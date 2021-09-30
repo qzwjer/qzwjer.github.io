@@ -1,0 +1,284 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>嵌入式芯片基础 | 大笑之博客</title><meta name="keywords" content="基础"><meta name="author" content="大笑之"><meta name="copyright" content="大笑之"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="以stm32f103c8t6为例： 内核：ARM 32位Cortex-M3 CPU，72MHz工作频率，是RISC处理器  存储器： ROM（flash）：64K字节，存储 Code 和 RO-data RAM（sram）：20K字节，存储 RW-data 和 ZI-data  flash里面的数据掉电可保存，sram中的数据掉电就丢失，sram的执行速度要快于flash，flash容量大于sra">
+<meta property="og:type" content="article">
+<meta property="og:title" content="嵌入式芯片基础">
+<meta property="og:url" content="https://qzwjer.github.io/2021/09/%E5%B5%8C%E5%85%A5%E5%BC%8F%E8%8A%AF%E7%89%87%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="大笑之博客">
+<meta property="og:description" content="以stm32f103c8t6为例： 内核：ARM 32位Cortex-M3 CPU，72MHz工作频率，是RISC处理器  存储器： ROM（flash）：64K字节，存储 Code 和 RO-data RAM（sram）：20K字节，存储 RW-data 和 ZI-data  flash里面的数据掉电可保存，sram中的数据掉电就丢失，sram的执行速度要快于flash，flash容量大于sra">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2021-09-30T01:53:43.000Z">
+<meta property="article:modified_time" content="2021-09-30T02:05:43.509Z">
+<meta property="article:author" content="大笑之">
+<meta property="article:tag" content="基础">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://qzwjer.github.io/2021/09/%E5%B5%8C%E5%85%A5%E5%BC%8F%E8%8A%AF%E7%89%87%E5%9F%BA%E7%A1%80/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2021-09-30 10:05:43'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><link rel="stylesheet" href="/css/my.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/my.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">55</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">41</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">大笑之博客</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">嵌入式芯片基础</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-09-30T01:53:43.000Z" title="发表于 2021-09-30 09:53:43">2021-09-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-09-30T02:05:43.509Z" title="更新于 2021-09-30 10:05:43">2021-09-30</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%9D%82%E6%96%87%E9%9B%86%E5%90%88/">杂文集合</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">953</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>3分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>以stm32f103c8t6为例：</p>
+<p>内核：ARM 32位Cortex-M3 CPU，72MHz工作频率，是RISC处理器</p>
+<hr>
+<p>存储器：</p>
+<p>ROM（flash）：64K字节，存储 Code 和 RO-data</p>
+<p>RAM（sram）：20K字节，存储 RW-data 和 ZI-data</p>
+<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/20190218114244769.png" alt="在这里插入图片描述"></p>
+<p>flash里面的数据掉电可保存，sram中的数据掉电就丢失，sram的执行速度要快于flash，flash容量大于sram。<br>上方的最低内存地址，最高地址，都是在flash和sram中。<br>正常下载程序都是下载存储进flash里面。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Code:代码存储区</span><br><span class="line"></span><br><span class="line">RO-data:只读数据存储区，</span><br><span class="line">存储文字常量</span><br><span class="line"></span><br><span class="line">RW-data:读写数据存储区，</span><br><span class="line">存储包括栈区（stack）、堆区（heap）、全局变量区（静态区）（static）</span><br><span class="line"></span><br><span class="line">ZI-data:零初始化数据区</span><br><span class="line">&#x2F;&#x2F;--------------------------------------------------------------</span><br><span class="line">全局变量存放在静态存储区,位置是固定的。 </span><br><span class="line">局部变量在栈空间,栈地址是不固定的。</span><br><span class="line">栈：就是那些由编译器在需要的时候分配，在不需要的时候自动清除的变量的存储区。里面的变量通常是局部变量、函数参数等。</span><br><span class="line">堆：就是那些由new分配的内存块，他们的释放编译器不去管，由我们的应用程序去控制，一般一个new就要对应一个delete。如果程序员没有释放掉，那么在程序结束后，操作系统会自动回收。</span><br><span class="line">自由存储区：就是那些由malloc等分配的内存块，他和堆是十分相似的，不过它是用free来结束自己的生命的。</span><br><span class="line">全局存储区（静态存储区）：全局变量和静态变量的存储是放在一块的，初始化的全局变量和静态变量在一块区域， 未初始化的全局变量和未初始化的静态变量在相邻的另一块区域。程序结束后由系统释放。</span><br><span class="line">常量存储区：这是一块比较特殊的存储区，他们里面存放的是常量，不允许修改。</span><br></pre></td></tr></table></figure>
+<p>使用mdk编译时，可以看到output：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">linking...</span><br><span class="line">Program Size: Code=16904 RO-data=268 RW-data=320 ZI-data=19368  </span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>封装：LQFP64，薄型QFP（Low-profile Quad Flat Package），中文含义叫四方扁平式封装技术（Quad Flat Package）。引脚在外面露着，爬着。</p>
+<p>其它封装：FBGA，是<em><strong>Fine-Pitch Ball Grid Array</strong></em>（意译为“<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%BB%86%E9%97%B4%E8%B7%9D%E7%90%83%E6%A0%85%E9%98%B5%E5%88%97/9241045">细间距球栅阵列</a>”）的缩写，是细间距球栅阵列，是一种在底部有焊球的面阵引脚结构。没有引脚，贴着。</p>
+<hr>
+<p>系统架构</p>
+<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/image-20210929091554826.png" alt="image-20210929091554826"></p>
+<hr>
+<p>一个非常好的博客文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/yihuihong/p/4965997.html">https://www.cnblogs.com/yihuihong/p/4965997.html</a></p>
+<p>在此备份👇：</p>
+<ol>
+<li>芯片结构组成图：</li>
+</ol>
+<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/615824-20151114225549759-412496293.jpg" alt="img"></p>
+<ol start="2">
+<li>STM32内部结构</li>
+</ol>
+<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/615824-20151114225819728-1602787293.jpg" alt="img"></p>
+<ol start="3">
+<li>Cortex-M3模块结构图</li>
+</ol>
+<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/615824-20151114230206103-764427193.jpg" alt="img"></p>
+<ol start="4">
+<li>STM3210X内部结构</li>
+</ol>
+<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/615824-20151114230423587-315199759.jpg" alt="img"></p>
+<ol start="5">
+<li>桥</li>
+</ol>
+<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/615824-20151114230556290-1068564531.png" alt="img"></p>
+<hr>
+<p><strong>四个主动单元 :</strong></p>
+<p>​    M3内核的ICode总线(I-bus)、DCode总线(D-bus)、 系统总线(S-bus)、DMA(DMA1、DMA2、以太网DMA) </p>
+<p><strong>四个被动单元</strong> :</p>
+<p>​    内部SRAM、内部闪存、FSMC、AHB到APB桥 </p>
+<p><strong>ICode总线 :</strong></p>
+<p>​    将M3内核的指令总线与FLASH指令接口相连，用于指令预取</p>
+<p><strong>DCode总线:</strong></p>
+<p>​    将M3内核的数据总线与FLASH数据接口相连，常量加载和调试 </p>
+<p><strong>系统总线 :</strong></p>
+<p>将M3内核的系统总线与总线矩阵相连，协调内核与DMA访问 </p>
+<p><strong>DMA总线:</strong> </p>
+<p>将DMA的AHB主控接口与总线矩阵相连，协调CPU的DCode和DMA到SRAM、闪存、外设的访问</p>
+<p><strong>总线矩阵:</strong></p>
+<p>协调内核系统总线和DMA主控总线间的访问仲裁，仲裁采用轮换算法。</p>
+<p>此总线矩阵由三个驱动部件(CPU 的 DCode、系统总线和 DMA 总线)和三个被动部件(闪存存储器接口、SRAM 和 AHB2APB 桥)构成。</p>
+<p>AHB 外设通过总线矩阵与系统总线相连，允许 DMA 访问。</p>
+<p><strong>AHB到APB桥 :</strong></p>
+<p>两个AHB/APB桥在AHB和两个APB总线间提供同步连接</p>
+<p>APB1速度限于36MHz，APB2全速最高72MHz</p>
+<hr>
+<p>存储器映像<br><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/image-20210929163541040.png" alt="image-20210929163541040"></p>
+<hr>
+<p>时钟</p>
+<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/image-20210929172247441.png" alt="image-20210929172247441"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">大笑之</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://qzwjer.github.io/2021/09/%E5%B5%8C%E5%85%A5%E5%BC%8F%E8%8A%AF%E7%89%87%E5%9F%BA%E7%A1%80/">https://qzwjer.github.io/2021/09/%E5%B5%8C%E5%85%A5%E5%BC%8F%E8%8A%AF%E7%89%87%E5%9F%BA%E7%A1%80/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://qzwjer.github.io" target="_blank">大笑之博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%9F%BA%E7%A1%80/">基础</a></div><div class="post_share"><div class="addthis_inline_share_toolbox"></div><script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=null" async="async"></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/09/%E5%BC%BA%E5%88%B6%E5%9C%B0%E5%9D%80%E8%B7%B3%E8%BD%AC/"><img class="prev-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">强制地址跳转</div></div></a></div><div class="next-post pull-right"><a href="/2021/09/%E7%BC%A9%E5%87%8FSQLServer%E6%95%B0%E6%8D%AE%E5%BA%93%E6%97%A5%E5%BF%97/"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">缩减SQLServer数据库日志</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/my.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">大笑之</div><div class="author-info__description">学习，进步</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">55</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">41</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div></div><a class="button--animated" id="card-info-btn"><i class="fa fa-bookmark"></i><span>加入书签</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/qzwjer" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:1010094375@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/09/QT%E6%97%A0%E6%B3%95%E5%AE%9A%E4%BD%8D%E7%A8%8B%E5%BA%8F%E8%BE%93%E5%85%A5%E7%82%B9/" title="QT无法定位程序输入点"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="QT无法定位程序输入点"/></a><div class="content"><a class="title" href="/2021/09/QT%E6%97%A0%E6%B3%95%E5%AE%9A%E4%BD%8D%E7%A8%8B%E5%BA%8F%E8%BE%93%E5%85%A5%E7%82%B9/" title="QT无法定位程序输入点">QT无法定位程序输入点</a><time datetime="2021-09-30T02:53:08.000Z" title="发表于 2021-09-30 10:53:08">2021-09-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/09/SQL%E7%BC%A9%E5%87%8F%E8%A1%A8%E5%A4%A7%E5%B0%8F/" title="SQL缩减表大小"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SQL缩减表大小"/></a><div class="content"><a class="title" href="/2021/09/SQL%E7%BC%A9%E5%87%8F%E8%A1%A8%E5%A4%A7%E5%B0%8F/" title="SQL缩减表大小">SQL缩减表大小</a><time datetime="2021-09-30T01:56:24.000Z" title="发表于 2021-09-30 09:56:24">2021-09-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/09/ssh%E8%BF%9E%E6%8E%A5%E9%97%AE%E9%A2%98/" title="ssh连接问题"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ssh连接问题"/></a><div class="content"><a class="title" href="/2021/09/ssh%E8%BF%9E%E6%8E%A5%E9%97%AE%E9%A2%98/" title="ssh连接问题">ssh连接问题</a><time datetime="2021-09-30T01:55:08.000Z" title="发表于 2021-09-30 09:55:08">2021-09-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/09/ubuntu%E4%B8%8Bjlink%E7%83%A7%E5%BD%95stm32%E7%A8%8B%E5%BA%8F/" title="ubuntu下jlink烧录stm32程序"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ubuntu下jlink烧录stm32程序"/></a><div class="content"><a class="title" href="/2021/09/ubuntu%E4%B8%8Bjlink%E7%83%A7%E5%BD%95stm32%E7%A8%8B%E5%BA%8F/" title="ubuntu下jlink烧录stm32程序">ubuntu下jlink烧录stm32程序</a><time datetime="2021-09-30T01:54:49.000Z" title="发表于 2021-09-30 09:54:49">2021-09-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/09/gcc%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93/" title="gcc动态链接库"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="gcc动态链接库"/></a><div class="content"><a class="title" href="/2021/09/gcc%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93/" title="gcc动态链接库">gcc动态链接库</a><time datetime="2021-09-30T01:54:27.000Z" title="发表于 2021-09-30 09:54:27">2021-09-30</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By 大笑之</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">欢迎来到我的博客！</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(() => {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'default',
+      })
+      false && mermaid.init()
+    })
+  }
+}</script><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: 'tIO55n1PcFVxdupwuvyUIUhw-gzGzoHsz',
+      appKey: 'j7cfrdWGV6mIQ6PY5okJrOdz',
+      placeholder: '少年，留下你的足迹',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="/css/my.js"></script><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

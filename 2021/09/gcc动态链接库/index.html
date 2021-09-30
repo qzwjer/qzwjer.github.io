@@ -1,0 +1,270 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>gcc动态链接库 | 大笑之博客</title><meta name="keywords" content="动态链接库"><meta name="author" content="大笑之"><meta name="copyright" content="大笑之"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、动态链接库源文件示例12345678910111213141516&#x2F;&#x2F;my.h#ifndef __my__#define __my__#if defined(__cplusplus)extern &quot;C&quot;&amp;#123;#endif        int max(int a, int b);    #if defined(__cplusplus)&amp;#125;#endif#endi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="gcc动态链接库">
+<meta property="og:url" content="https://qzwjer.github.io/2021/09/gcc%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93/index.html">
+<meta property="og:site_name" content="大笑之博客">
+<meta property="og:description" content="一、动态链接库源文件示例12345678910111213141516&#x2F;&#x2F;my.h#ifndef __my__#define __my__#if defined(__cplusplus)extern &quot;C&quot;&amp;#123;#endif        int max(int a, int b);    #if defined(__cplusplus)&amp;#125;#endif#endi">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2021-09-30T01:54:27.000Z">
+<meta property="article:modified_time" content="2021-09-30T02:46:31.125Z">
+<meta property="article:author" content="大笑之">
+<meta property="article:tag" content="动态链接库">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://qzwjer.github.io/2021/09/gcc%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-09-30 10:46:31'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><link rel="stylesheet" href="/css/my.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/my.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">55</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">41</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">大笑之博客</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">gcc动态链接库</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-09-30T01:54:27.000Z" title="发表于 2021-09-30 09:54:27">2021-09-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-09-30T02:46:31.125Z" title="更新于 2021-09-30 10:46:31">2021-09-30</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">学习总结</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h3 id="一、动态链接库源文件示例"><a href="#一、动态链接库源文件示例" class="headerlink" title="一、动态链接库源文件示例"></a>一、动态链接库源文件示例</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//my.h</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> __my__</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __my__</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> defined(__cplusplus)</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">max</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>;</span><br><span class="line">    </span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> defined(__cplusplus)</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//my.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;my.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">max</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a&gt;b?a:b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="二、生成动态链接库"><a href="#二、生成动态链接库" class="headerlink" title="二、生成动态链接库"></a>二、生成动态链接库</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -shared -fPIC my.c -o libmy.so </span><br></pre></td></tr></table></figure>
+
+<h3 id="三、使用动态链接库示例"><a href="#三、使用动态链接库示例" class="headerlink" title="三、使用动态链接库示例"></a>三、使用动态链接库示例</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//main.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;my.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\r\n&quot;</span>,max(<span class="number">1</span>,<span class="number">100</span>));</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="四、动态链接库编译选项"><a href="#四、动态链接库编译选项" class="headerlink" title="四、动态链接库编译选项"></a>四、动态链接库编译选项</h3><p>使用动态链接库，需要设置动态库的搜索路径，先后顺序是：</p>
+<p>　　<strong>1.编译目标代码时指定的动态库搜索路径;</strong></p>
+<p>　　<strong>2.环境变量LD_LIBRARY_PATH指定的动态库搜索路径；</strong> </p>
+<p>　　<strong>3.配置文件/etc/ld.so.conf中指定的动态库搜索路径；</strong></p>
+<p>　　<strong>4.默认的动态库搜索路径/lib/usr/lib。</strong></p>
+<p>因此有4种方法，</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">1</span></span><br><span class="line">gcc main.c -o main -L. -lmy -Wl,-rpath=&#x27;.&#x27;  #&#x27;.&#x27;指当前目录</span><br><span class="line"><span class="meta">#</span><span class="bash">或者</span></span><br><span class="line">gcc main.c -o main -L. -lmy -Wl,-rpath,-Wl,&#x27;.&#x27;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">2</span></span><br><span class="line">export LD_LIBRARY_PATH=.  #当前目录</span><br><span class="line">gcc main.c -o main -lmy</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>对于方法3，查看虚拟机，</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ly@qzwjer:luatest$ cat /etc/ld.so.conf</span><br><span class="line">include /etc/ld.so.conf.d/*.conf</span><br><span class="line"></span><br><span class="line">ly@qzwjer:luatest$ ls /etc/ld.so.conf.d</span><br><span class="line">fakeroot-x86_64-linux-gnu.conf  libc.conf  vmware-tools-libraries.conf  x86_64-linux-gnu.conf</span><br><span class="line">ly@qzwjer:luatest$ cat /etc/ld.so.conf.d/libc.conf </span><br><span class="line"><span class="meta">#</span><span class="bash"> libc default configuration</span></span><br><span class="line">/usr/local/lib</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>因此可以在 <code>/etc/ld.so.conf.d/</code> 目录下建立自己的 conf 文件，或在 libc.conf 中，加入动态链接库的目录。</p>
+<p>方法4不需赘言。</p>
+<h3 id="五、ldd查看使用的共享库"><a href="#五、ldd查看使用的共享库" class="headerlink" title="五、ldd查看使用的共享库"></a>五、ldd查看使用的共享库</h3><p>可以通过 ldd a 来看程序 a 使用的共享函数库。</p>
+<h3 id="六、动态加载的函数库"><a href="#六、动态加载的函数库" class="headerlink" title="六、动态加载的函数库"></a>六、动态加载的函数库</h3><p>以下内容原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/ithomer/article/details/7346146">https://blog.csdn.net/ithomer/article/details/7346146</a></p>
+<p>动态加载的函数库Dynamically loaded (DL) libraries是一类函数库，它可以在程序运行过程中的任何时间加载。它们特别适合在函数中加载一些模块和plugin扩展模块的场合，因为它可以在当程序需要某个plugin模块时才动态的加载。例如，Pluggable Authentication Modules(PAM)系统就是用动态加载函数库来使得管理员可以配置和重新配置身份验证信息。</p>
+<p>Linux系统下，DL函数库与其他函数库在格式上没有特殊的区别，我们前面提到过，它们创建的时候是标准的object格式。主要的区别就是这些函数库不是在程序链接的时候或者启动的时候加载，而是通过一个API来打开一个函数库，寻找符号表，处理错误和关闭函数库。通常C语言环境下，需要包含这个头文件。 </p>
+<p>Linux中使用的函数和Solaris中一样，都是dlpoen（） API。当然不是所有的平台都使用同样的接口，例如HP-UX使用shl_load()机制，而Windows平台用另外的其他的调用接口。如果你的目的是使得你的代码有很强的移植性，你应该使用一些wrapping函数库，这样的wrapping函数库隐藏不同的平台的接口区别。一种方法是使用glibc函数库中的对动态加载模块的支持，它使用一些潜在的动态加载函数库界面使得它们可以夸平台使用。具体可以参考<a target="_blank" rel="noopener" href="http://developer.gnome.org/doc/API/glib/glib-dynamic-loading-of-modules.html">http://developer.gnome.org/doc/API/glib/glib-dynamic-loading-of-modules.html</a>. 另外一个方法是使用libltdl，是GNU libtool的一部分，可以进一步参考CORBA相关资料。  </p>
+<p>4.1. dlopen()<br>dlopen函数打开一个函数库然后为后面的使用做准备。C语言原形是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void * dlopen(const char *filename, int flag);</span><br></pre></td></tr></table></figure>
+<p>如果文件名filename是以“/”开头，也就是使用绝对路径，那么dlopne就直接使用它，而不去查找某些环境变量或者系统设置的函数库所在的目录了。否则dlopen（）就会按照下面的次序查找函数库文件：</p>
+<ol>
+<li><p>环境变量LD_LIBRARY指明的路径。</p>
+</li>
+<li><p>/etc/ld.so.cache中的函数库列表。</p>
+</li>
+<li><p>/lib目录，然后/usr/lib。不过一些很老的a.out的loader则是采用相反的次序，也就是先查 /usr/lib，然后是/lib。<br> dlopen()函数中，参数flag的值必须是RTLD_LAZY或者RTLD_NOW，RTLD_LAZY的意思是resolve undefined symbols as code from the dynamic library is executed，而RTLD_NOW的含义是resolve all undefined symbols before dlopen() returns and fail if this cannot be done’。<br> 如果有好几个函数库，它们之间有一些依赖关系的话，例如X依赖Y，那么你就要先加载那些被依赖的函数。例如先加载Y，然后加载X。</p>
+<p> dlopen()函数的返回值是一个句柄，然后后面的函数就通过使用这个句柄来做进一步的操作。如果打开失败dlopen()就返回一个NULL。如果一个函数库被多次打开，它会返回同样的句柄。<br> 如果一个函数库里面有一个输出的函数名字为_init,那么_init就会在dlopen（）这个函数返回前被执行。我们可以利用这个函数在我的函数库里面做一些初始化的工作。我们后面会继续讨论这个问题的。  </p>
+</li>
+</ol>
+<p>4.2. dlerror()</p>
+<p>通过调用dlerror()函数，我们可以获得最后一次调用dlopen()，dlsym()，或者dlclose（）的错误信息。 </p>
+<p>4.3. dlsym()</p>
+<p>如果你加载了一个DL函数库而不去使用当然是不可能的了，使用一个DL函数库的最主要的一个函数就是dlsym()，这个函数在一个已经打开的函数库里面查找给定的符号。这个函数如下定义：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void * dlsym(void *handle, char *symbol);</span><br></pre></td></tr></table></figure>
+<p>函数中的参数handle就是由dlopen打开后返回的句柄，symbol是一个以NIL结尾的字符串。如果dlsym()函数没有找到需要查找的symbol，则返回NULL。如果你知道某个symbol的值不可能是NULL或者0，那么就很好，你就可以根据这个返回结果判断查找的symbol是否存在了；不过，如果某个symbol的值就是NULL，那么这个判断就有问题了。标准的判断方法是先调用dlerror()，清除以前可能存在的错误，然后调用dlsym（）来访问一个symbol，然后再调用dlerror（）来判断是否出现了错误。一个典型的过程如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">dlerror();		&#x2F;*clear error code *&#x2F;</span><br><span class="line">s &#x3D; (actual_type)dlsym(handle, symbol_being_searched_for);</span><br><span class="line">if((error &#x3D; dlerror()) !&#x3D; NULL)&#123;</span><br><span class="line">&#x2F;* handle error, the symbol wasn&#39;t found *&#x2F;</span><br><span class="line">&#125; else &#123;</span><br><span class="line">&#x2F;* symbol found, its value is in s *&#x2F;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>4.4. dlclose()</p>
+<p>dlopen()函数的反过程就是dlclose（）函数，dlclose（）函数用力关闭一个DL函数库。Dl函数库维持一个资源利用的计数器，当调用dlclose的时候，就把这个计数器的计数减一，如果计数器为0，则真正的释放掉。真正释放的时候，如果函数库里面有_fini()这个函数，则自动调用_ fini（）这个函数，做一些必要的处理。Dlclose（）返回0表示成功，其他非0值表示错误。</p>
+<p>4.5. DL Library Example</p>
+<p>下面是一个例子。例子中调入math函数库，然后打印2.0的余弦函数值。例子中每次都检查是否出错。应该是个不错的范例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">int main(int argc, char *argv)&#123;</span><br><span class="line">		void *handle;</span><br><span class="line">		char *error;</span><br><span class="line">		</span><br><span class="line">		double (*cosine )(double);</span><br><span class="line">		handle &#x3D; dlopen(&quot;&#x2F;lib&#x2F;libm.so.6&quot;, RTLD_LAZY);</span><br><span class="line">		if(!handle)&#123;</span><br><span class="line">			fputs(dlerror(), stderr);</span><br><span class="line">			 exit(1);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		cosine &#x3D; dlsym(handle, &quot;cos&quot;);</span><br><span class="line">		if((error &#x3D; dlerror()) !&#x3D; NULL)&#123;</span><br><span class="line">			fputs(error, stderr);</span><br><span class="line">			exit(1);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		printf(&quot;%f&quot;, (*cosine)(2, 0));</span><br><span class="line">		</span><br><span class="line">		dlclose(handle);</span><br><span class="line">		</span><br><span class="line">		return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果这个程序名字叫foo.c,那么用下面的命令来编译：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -o foo foo.c –ldl</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">大笑之</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://qzwjer.github.io/2021/09/gcc%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93/">https://qzwjer.github.io/2021/09/gcc%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://qzwjer.github.io" target="_blank">大笑之博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93/">动态链接库</a></div><div class="post_share"><div class="addthis_inline_share_toolbox"></div><script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=null" async="async"></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/09/ubuntu%E4%B8%8Bjlink%E7%83%A7%E5%BD%95stm32%E7%A8%8B%E5%BA%8F/"><img class="prev-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">ubuntu下jlink烧录stm32程序</div></div></a></div><div class="next-post pull-right"><a href="/2021/09/%E5%BC%BA%E5%88%B6%E5%9C%B0%E5%9D%80%E8%B7%B3%E8%BD%AC/"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">强制地址跳转</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/my.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">大笑之</div><div class="author-info__description">学习，进步</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">55</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">41</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div></div><a class="button--animated" id="card-info-btn"><i class="fa fa-bookmark"></i><span>加入书签</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/qzwjer" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:1010094375@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%E6%BA%90%E6%96%87%E4%BB%B6%E7%A4%BA%E4%BE%8B"><span class="toc-text">一、动态链接库源文件示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%94%9F%E6%88%90%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93"><span class="toc-text">二、生成动态链接库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%BD%BF%E7%94%A8%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%E7%A4%BA%E4%BE%8B"><span class="toc-text">三、使用动态链接库示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9"><span class="toc-text">四、动态链接库编译选项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81ldd%E6%9F%A5%E7%9C%8B%E4%BD%BF%E7%94%A8%E7%9A%84%E5%85%B1%E4%BA%AB%E5%BA%93"><span class="toc-text">五、ldd查看使用的共享库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E5%8A%A8%E6%80%81%E5%8A%A0%E8%BD%BD%E7%9A%84%E5%87%BD%E6%95%B0%E5%BA%93"><span class="toc-text">六、动态加载的函数库</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/09/QT%E6%97%A0%E6%B3%95%E5%AE%9A%E4%BD%8D%E7%A8%8B%E5%BA%8F%E8%BE%93%E5%85%A5%E7%82%B9/" title="QT无法定位程序输入点"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="QT无法定位程序输入点"/></a><div class="content"><a class="title" href="/2021/09/QT%E6%97%A0%E6%B3%95%E5%AE%9A%E4%BD%8D%E7%A8%8B%E5%BA%8F%E8%BE%93%E5%85%A5%E7%82%B9/" title="QT无法定位程序输入点">QT无法定位程序输入点</a><time datetime="2021-09-30T02:53:08.000Z" title="发表于 2021-09-30 10:53:08">2021-09-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/09/SQL%E7%BC%A9%E5%87%8F%E8%A1%A8%E5%A4%A7%E5%B0%8F/" title="SQL缩减表大小"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SQL缩减表大小"/></a><div class="content"><a class="title" href="/2021/09/SQL%E7%BC%A9%E5%87%8F%E8%A1%A8%E5%A4%A7%E5%B0%8F/" title="SQL缩减表大小">SQL缩减表大小</a><time datetime="2021-09-30T01:56:24.000Z" title="发表于 2021-09-30 09:56:24">2021-09-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/09/ssh%E8%BF%9E%E6%8E%A5%E9%97%AE%E9%A2%98/" title="ssh连接问题"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ssh连接问题"/></a><div class="content"><a class="title" href="/2021/09/ssh%E8%BF%9E%E6%8E%A5%E9%97%AE%E9%A2%98/" title="ssh连接问题">ssh连接问题</a><time datetime="2021-09-30T01:55:08.000Z" title="发表于 2021-09-30 09:55:08">2021-09-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/09/ubuntu%E4%B8%8Bjlink%E7%83%A7%E5%BD%95stm32%E7%A8%8B%E5%BA%8F/" title="ubuntu下jlink烧录stm32程序"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ubuntu下jlink烧录stm32程序"/></a><div class="content"><a class="title" href="/2021/09/ubuntu%E4%B8%8Bjlink%E7%83%A7%E5%BD%95stm32%E7%A8%8B%E5%BA%8F/" title="ubuntu下jlink烧录stm32程序">ubuntu下jlink烧录stm32程序</a><time datetime="2021-09-30T01:54:49.000Z" title="发表于 2021-09-30 09:54:49">2021-09-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/09/gcc%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93/" title="gcc动态链接库"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="gcc动态链接库"/></a><div class="content"><a class="title" href="/2021/09/gcc%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93/" title="gcc动态链接库">gcc动态链接库</a><time datetime="2021-09-30T01:54:27.000Z" title="发表于 2021-09-30 09:54:27">2021-09-30</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By 大笑之</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">欢迎来到我的博客！</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(() => {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'default',
+      })
+      false && mermaid.init()
+    })
+  }
+}</script><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: 'tIO55n1PcFVxdupwuvyUIUhw-gzGzoHsz',
+      appKey: 'j7cfrdWGV6mIQ6PY5okJrOdz',
+      placeholder: '少年，留下你的足迹',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="/css/my.js"></script><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
