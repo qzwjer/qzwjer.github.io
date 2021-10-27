@@ -1,0 +1,262 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>OTA常用代码 | 大笑之博客</title><meta name="keywords" content="嵌入式"><meta name="author" content="大笑之"><meta name="copyright" content="大笑之"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="在嵌入式开发中，使产品的软件能够更新升级是个很常见的需求，作为开发人员，能够快速熟练地实现该功能是基本能力。 一般当设备不具备直接获取完整的更新文件时，需要逐包获取更新文件，因此要设计专门的更新代码以实现此功能。 在此记录下OTA的常用升级代码，以备不时之需。 1.数据结构首先先来定义OTA需要的数据结构：  具有更新功能的软件，必须定义软件版本号，以下为一个参考：  12345678910111">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OTA常用代码">
+<meta property="og:url" content="https://qzwjer.github.io/2021/10/OTA%E5%B8%B8%E7%94%A8%E4%BB%A3%E7%A0%81/index.html">
+<meta property="og:site_name" content="大笑之博客">
+<meta property="og:description" content="在嵌入式开发中，使产品的软件能够更新升级是个很常见的需求，作为开发人员，能够快速熟练地实现该功能是基本能力。 一般当设备不具备直接获取完整的更新文件时，需要逐包获取更新文件，因此要设计专门的更新代码以实现此功能。 在此记录下OTA的常用升级代码，以备不时之需。 1.数据结构首先先来定义OTA需要的数据结构：  具有更新功能的软件，必须定义软件版本号，以下为一个参考：  12345678910111">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2021-10-27T04:35:29.000Z">
+<meta property="article:modified_time" content="2021-10-27T04:44:12.589Z">
+<meta property="article:author" content="大笑之">
+<meta property="article:tag" content="嵌入式">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://qzwjer.github.io/2021/10/OTA%E5%B8%B8%E7%94%A8%E4%BB%A3%E7%A0%81/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-10-27 12:44:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><link rel="stylesheet" href="/css/my.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/my.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">57</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">41</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">大笑之博客</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">OTA常用代码</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-10-27T04:35:29.000Z" title="发表于 2021-10-27 12:35:29">2021-10-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-10-27T04:44:12.589Z" title="更新于 2021-10-27 12:44:12">2021-10-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">学习总结</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>在嵌入式开发中，使产品的软件能够更新升级是个很常见的需求，作为开发人员，能够快速熟练地实现该功能是基本能力。</p>
+<p>一般当设备不具备直接获取完整的更新文件时，需要逐包获取更新文件，因此要设计专门的更新代码以实现此功能。</p>
+<p>在此记录下OTA的常用升级代码，以备不时之需。</p>
+<h3 id="1-数据结构"><a href="#1-数据结构" class="headerlink" title="1.数据结构"></a>1.数据结构</h3><p>首先先来定义OTA需要的数据结构：</p>
+<ul>
+<li>具有更新功能的软件，必须定义软件版本号，以下为一个参考：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//version.h</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> __VERSION_H__</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __VERSION_H__</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PROJECT_ID       0x2A4B     <span class="comment">/**&lt;each project has its own ID*/</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BOOT_VERSION     0x0        <span class="comment">/**&lt;BOOT LOADER version*/</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> STACK_VERSION    0x16       <span class="comment">/**&lt;stack version*/</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> USER_APP_VERSION 0x0002     <span class="comment">/**&lt;user only allow to change app version*/</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> APP_VERSION     ((BOOT_VERSION &lt;&lt; 24) | (STACK_VERSION &lt;&lt; 16) | USER_APP_VERSION)  <span class="comment">/**&lt;app code version, only low uin16 can be set by user*/</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>获取更新包时需要的变量：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">uint8_t</span>    updata_ok   =  <span class="number">0</span>;	<span class="comment">//更新数据传输完成的标志位，当置1时设备复位升级</span></span><br><span class="line"><span class="keyword">uint32_t</span>   ota_offset  = <span class="number">16</span>;	<span class="comment">//更新包请求偏移量，一般前16个字节是更新包的头文件，用来保存版本号、校验码等，从16字节开始是设备更新文件</span></span><br><span class="line"><span class="keyword">uint16_t</span>   pk	       = <span class="number">1024</span>;	<span class="comment">//一般获取更新包时，每次请求1024个字节，因为一般写flash时是以1024字节为单位</span></span><br><span class="line"><span class="keyword">uint16_t</span>   x_bk	       = <span class="number">0</span>;		<span class="comment">//请求1024字节数据包的个数</span></span><br><span class="line"><span class="keyword">uint16_t</span>   remain      = <span class="number">0</span>;		<span class="comment">//不足1024字节时，最后一包的字节数</span></span><br><span class="line"></span><br><span class="line">UPDATE_HEADER sys_vs_info = &#123;<span class="number">0</span>&#125;;<span class="comment">//软件版本信息</span></span><br><span class="line">UPDATE_HEADER ota_vs_info = &#123;<span class="number">0</span>&#125;;<span class="comment">//ota文件版本信息</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">uint8_t</span>    ota_buff[<span class="number">1024</span> + <span class="number">32</span>] = &#123;<span class="number">0</span>&#125;; <span class="comment">//接收更新数据</span></span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>以下为更新包16字节头的参考结构，其中必须要包含的是软件版本号、更新文件长度、校验码：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	uint16 project_id;          <span class="comment">/**&lt; each project has its unique id */</span></span><br><span class="line">	uint8 root_version;	        <span class="comment">/**&lt;secondary boot update*/</span></span><br><span class="line">	uint8 stack_version;        <span class="comment">/**&lt;stack update*/</span></span><br><span class="line">	uint32 app_version;         <span class="comment">/**&lt;app update*/</span></span><br><span class="line">	uint32 code_size;           <span class="comment">/**&lt; updated code size*/</span></span><br><span class="line">	uint32 crc32;               <span class="comment">/**&lt;crc32*/</span></span><br><span class="line">&#125; UPDATE_HEADER;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2-OTA过程"><a href="#2-OTA过程" class="headerlink" title="2.OTA过程"></a>2.OTA过程</h3><ul>
+<li><p>OTA开始条件：一般设定一个时间间隔或定时来 check 一次是否有新版本更新，或是接收升级指令更新。check 有符合更新的版本时，即可开始请求。</p>
+</li>
+<li><p>获取更新数据：如果从其它模块获取更新数据，需要等待模块下载完成存储到数组中后，触发更新请求。OTA请求的第一个包是16字节的头文件，之后是设备更新数据。每次请求数据，offset 是数组的下标，长度为 pk 或 remain，更新数据写入 flash 的预留空间中。</p>
+</li>
+<li><p>判断接收完成：当接收的总字节数等于头文件的字节数时，即可置位 updata_ok，在合适的时间重启。</p>
+</li>
+<li><p>完成更新：重启后，进入 bootloader——如果设备有更新功能，则必须有 bootloader，每次设备复位后先进入 bootloader，检查 flash 预留空间是否有更新包可用，如果有则在校验通过后将更新包拷贝到应用程序空间，然后跳转到应用程序。</p>
+</li>
+</ul>
+<h3 id="3-获取更新数据程序"><a href="#3-获取更新数据程序" class="headerlink" title="3.获取更新数据程序"></a>3.获取更新数据程序</h3><p>OTA的其它过程没什么说的，主要是获取更新数据的过程，分为发送和接收。发送和接收又分为头16字节数据和剩余数据。在剩余数据中，又分为1024字节整的数据包和最后一个不足1024字节的数据包。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//接收16字节更新头文件</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">check_ota_head</span><span class="params">(<span class="keyword">uint8_t</span> *pData,<span class="keyword">uint16_t</span> lens)</span><span class="comment">//lens = 16</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">		<span class="keyword">bool</span> s = <span class="literal">false</span>;</span><br><span class="line">		<span class="keyword">uint16_t</span> sysAppNum = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">uint16_t</span> otaAppNum = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">uint8_t</span>  otaApproot  = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">uint8_t</span>  otaAppstack = <span class="number">0</span>;</span><br><span class="line">		ota_init();<span class="comment">//获取软件的版本号等信息</span></span><br><span class="line">		<span class="built_in">memcpy</span>(&amp;ota_vs_info,pData,lens);<span class="comment">//文件头16字节得到文件大小和CRC32</span></span><br><span class="line">		sysAppNum   = sys_vs_info.app_version;</span><br><span class="line">		otaAppNum   = ota_vs_info.app_version;</span><br><span class="line">		otaApproot  = ota_vs_info.app_version &gt;&gt; <span class="number">24</span>;</span><br><span class="line">		otaAppstack = ota_vs_info.app_version &gt;&gt; <span class="number">16</span>;</span><br><span class="line">		<span class="keyword">if</span>(ota_vs_info.project_id == sys_vs_info.project_id</span><br><span class="line">					&amp;&amp; ota_vs_info.root_version  == <span class="number">0</span></span><br><span class="line">					&amp;&amp; ota_vs_info.stack_version == <span class="number">0</span></span><br><span class="line">					&amp;&amp; sys_vs_info.root_version  == otaApproot</span><br><span class="line">					&amp;&amp; sys_vs_info.stack_version == otaAppstack</span><br><span class="line">					&amp;&amp; sysAppNum != otaAppNum</span><br><span class="line">					&amp;&amp; ota_vs_info.code_size &lt;= (<span class="number">40</span> * <span class="number">1024</span>))</span><br><span class="line">		&#123;</span><br><span class="line">				s = <span class="literal">true</span>;</span><br><span class="line">				<span class="comment">//更新控制信息，进入bootloader后判断是否更新</span></span><br><span class="line">				write_ota_ctrl(WRITE_OTA_INFO_CTRL);</span><br><span class="line">				write_ota_ctrl(WRITE_OTA_FILE_SIZE_CTRL);</span><br><span class="line">				x_bk   = (ota_vs_info.code_size) / pk;</span><br><span class="line">				remain = (ota_vs_info.code_size) % pk;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//接收设备更新数据</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">check_bin_file</span><span class="params">(<span class="keyword">uint8_t</span> *pData,<span class="keyword">uint16_t</span> lens)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">		<span class="keyword">uint8_t</span> i,j,k;</span><br><span class="line">		k = lens / <span class="number">128</span>;</span><br><span class="line">		j = lens % <span class="number">128</span>;</span><br><span class="line">		<span class="keyword">if</span>(ota_offset &lt; ota_vs_info.code_size)</span><br><span class="line">		&#123;</span><br><span class="line">				<span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; k;i++)</span><br><span class="line">				&#123;</span><br><span class="line">						ota_write_ota_data(&amp;pData[i * <span class="number">128</span>],<span class="number">128</span>);<span class="comment">//写入flash</span></span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span>(j)</span><br><span class="line">				&#123;</span><br><span class="line">						ota_write_ota_data(&amp;pData[i*<span class="number">128</span>],j);</span><br><span class="line">				&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		ota_offset += lens;</span><br><span class="line">		<span class="comment">//接收完成所有bin file复位升级</span></span><br><span class="line">		<span class="keyword">if</span>(ota_offset &gt;= (ota_vs_info.code_size))</span><br><span class="line">		&#123;</span><br><span class="line">				dly_us(<span class="number">100000</span>);</span><br><span class="line">				write_ota_ctrl(WRITE_OTA_FILE_CRC32_CTRL);</span><br><span class="line">				updata_ok     = <span class="number">1</span>;</span><br><span class="line">				ota_offset    = <span class="number">16</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> updata_ok;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//请求设备更新数据数据</span></span><br><span class="line"><span class="function"><span class="keyword">uint8_t</span> <span class="title">copy_bin_file</span><span class="params">(<span class="keyword">uint8_t</span> *p)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">		<span class="keyword">uint8_t</span> len = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">pk_t</span> pt = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">		<span class="keyword">if</span>(ota_offset / pk &lt; x_bk)</span><br><span class="line">		&#123;</span><br><span class="line">				pt.addr = ota_offset;</span><br><span class="line">				pt.pk   = pk;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> </span><br><span class="line">		<span class="keyword">if</span>(remain)</span><br><span class="line">		&#123;</span><br><span class="line">				pt.addr = ota_offset;</span><br><span class="line">				pt.pk   = remain;</span><br><span class="line">		&#125;</span><br><span class="line">		len = <span class="keyword">sizeof</span>(<span class="keyword">pk_t</span>);</span><br><span class="line">		<span class="built_in">memcpy</span>(p,(<span class="keyword">uint8_t</span>*)&amp;pt,len);</span><br><span class="line">		<span class="keyword">return</span> len;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//发送请求</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">send_uartttl_data</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">uint16_t</span>  ask   = <span class="number">0</span>;</span><br><span class="line">    uartMsg  uMsg   = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">memset</span>(pub_buf.buf, <span class="number">0</span>, <span class="keyword">sizeof</span>(pub_buf.buf));</span><br><span class="line">    <span class="keyword">pst_info_t</span> s_cat1_data = (<span class="keyword">pst_info_t</span>)&amp;pub_buf.buf;</span><br><span class="line">    getUartQueMsg(&amp;uMsg);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">switch</span>(uMsg.msgType)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">case</span> OTA_HEAD:</span><br><span class="line">        &#123;</span><br><span class="line">            ask = <span class="number">1</span>;<span class="comment">//请求头文件时offset为0，对端响应16字节头文件数据</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">case</span> OTA_DATA:</span><br><span class="line">	&#123;</span><br><span class="line">	    ask = copy_bin_file((<span class="keyword">uint8_t</span>*)&amp;pub_buf.buf[<span class="number">5</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(ask)</span><br><span class="line">    &#123;</span><br><span class="line">        s_cat1_data -&gt; head  = CAT1_OTA_HEAD;</span><br><span class="line">        s_cat1_data -&gt; cmd   = uMsg.msgType ;</span><br><span class="line">        s_cat1_data -&gt; len   = ask;</span><br><span class="line">        s_cat1_data -&gt; crc   = m_crc8((<span class="keyword">uint8_t</span>*)&amp;pub_buf.buf[<span class="number">5</span>], ask);</span><br><span class="line">        uart0_send((<span class="keyword">uint8_t</span>*)pub_buf.buf, <span class="number">5</span> + ask);</span><br><span class="line">        uartQueMsg.w_count += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//接收数据</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">read_uartttl_data</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">uint8_t</span> t_crc =  <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(mxd_ttl.priv_len)</span><br><span class="line">    &#123;</span><br><span class="line">        t_crc = m_crc8(&amp;mxd_ttl.buf[<span class="number">5</span>], mxd_ttl.priv_len - <span class="number">5</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(*(mxd_ttl.buf + <span class="number">4</span>) != t_crc </span><br><span class="line">           || mxd_ttl.buf[<span class="number">0</span>] != CAT1_OTA_HEAD)</span><br><span class="line">        &#123;</span><br><span class="line">            clear_ttl();</span><br><span class="line">            <span class="keyword">return</span> ;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">switch</span>(*(mxd_ttl.buf + <span class="number">1</span>))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">case</span> OTA_HEAD:</span><br><span class="line">            &#123;</span><br><span class="line">		<span class="keyword">if</span>(check_ota_head(&amp;mxd_ttl.buf[<span class="number">5</span>], mxd_ttl.priv_len - <span class="number">5</span>)) </span><br><span class="line">                &#123;</span><br><span class="line">                    set_uart_queue(OTA_DATA);</span><br><span class="line">                &#125;</span><br><span class="line">                getUartQueMsgNumAdd();</span><br><span class="line">		uartQueMsg.w_count = <span class="number">0</span>;<span class="comment">//清空超时</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">case</span> OTA_DATA:</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(check_bin_file(&amp;mxd_ttl.buf[<span class="number">5</span>], mxd_ttl.priv_len - <span class="number">5</span>))</span><br><span class="line">                &#123;</span><br><span class="line">					<span class="comment">//接收完成，复位</span></span><br><span class="line">                &#125;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">		&#123;</span><br><span class="line">			set_uart_queue(OTA_DATA);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		getUartQueMsgNumAdd();</span><br><span class="line">                uartQueMsg.w_count = <span class="number">0</span>;<span class="comment">//清空超时</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        clear_ttl();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">大笑之</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://qzwjer.github.io/2021/10/OTA%E5%B8%B8%E7%94%A8%E4%BB%A3%E7%A0%81/">https://qzwjer.github.io/2021/10/OTA%E5%B8%B8%E7%94%A8%E4%BB%A3%E7%A0%81/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://qzwjer.github.io" target="_blank">大笑之博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/">嵌入式</a></div><div class="post_share"><div class="addthis_inline_share_toolbox"></div><script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=null" async="async"></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2021/10/js%E6%B5%AE%E7%82%B9%E6%95%B0%E5%A4%84%E7%90%86/"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">js浮点数处理</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/04/换电开发小结/" title="换电开发小结"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-04-07</div><div class="title">换电开发小结</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/my.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">大笑之</div><div class="author-info__description">学习，进步</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">57</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">41</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div></div><a class="button--animated" id="card-info-btn"><i class="fa fa-bookmark"></i><span>加入书签</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/qzwjer" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:1010094375@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-text">1.数据结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-OTA%E8%BF%87%E7%A8%8B"><span class="toc-text">2.OTA过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%8E%B7%E5%8F%96%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE%E7%A8%8B%E5%BA%8F"><span class="toc-text">3.获取更新数据程序</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/10/OTA%E5%B8%B8%E7%94%A8%E4%BB%A3%E7%A0%81/" title="OTA常用代码"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="OTA常用代码"/></a><div class="content"><a class="title" href="/2021/10/OTA%E5%B8%B8%E7%94%A8%E4%BB%A3%E7%A0%81/" title="OTA常用代码">OTA常用代码</a><time datetime="2021-10-27T04:35:29.000Z" title="发表于 2021-10-27 12:35:29">2021-10-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/10/js%E6%B5%AE%E7%82%B9%E6%95%B0%E5%A4%84%E7%90%86/" title="js浮点数处理"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="js浮点数处理"/></a><div class="content"><a class="title" href="/2021/10/js%E6%B5%AE%E7%82%B9%E6%95%B0%E5%A4%84%E7%90%86/" title="js浮点数处理">js浮点数处理</a><time datetime="2021-10-25T10:11:06.000Z" title="发表于 2021-10-25 18:11:06">2021-10-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/09/QT%E6%97%A0%E6%B3%95%E5%AE%9A%E4%BD%8D%E7%A8%8B%E5%BA%8F%E8%BE%93%E5%85%A5%E7%82%B9/" title="QT无法定位程序输入点"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="QT无法定位程序输入点"/></a><div class="content"><a class="title" href="/2021/09/QT%E6%97%A0%E6%B3%95%E5%AE%9A%E4%BD%8D%E7%A8%8B%E5%BA%8F%E8%BE%93%E5%85%A5%E7%82%B9/" title="QT无法定位程序输入点">QT无法定位程序输入点</a><time datetime="2021-09-30T02:53:08.000Z" title="发表于 2021-09-30 10:53:08">2021-09-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/09/SQL%E7%BC%A9%E5%87%8F%E8%A1%A8%E5%A4%A7%E5%B0%8F/" title="SQL缩减表大小"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SQL缩减表大小"/></a><div class="content"><a class="title" href="/2021/09/SQL%E7%BC%A9%E5%87%8F%E8%A1%A8%E5%A4%A7%E5%B0%8F/" title="SQL缩减表大小">SQL缩减表大小</a><time datetime="2021-09-30T01:56:24.000Z" title="发表于 2021-09-30 09:56:24">2021-09-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/09/ssh%E8%BF%9E%E6%8E%A5%E9%97%AE%E9%A2%98/" title="ssh连接问题"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ssh连接问题"/></a><div class="content"><a class="title" href="/2021/09/ssh%E8%BF%9E%E6%8E%A5%E9%97%AE%E9%A2%98/" title="ssh连接问题">ssh连接问题</a><time datetime="2021-09-30T01:55:08.000Z" title="发表于 2021-09-30 09:55:08">2021-09-30</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By 大笑之</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">欢迎来到我的博客！</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(() => {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'default',
+      })
+      false && mermaid.init()
+    })
+  }
+}</script><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: 'tIO55n1PcFVxdupwuvyUIUhw-gzGzoHsz',
+      appKey: 'j7cfrdWGV6mIQ6PY5okJrOdz',
+      placeholder: '少年，留下你的足迹',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="/css/my.js"></script><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
