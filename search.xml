@@ -1556,7 +1556,9 @@
   <entry>
     <title>常用英语词汇</title>
     <url>/2021/11/%E5%B8%B8%E7%94%A8%E8%8B%B1%E8%AF%AD%E8%AF%8D%E6%B1%87/</url>
-    <content><![CDATA[<table style="font-size:16px;text-align:center;font-weight:bold;">
+    <content><![CDATA[<h2 align='center' id='常用英语词汇'>常用英语词汇</h2>
+
+<table style="font-size:16px;text-align:center;font-weight:bold;">
     <tr>
         <td><a href="#蓝牙">蓝牙</a></td>
         <td><a href="#芯片">芯片</a></td>
@@ -1570,9 +1572,11 @@
         <td><a href="#Linux">Linux</a></td>
     </tr>
     <tr>
+        <td><a href="#变量定义">变量定义</a></td>
         <td><a href="#底部">底部</a></td>
     </tr>
 </table>
+
 
 
 
@@ -2293,7 +2297,11 @@
 <td>进程文件系统</td>
 </tr>
 </tbody></table>
-<h2 align='center' id='底部'>底部</h2>
+<h2 align='center' id='变量定义'>变量定义</h2>
+| 变量 | 全程            |
+| ---- | --------------- |
+| argc | argument count  |
+| argv | argument vector |
 
 
 
@@ -2301,16 +2309,7 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
+<p><a href="#常用英语词汇" id='底部' >回到顶部</a></p>
 ]]></content>
       <categories>
         <category>杂文集合</category>
