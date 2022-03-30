@@ -2298,10 +2298,15 @@
 </tr>
 </tbody></table>
 <h2 align='center' id='变量定义'>变量定义</h2>
-| 变量 | 全程            |
-| ---- | --------------- |
-| argc | argument count  |
-| argv | argument vector |
+| 变量  | 全程                  |
+| ----- | --------------------- |
+| argc  | argument count        |
+| argv  | argument vector       |
+| atoi  | ascii to int          |
+| htonl | host to network long  |
+| htons | host ot network short |
+| ntohl | network to host long  |
+| ntohs | network to host short |
 
 
 
