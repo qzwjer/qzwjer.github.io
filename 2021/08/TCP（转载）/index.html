@@ -7,7 +7,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
 <meta property="article:published_time" content="2021-08-17T04:04:27.000Z">
-<meta property="article:modified_time" content="2021-10-27T04:27:33.763Z">
+<meta property="article:modified_time" content="2022-03-31T06:52:44.928Z">
 <meta property="article:author" content="大笑之">
 <meta property="article:tag" content="TCP">
 <meta property="article:tag" content="网络">
@@ -58,7 +58,7 @@
   isHome: false,
   isHighlightShrink: false,
   isToc: true,
-  postUpdate: '2021-10-27 12:27:33'
+  postUpdate: '2022-03-31 14:52:44'
 }</script><noscript><style type="text/css">
   #nav {
     opacity: 1
@@ -164,7 +164,7 @@
     if (fontSizeVal !== undefined) {
       document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
     }
-    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/my.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">76</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">42</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">飞椅档案</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">TCP（转载）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-08-17T04:04:27.000Z" title="发表于 2021-08-17 12:04:27">2021-08-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-10-27T04:27:33.763Z" title="更新于 2021-10-27 12:27:33">2021-10-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">学习总结</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="TCP的通信机制"><a href="#TCP的通信机制" class="headerlink" title="TCP的通信机制"></a>TCP的通信机制</h2><hr>
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/my.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">76</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">42</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">飞椅档案</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">TCP（转载）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-08-17T04:04:27.000Z" title="发表于 2021-08-17 12:04:27">2021-08-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-03-31T06:52:44.928Z" title="更新于 2022-03-31 14:52:44">2022-03-31</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">学习总结</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="TCP的通信机制"><a href="#TCP的通信机制" class="headerlink" title="TCP的通信机制"></a>TCP的通信机制</h2><hr>
 <p>版权声明：本文为CSDN博主「「零一」」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。<br>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/l_ppp/article/details/109133096">https://blog.csdn.net/l_ppp/article/details/109133096</a></p>
 <p>[TOC]</p>
 <h3 id="1-TCP连接管理"><a href="#1-TCP连接管理" class="headerlink" title="1.TCP连接管理"></a>1.TCP连接管理</h3><p>TCP是面向连接进行通信服务的协议，所谓连接，其实就是在两台需要数据交互的主机之间建立一条虚拟的线路，所有的数据交互都是通过这条线路进行的，而TCP就负责这整个线路的创建、销毁、维护管理等工作</p>
@@ -172,7 +172,7 @@
 <p>两端若在通信完成以后肯定需要断开通信，同样也需要两端互发包来确认是否要断开通信。比如，发送端先发送一个FIN包给接收端，告知想要断开连接，然后接收端可以返回给发送端一个ACK包表示同意你断开连接的请求，紧接着接收端也向发送端发送了一个FIN包，表示其也想断开连接的意愿，发送端在接收到该包后随即返回给接收端一个ACK包表示我也同意你断开连接，这样，两端就断开连接了</p>
 <p>总结一下，一次完整的TCP连接的建立与断开至少需要来回发送7个包，其中建立连接需要发3个包，断开连接需要发4个包</p>
 <p>我们来看一下完整的通信过程简图</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/20201017154006265.png" alt="在这里插入图片描述"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/20201017154006265.png" alt="在这里插入图片描述"></p>
 <p>这就是大家常说的三次握手，四次挥手的过程</p>
 <p>如果不好理解上面的建立、断开连接过程，这里我再给大家举一个小小的例子</p>
 <p>发送端与接收端通信，就好比我们日常生活中两个人打电话，例如现在A给B打电话</p>
@@ -182,33 +182,33 @@
 <h3 id="2-分段数据发送"><a href="#2-分段数据发送" class="headerlink" title="2.分段数据发送"></a>2.分段数据发送</h3><p>TCP不是拿到一整个包就直接原封不动地传给接收端的，因为若这样做，即使是发生了数据丢失，也不知道到底丢失了哪部分的数据，因此其采用的就是将数据分段发送的方式</p>
 <p>这里先说明一点，不光建立和断开连接时接收端需要向发送端发送请求应答，在数据交互时也是需要的</p>
 <p>例如有一个数据包，我们可以将其按顺序给每一个字节都标上一个序号，然后我们假设每次发送1000个序号区间的数据给接收端，所以第一次发送的是 序号 1 ~ 1000 的数据，接收端接收到了以后会返回给发送端一个请求应答，告知发送端下一次请发送 序号 1001 ~ 2000 的数据过来，过程如图所示</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/20201017162518393.png" alt="在这里插入图片描述"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/20201017162518393.png" alt="在这里插入图片描述"></p>
 <p>上面我们假设的是每次发送1000个序列号区间的单位，而实际过程中，却不一定是这个值。</p>
 <p>在前面的学习中，我们得知数据在数据链路层中传输会收到MTU（最大传输单元）的影响，若数据大于该值，IP则会被分片处理，因此我们尽可能地不让这种事情发生，那么就要让传输的每段数据大小小于该通信线路上最小的MTU，该值称为MSS（最大消息长度）</p>
 <p>该值是会在建立连接的三次握手时被计算获得的，比如发送端在请求接收端的时候，在发送的包上附带上其线路上的MTU大小为4000，然后接收端在发送确认应答给发送端时，也会在包上附带上其线路上的MTU大小为1460，此时发送端接收到确认应答后比较两个MTU的大小，取其中小的那个值作为之后数据传输每段的数据大小</p>
 <p>如图：</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/20201017164229202.png" alt="在这里插入图片描述"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/20201017164229202.png" alt="在这里插入图片描述"></p>
 <h3 id="3-重发控制"><a href="#3-重发控制" class="headerlink" title="3.重发控制"></a>3.重发控制</h3><p>我们都知道，在数据传输过程中可能会因为各种原因出现丢包现象，而当出现丢包现象时，即发送端在发完数据以后等待一段时间，并未收到接收端的确认应答，则视为丢包，于是就会进行重发</p>
 <p>其中丢包现象又分为两种：</p>
 <p>发送端向接收端发送数据的过程中，发生了丢包现象，接收端并未接收到数据，因此不会给发送端发送确认应答<br>接收端收到了发送端传过来的数据，并且也向发送端返回了确认应答，但确认应答的包却在发送的途中出现了丢包，所以发送端接收不到确认应答<br>以上两种情况如下图所示：</p>
 <p>第一种情况：</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/20201017165347779.png" alt="在这里插入图片描述"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/20201017165347779.png" alt="在这里插入图片描述"></p>
 <p>第二种情况：</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/2020101716554998.png" alt="在这里插入图片描述"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/2020101716554998.png" alt="在这里插入图片描述"></p>
 <p>那么，发送端发送完数据后多久没收到确认应答才判定数据丢包了呢？这个都是随着网络环境的变化而变化的，TCP会在每次发包时计算往返时间以及偏差来决定等待的时间</p>
 <p>若重发后又出现了丢包，则下一次等待的时间会以2倍、4倍的指数函数延长</p>
 <p>但其又不会无限进行重发，当重发次数达到一定程度后，会判定为网络异常，两端通信就会被强制关闭</p>
 <h3 id="4-滑动窗口控制"><a href="#4-滑动窗口控制" class="headerlink" title="4.滑动窗口控制"></a>4.滑动窗口控制</h3><p>上面介绍了TCP将数据分段发送，虽然提高了传输的可靠性，但是存在着一个致命的缺点，那就是效率非常低，因为每送一段都要等待接收端的确认应答，若整个数据的分段较多，那么通信的性能可能就会很低了，因此TCP引入了窗口这个概念</p>
 <p>所谓窗口，表示的是无需等待确认应答而可以连续发送的连续多段数据的区域，如图</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/20201017172721594.png" alt="在这里插入图片描述"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/20201017172721594.png" alt="在这里插入图片描述"></p>
 <p>我们假设每段数据长度为1000，这里的窗口大小为4段，因此发送端可以将这四段数据都分别发送出去并且不需要发送一段数据以后等待一个确认应答，如图</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/20201017172916342.png" alt="在这里插入图片描述"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/20201017172916342.png" alt="在这里插入图片描述"></p>
 <p>此时的窗口包含4个段，即窗口内包含4000个字节的数据，我们称之为窗口大小</p>
 <p>接收端在返回相应的确认应答给发送端时，发送端会根据收到的确认应答，继续发送比该确认应答中序列号大4000的数据，如图所示</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/20201017173737412.png" alt="在这里插入图片描述"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/20201017173737412.png" alt="在这里插入图片描述"></p>
 <h3 id="5-滑动窗口的重发控制"><a href="#5-滑动窗口的重发控制" class="headerlink" title="5.滑动窗口的重发控制"></a>5.滑动窗口的重发控制</h3><p>若使用了滑动窗口控制这一技术后，即使某段数据出现了丢包现象，也不会造成太大的影响，因为接收端会一边接收发送端传过来的数据，一边用某种方式告知发送端刚才丢失了哪段数据</p>
 <p>接下来我们来介绍一下其作用过程，如图所示</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/20201017194341110.png" alt="在这里插入图片描述"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/20201017194341110.png" alt="在这里插入图片描述"></p>
 <p>图中，在发送第二段数据（1001 ~ 2000）时发生了丢包，因此接收端没有接收到对应的包，所以当发送端传过来第三段数据的时候，接收端返回的仍是第二段的确认应答，紧接着发送端分别发送了第四段、第五段数据，可接收端都返回的是第二段的确认应答</p>
 <p>就这样连着三次发送了同一个确认应答给发送端，所以发送端得知刚才传输数据的过程中第二段数据发生了丢包，因此此时会将丢失的数据重发一份</p>
 <p>然后接收端在接收到之前丢掉的那段数据以后，因为之前的数据都成功接收了，所以下一次就开始请求 5001 ~ 6000 这段数据了</p>
@@ -216,11 +216,11 @@
 <p>为了防止上述情况得发生，TCP提供了一种机制可以使发送端每次发送的数据尽可能得在接收端得承载能力之内，而其实现得方式就是接收端向发送端告知自己能够接收的数据大小，因此发送端每次发送的数据就都不会超过该值，我们称该值为窗口大小</p>
 <p>一旦接收端暂时无法接收任何数据，它会告知发送端，因此发送端会暂停数据的发送，但为了后续数据的正常发送，发送端会不时地向接收端发送一个窗口探测，试探性地看一下接收端是否能继续接收数据了</p>
 <p>具体的过程如下图所示</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/20201019163343725.png" alt="在这里插入图片描述"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/20201019163343725.png" alt="在这里插入图片描述"></p>
 <h3 id="7-拥塞控制"><a href="#7-拥塞控制" class="headerlink" title="7.拥塞控制"></a>7.拥塞控制</h3><p>因为出现了窗口控制，数据不再是一段一段发送，而是连续发送多段数据包，因此有时如果遇到网络拥堵的情况，而我们又同时发送了大量的数据包，可能会导致网络瘫痪</p>
 <p>TCP运用了一种叫做慢启动技巧缓解了上述情况，何为慢启动呢？就是不要在一开始就瞬间发送大量数据包，而是先发送一部分，然后根据收发情况再发送更多的数据包</p>
 <p>具体过程我们来看一下</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/20201019171411162.png" alt="在这里插入图片描述"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/20201019171411162.png" alt="在这里插入图片描述"></p>
 <p>如图中，发送端的窗口大小为1000，因此只发送了一段长度为1000字节的数据包，此时接收端收到数据并返回一个确认应答，因此发送端将窗口大小加一，即窗口大小为2000 ；发送端又发送了两段长度为1000的数据包，接收端收到数据并返回两个确认应答，因此发送端将窗口大小加二，即窗口大小为4000 ；以此类推</p>
 <p>总结： 发送端每次发送的数据包会以1，2，4的指数型增长</p>
 <p>但窗口大小也不会无限指数型增大，而是会在达到某个值时进行一些调整，该值称为慢启动阈值</p>

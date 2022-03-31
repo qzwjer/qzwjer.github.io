@@ -361,7 +361,7 @@
 <p>两端若在通信完成以后肯定需要断开通信，同样也需要两端互发包来确认是否要断开通信。比如，发送端先发送一个FIN包给接收端，告知想要断开连接，然后接收端可以返回给发送端一个ACK包表示同意你断开连接的请求，紧接着接收端也向发送端发送了一个FIN包，表示其也想断开连接的意愿，发送端在接收到该包后随即返回给接收端一个ACK包表示我也同意你断开连接，这样，两端就断开连接了</p>
 <p>总结一下，一次完整的TCP连接的建立与断开至少需要来回发送7个包，其中建立连接需要发3个包，断开连接需要发4个包</p>
 <p>我们来看一下完整的通信过程简图</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/20201017154006265.png" alt="在这里插入图片描述"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/20201017154006265.png" alt="在这里插入图片描述"></p>
 <p>这就是大家常说的三次握手，四次挥手的过程</p>
 <p>如果不好理解上面的建立、断开连接过程，这里我再给大家举一个小小的例子</p>
 <p>发送端与接收端通信，就好比我们日常生活中两个人打电话，例如现在A给B打电话</p>
@@ -371,33 +371,33 @@
 <h3 id="2-分段数据发送"><a href="#2-分段数据发送" class="headerlink" title="2.分段数据发送"></a>2.分段数据发送</h3><p>TCP不是拿到一整个包就直接原封不动地传给接收端的，因为若这样做，即使是发生了数据丢失，也不知道到底丢失了哪部分的数据，因此其采用的就是将数据分段发送的方式</p>
 <p>这里先说明一点，不光建立和断开连接时接收端需要向发送端发送请求应答，在数据交互时也是需要的</p>
 <p>例如有一个数据包，我们可以将其按顺序给每一个字节都标上一个序号，然后我们假设每次发送1000个序号区间的数据给接收端，所以第一次发送的是 序号 1 ~ 1000 的数据，接收端接收到了以后会返回给发送端一个请求应答，告知发送端下一次请发送 序号 1001 ~ 2000 的数据过来，过程如图所示</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/20201017162518393.png" alt="在这里插入图片描述"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/20201017162518393.png" alt="在这里插入图片描述"></p>
 <p>上面我们假设的是每次发送1000个序列号区间的单位，而实际过程中，却不一定是这个值。</p>
 <p>在前面的学习中，我们得知数据在数据链路层中传输会收到MTU（最大传输单元）的影响，若数据大于该值，IP则会被分片处理，因此我们尽可能地不让这种事情发生，那么就要让传输的每段数据大小小于该通信线路上最小的MTU，该值称为MSS（最大消息长度）</p>
 <p>该值是会在建立连接的三次握手时被计算获得的，比如发送端在请求接收端的时候，在发送的包上附带上其线路上的MTU大小为4000，然后接收端在发送确认应答给发送端时，也会在包上附带上其线路上的MTU大小为1460，此时发送端接收到确认应答后比较两个MTU的大小，取其中小的那个值作为之后数据传输每段的数据大小</p>
 <p>如图：</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/20201017164229202.png" alt="在这里插入图片描述"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/20201017164229202.png" alt="在这里插入图片描述"></p>
 <h3 id="3-重发控制"><a href="#3-重发控制" class="headerlink" title="3.重发控制"></a>3.重发控制</h3><p>我们都知道，在数据传输过程中可能会因为各种原因出现丢包现象，而当出现丢包现象时，即发送端在发完数据以后等待一段时间，并未收到接收端的确认应答，则视为丢包，于是就会进行重发</p>
 <p>其中丢包现象又分为两种：</p>
 <p>发送端向接收端发送数据的过程中，发生了丢包现象，接收端并未接收到数据，因此不会给发送端发送确认应答<br>接收端收到了发送端传过来的数据，并且也向发送端返回了确认应答，但确认应答的包却在发送的途中出现了丢包，所以发送端接收不到确认应答<br>以上两种情况如下图所示：</p>
 <p>第一种情况：</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/20201017165347779.png" alt="在这里插入图片描述"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/20201017165347779.png" alt="在这里插入图片描述"></p>
 <p>第二种情况：</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/2020101716554998.png" alt="在这里插入图片描述"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/2020101716554998.png" alt="在这里插入图片描述"></p>
 <p>那么，发送端发送完数据后多久没收到确认应答才判定数据丢包了呢？这个都是随着网络环境的变化而变化的，TCP会在每次发包时计算往返时间以及偏差来决定等待的时间</p>
 <p>若重发后又出现了丢包，则下一次等待的时间会以2倍、4倍的指数函数延长</p>
 <p>但其又不会无限进行重发，当重发次数达到一定程度后，会判定为网络异常，两端通信就会被强制关闭</p>
 <h3 id="4-滑动窗口控制"><a href="#4-滑动窗口控制" class="headerlink" title="4.滑动窗口控制"></a>4.滑动窗口控制</h3><p>上面介绍了TCP将数据分段发送，虽然提高了传输的可靠性，但是存在着一个致命的缺点，那就是效率非常低，因为每送一段都要等待接收端的确认应答，若整个数据的分段较多，那么通信的性能可能就会很低了，因此TCP引入了窗口这个概念</p>
 <p>所谓窗口，表示的是无需等待确认应答而可以连续发送的连续多段数据的区域，如图</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/20201017172721594.png" alt="在这里插入图片描述"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/20201017172721594.png" alt="在这里插入图片描述"></p>
 <p>我们假设每段数据长度为1000，这里的窗口大小为4段，因此发送端可以将这四段数据都分别发送出去并且不需要发送一段数据以后等待一个确认应答，如图</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/20201017172916342.png" alt="在这里插入图片描述"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/20201017172916342.png" alt="在这里插入图片描述"></p>
 <p>此时的窗口包含4个段，即窗口内包含4000个字节的数据，我们称之为窗口大小</p>
 <p>接收端在返回相应的确认应答给发送端时，发送端会根据收到的确认应答，继续发送比该确认应答中序列号大4000的数据，如图所示</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/20201017173737412.png" alt="在这里插入图片描述"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/20201017173737412.png" alt="在这里插入图片描述"></p>
 <h3 id="5-滑动窗口的重发控制"><a href="#5-滑动窗口的重发控制" class="headerlink" title="5.滑动窗口的重发控制"></a>5.滑动窗口的重发控制</h3><p>若使用了滑动窗口控制这一技术后，即使某段数据出现了丢包现象，也不会造成太大的影响，因为接收端会一边接收发送端传过来的数据，一边用某种方式告知发送端刚才丢失了哪段数据</p>
 <p>接下来我们来介绍一下其作用过程，如图所示</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/20201017194341110.png" alt="在这里插入图片描述"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/20201017194341110.png" alt="在这里插入图片描述"></p>
 <p>图中，在发送第二段数据（1001 ~ 2000）时发生了丢包，因此接收端没有接收到对应的包，所以当发送端传过来第三段数据的时候，接收端返回的仍是第二段的确认应答，紧接着发送端分别发送了第四段、第五段数据，可接收端都返回的是第二段的确认应答</p>
 <p>就这样连着三次发送了同一个确认应答给发送端，所以发送端得知刚才传输数据的过程中第二段数据发生了丢包，因此此时会将丢失的数据重发一份</p>
 <p>然后接收端在接收到之前丢掉的那段数据以后，因为之前的数据都成功接收了，所以下一次就开始请求 5001 ~ 6000 这段数据了</p>
@@ -405,11 +405,11 @@
 <p>为了防止上述情况得发生，TCP提供了一种机制可以使发送端每次发送的数据尽可能得在接收端得承载能力之内，而其实现得方式就是接收端向发送端告知自己能够接收的数据大小，因此发送端每次发送的数据就都不会超过该值，我们称该值为窗口大小</p>
 <p>一旦接收端暂时无法接收任何数据，它会告知发送端，因此发送端会暂停数据的发送，但为了后续数据的正常发送，发送端会不时地向接收端发送一个窗口探测，试探性地看一下接收端是否能继续接收数据了</p>
 <p>具体的过程如下图所示</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/20201019163343725.png" alt="在这里插入图片描述"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/20201019163343725.png" alt="在这里插入图片描述"></p>
 <h3 id="7-拥塞控制"><a href="#7-拥塞控制" class="headerlink" title="7.拥塞控制"></a>7.拥塞控制</h3><p>因为出现了窗口控制，数据不再是一段一段发送，而是连续发送多段数据包，因此有时如果遇到网络拥堵的情况，而我们又同时发送了大量的数据包，可能会导致网络瘫痪</p>
 <p>TCP运用了一种叫做慢启动技巧缓解了上述情况，何为慢启动呢？就是不要在一开始就瞬间发送大量数据包，而是先发送一部分，然后根据收发情况再发送更多的数据包</p>
 <p>具体过程我们来看一下</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/20201019171411162.png" alt="在这里插入图片描述"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/20201019171411162.png" alt="在这里插入图片描述"></p>
 <p>如图中，发送端的窗口大小为1000，因此只发送了一段长度为1000字节的数据包，此时接收端收到数据并返回一个确认应答，因此发送端将窗口大小加一，即窗口大小为2000 ；发送端又发送了两段长度为1000的数据包，接收端收到数据并返回两个确认应答，因此发送端将窗口大小加二，即窗口大小为4000 ；以此类推</p>
 <p>总结： 发送端每次发送的数据包会以1，2，4的指数型增长</p>
 <p>但窗口大小也不会无限指数型增大，而是会在达到某个值时进行一些调整，该值称为慢启动阈值</p>
@@ -491,12 +491,12 @@
     <url>/2021/07/http%E7%AE%80%E5%8D%95%E6%8E%A2%E7%B4%A2/</url>
     <content><![CDATA[<p>&#x3D;&#x3D;注意：&#x3D;&#x3D;有些图片中，消息的时间和端口号与前面的不匹配，是因为图片是后提供的，不必纠结。</p>
 <p>打开<strong>网络串口调试助手</strong>，如 netAssist，配置成 TCP Server 模式，如下：</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/image-20210701130219844.png" alt="image-20210701130219844"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/image-20210701130219844.png" alt="image-20210701130219844"></p>
 <p>用浏览器访问地址：<code>localhost:12345</code> 或者 <code>127.0.0.1:12345</code>。</p>
 <p>我们从网络调试助手上，首先看到客户端上线的通知，如下：</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/image-20210701131006096.png" alt="image-20210701131006096"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/image-20210701131006096.png" alt="image-20210701131006096"></p>
 <p>然后收到信息，如下：</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/image-20210701131627226.png" alt="image-20210701131627226"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/image-20210701131627226.png" alt="image-20210701131627226"></p>
 <p>具体数据为：</p>
 <figure class="highlight http"><table><tr><td class="code"><pre><span class="line"><span class="keyword">GET</span> <span class="string">/</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>localhost:12345</span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>keep-alive</span><br><span class="line"><span class="attribute">sec-ch-ua</span><span class="punctuation">: </span>&quot; Not;A Brand&quot;;v=&quot;99&quot;, &quot;Microsoft Edge&quot;;v=&quot;91&quot;, &quot;Chromium&quot;;v=&quot;91&quot;</span><br><span class="line"><span class="attribute">sec-ch-ua-mobile</span><span class="punctuation">: </span>?0</span><br><span class="line"><span class="attribute">Upgrade-Insecure-Requests</span><span class="punctuation">: </span>1</span><br><span class="line"><span class="attribute">User-Agent</span><span class="punctuation">: </span>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36 Edg/91.0.864.59</span><br><span class="line"><span class="attribute">Accept</span><span class="punctuation">: </span>text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9</span><br><span class="line"><span class="attribute">Sec-Fetch-Site</span><span class="punctuation">: </span>none</span><br><span class="line"><span class="attribute">Sec-Fetch-Mode</span><span class="punctuation">: </span>navigate</span><br><span class="line"><span class="attribute">Sec-Fetch-User</span><span class="punctuation">: </span>?1</span><br><span class="line"><span class="attribute">Sec-Fetch-Dest</span><span class="punctuation">: </span>document</span><br><span class="line"><span class="attribute">Accept-Encoding</span><span class="punctuation">: </span>gzip, deflate, br</span><br><span class="line"><span class="attribute">Accept-Language</span><span class="punctuation">: </span>zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6</span><br><span class="line"><span class="attribute">Cookie</span><span class="punctuation">: </span>wp-settings-time-1=1612349861; wp-settings-1=mfold%3Do</span><br></pre></td></tr></table></figure>
 
@@ -510,9 +510,9 @@
 <figure class="highlight"><table><tr><td class="code"><pre><span class="line"><span class="meta">HTTP/1.1</span> <span class="number">200</span> OK</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>text/html</span><br><span class="line"><span class="attribute">charset</span><span class="punctuation">: </span>gbk</span><br><span class="line">Content-Length:44</span><br><span class="line"></span><br><span class="line">&lt;html&gt;&lt;div&gt;&lt;h1&gt;hello world&lt;/h1&gt;&lt;/div&gt;&lt;/html&gt;</span><br></pre></td></tr></table></figure>
 
 <p>浏览器收到后，会刷新网页为：</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/image-20210701131312875.png" alt="image-20210701131312875"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/image-20210701131312875.png" alt="image-20210701131312875"></p>
 <p>收到数据后，浏览器再次响应：</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/image-20210701130422238.png"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/image-20210701130422238.png"></p>
 <p>具体数据为：</p>
 <figure class="highlight http"><table><tr><td class="code"><pre><span class="line"><span class="keyword">GET</span> <span class="string">/favicon.ico</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>localhost:12345</span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>keep-alive</span><br><span class="line"><span class="attribute">sec-ch-ua</span><span class="punctuation">: </span>&quot; Not;A Brand&quot;;v=&quot;99&quot;, &quot;Microsoft Edge&quot;;v=&quot;91&quot;, &quot;Chromium&quot;;v=&quot;91&quot;</span><br><span class="line"><span class="attribute">sec-ch-ua-mobile</span><span class="punctuation">: </span>?0</span><br><span class="line"><span class="attribute">User-Agent</span><span class="punctuation">: </span>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36 Edg/91.0.864.59</span><br><span class="line"><span class="attribute">Accept</span><span class="punctuation">: </span>image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8</span><br><span class="line"><span class="attribute">Sec-Fetch-Site</span><span class="punctuation">: </span>same-origin</span><br><span class="line"><span class="attribute">Sec-Fetch-Mode</span><span class="punctuation">: </span>no-cors</span><br><span class="line"><span class="attribute">Sec-Fetch-Dest</span><span class="punctuation">: </span>image</span><br><span class="line"><span class="attribute">Referer</span><span class="punctuation">: </span>http://localhost:12345/</span><br><span class="line"><span class="attribute">Accept-Encoding</span><span class="punctuation">: </span>gzip, deflate, br</span><br><span class="line"><span class="attribute">Accept-Language</span><span class="punctuation">: </span>zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6</span><br><span class="line"><span class="attribute">Cookie</span><span class="punctuation">: </span>wp-settings-time-1=1612349861; wp-settings-1=mfold%3Do</span><br></pre></td></tr></table></figure>
 
@@ -568,7 +568,7 @@
 <h3 id="6-rdesktop-远程登录-windows"><a href="#6-rdesktop-远程登录-windows" class="headerlink" title="6.rdesktop 远程登录 windows"></a>6.rdesktop 远程登录 windows</h3><p>报错：</p>
 <p><em>Failed to initialize NLA, do you have correct Kerberos TGT initialized ?</em></p>
 <p>修改 windows 系统远程连接设置</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/image-20210820113554850.png" alt="image-20210820113554850"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/image-20210820113554850.png" alt="image-20210820113554850"></p>
 ]]></content>
       <categories>
         <category>学习总结</category>
@@ -644,7 +644,7 @@
     <content><![CDATA[<h3 id="1-gvim"><a href="#1-gvim" class="headerlink" title="1.gvim"></a>1.gvim</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">:edit $vim&#x2F;_vimrc</span><br></pre></td></tr></table></figure>
 
 <p>在末尾加</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/image-20210805151848038.png" alt="image-20210805151848038"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/image-20210805151848038.png" alt="image-20210805151848038"></p>
 <p>禁止生成临时文件</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">set noundofile</span><br><span class="line">set nobackup</span><br><span class="line">set noswapfile</span><br></pre></td></tr></table></figure>
 
@@ -1041,8 +1041,8 @@
 </ol>
 <p>测试：</p>
 <p>图片太大的显示不出来</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/19f2293ed1a15d9213f3f66dd3455a3.jpg"></p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/typora-icon2.png"><br><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/typora-icon.png"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/19f2293ed1a15d9213f3f66dd3455a3.jpg"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/typora-icon2.png"><br><img src="https://qzwjer.top/doc/blogImg/img/typora-icon.png"></p>
 ]]></content>
       <categories>
         <category>杂文集合</category>
@@ -1144,10 +1144,10 @@
 <ol>
 <li><p>创建项目。新建项目，模板选择 “Other Project” 分类中的 “Qt Custom Designer Widget”，项目名称定位 mydesigner，控件类改为 MyDesign，然后在右侧指定图标文件的路径（不指定的话使用 Qt 默认图标），其他选项保持默认。后面步骤全部保持默认直到完成项目的创建。</p>
 <p><strong>注意，在创建项目，选择编译 kit 时，选择 64位 msvc2019（我的 Qt Creator 是64位msvc2019编译的），因为后面生成的 dll 文件与编译套件相关，生成的 dll 文件版本如果与 Qt Creator、designer 不匹配，则部件无法加入。</strong></p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/image-20211112154912482.png" alt="image-20211112154912482"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/image-20211112154912482.png" alt="image-20211112154912482"></p>
 </li>
 <li><p>更改部件。可以通过修改 mydesign.h 和 mydesign.cpp（注意，在 mydesign 工程列表下的 mydesign 目录下，如下图），修改部件。</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/image-20211112154244020.png" alt="image-20211112154244020"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/image-20211112154244020.png" alt="image-20211112154244020"></p>
 <p>进入 mydesign.cpp 文件修改：</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;mydesign.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QPushButton&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QHBoxLayout&gt;</span></span></span><br><span class="line"></span><br><span class="line">MyDesign::MyDesign(QWidget *parent) :</span><br><span class="line">    QWidget(parent)</span><br><span class="line">&#123;</span><br><span class="line">    QPushButton *button1 = <span class="keyword">new</span> QPushButton(<span class="keyword">this</span>);</span><br><span class="line">    QPushButton *button2 = <span class="keyword">new</span> QPushButton(<span class="keyword">this</span>);</span><br><span class="line">    button1-&gt;setText(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line">    button2-&gt;setText(<span class="string">&quot;Qt!&quot;</span>);</span><br><span class="line">    QHBoxLayout *layout = <span class="keyword">new</span> QHBoxLayout;</span><br><span class="line">    layout-&gt;addWidget(button1);</span><br><span class="line">    layout-&gt;addWidget(button2);</span><br><span class="line">    setLayout(layout);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -1231,7 +1231,7 @@
 <li><p>加载插件。先单机 widget.ui 文件进入设计模式，设计的界面如图所示。将其中显示“无”字的 Label 的 objectName 属性更改为 labelNum。然后进入 wiget.h 文件，先添加头文件 #inlcude “regexpinterface.h”，然后再 private 部分定义一个对象指针，再声明一个加载插件函数：</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">RegExpInterface * regexpIntergace;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">loadPlugin</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/image-20211112115518432.png" alt="image-20211112115518432"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/image-20211112115518432.png" alt="image-20211112115518432"></p>
 <p>现在到 widget.cpp 文件中先添加头文件，包含：</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QPluginLoader&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QMessageBox&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QDir&gt;</span></span></span><br></pre></td></tr></table></figure>
 
@@ -1248,7 +1248,7 @@
 <p><strong>这里就是使用了 regexpInterface 接口的 regexp() 函数来获取 lineEdit 不见输入字符串中第一个出现的数字，然后在 labelNum 中显示出来。</strong></p>
 </li>
 <li><p>运行程序。先构建plugin项目，再运行 regexpwindow 项目。</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/image-20211112120230955.png" alt="image-20211112120230955"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/image-20211112120230955.png" alt="image-20211112120230955"></p>
 </li>
 </ol>
 <p>到此为止，创建插件并在应用程序中使用插件的整个过程就介绍完了。<strong>这个例子是基于 Qt 的 Echo Plugin Example 示例程序的，可以在帮助中查看这个例子。Qt 中还有一个 Plug &amp; Paint Example 演示程序，这是一个比较综合的使用插件扩展应用程序的例子。</strong></p>
@@ -1485,7 +1485,7 @@
 <p>存储器：</p>
 <p>ROM（flash）：64K字节，存储 Code 和 RO-data</p>
 <p>RAM（sram）：20K字节，存储 RW-data 和 ZI-data</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/20190218114244769.png" alt="在这里插入图片描述"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/20190218114244769.png" alt="在这里插入图片描述"></p>
 <p>flash里面的数据掉电可保存，sram中的数据掉电就丢失，sram的执行速度要快于flash，flash容量大于sram。<br>上方的最低内存地址，最高地址，都是在flash和sram中。<br>正常下载程序都是下载存储进flash里面。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Code:代码存储区</span><br><span class="line"></span><br><span class="line">RO-data:只读数据存储区，</span><br><span class="line">存储文字常量</span><br><span class="line"></span><br><span class="line">RW-data:读写数据存储区，</span><br><span class="line">存储包括栈区（stack）、堆区（heap）、全局变量区（静态区）（static）</span><br><span class="line"></span><br><span class="line">ZI-data:零初始化数据区</span><br><span class="line">&#x2F;&#x2F;--------------------------------------------------------------</span><br><span class="line">全局变量存放在静态存储区,位置是固定的。 </span><br><span class="line">局部变量在栈空间,栈地址是不固定的。</span><br><span class="line">栈：就是那些由编译器在需要的时候分配，在不需要的时候自动清除的变量的存储区。里面的变量通常是局部变量、函数参数等。</span><br><span class="line">堆：就是那些由new分配的内存块，他们的释放编译器不去管，由我们的应用程序去控制，一般一个new就要对应一个delete。如果程序员没有释放掉，那么在程序结束后，操作系统会自动回收。</span><br><span class="line">自由存储区：就是那些由malloc等分配的内存块，他和堆是十分相似的，不过它是用free来结束自己的生命的。</span><br><span class="line">全局存储区（静态存储区）：全局变量和静态变量的存储是放在一块的，初始化的全局变量和静态变量在一块区域， 未初始化的全局变量和未初始化的静态变量在相邻的另一块区域。程序结束后由系统释放。</span><br><span class="line">常量存储区：这是一块比较特殊的存储区，他们里面存放的是常量，不允许修改。</span><br></pre></td></tr></table></figure>
 <p>使用mdk编译时，可以看到output：</p>
@@ -1496,30 +1496,30 @@
 <p>其它封装：FBGA，是<em><strong>Fine-Pitch Ball Grid Array</strong></em>（意译为“<a href="https://baike.baidu.com/item/%E7%BB%86%E9%97%B4%E8%B7%9D%E7%90%83%E6%A0%85%E9%98%B5%E5%88%97/9241045">细间距球栅阵列</a>”）的缩写，是细间距球栅阵列，是一种在底部有焊球的面阵引脚结构。没有引脚，贴着。</p>
 <hr>
 <p>系统架构</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/image-20210929091554826.png" alt="image-20210929091554826"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/image-20210929091554826.png" alt="image-20210929091554826"></p>
 <hr>
 <p>一个非常好的博客文章：<a href="https://www.cnblogs.com/yihuihong/p/4965997.html">https://www.cnblogs.com/yihuihong/p/4965997.html</a></p>
 <p>在此备份👇：</p>
 <ol>
 <li>芯片结构组成图：</li>
 </ol>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/615824-20151114225549759-412496293.jpg" alt="img"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/615824-20151114225549759-412496293.jpg" alt="img"></p>
 <ol start="2">
 <li>STM32内部结构</li>
 </ol>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/615824-20151114225819728-1602787293.jpg" alt="img"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/615824-20151114225819728-1602787293.jpg" alt="img"></p>
 <ol start="3">
 <li>Cortex-M3模块结构图</li>
 </ol>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/615824-20151114230206103-764427193.jpg" alt="img"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/615824-20151114230206103-764427193.jpg" alt="img"></p>
 <ol start="4">
 <li>STM3210X内部结构</li>
 </ol>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/615824-20151114230423587-315199759.jpg" alt="img"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/615824-20151114230423587-315199759.jpg" alt="img"></p>
 <ol start="5">
 <li>桥</li>
 </ol>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/615824-20151114230556290-1068564531.png" alt="img"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/615824-20151114230556290-1068564531.png" alt="img"></p>
 <hr>
 <p><strong>四个主动单元 :</strong></p>
 <p>​    M3内核的ICode总线(I-bus)、DCode总线(D-bus)、 系统总线(S-bus)、DMA(DMA1、DMA2、以太网DMA) </p>
@@ -1541,10 +1541,10 @@
 <p>两个AHB&#x2F;APB桥在AHB和两个APB总线间提供同步连接</p>
 <p>APB1速度限于36MHz，APB2全速最高72MHz</p>
 <hr>
-<p>存储器映像<br><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/image-20210929163541040.png" alt="image-20210929163541040"></p>
+<p>存储器映像<br><img src="https://qzwjer.top/doc/blogImg/img/image-20210929163541040.png" alt="image-20210929163541040"></p>
 <hr>
 <p>时钟</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/image-20210929172247441.png" alt="image-20210929172247441"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/image-20210929172247441.png" alt="image-20210929172247441"></p>
 ]]></content>
       <categories>
         <category>杂文集合</category>
@@ -1994,6 +1994,16 @@
 <td></td>
 <td>自转，旋转（spinbox旋钮控件）</td>
 </tr>
+<tr>
+<td>dimension</td>
+<td>[daɪˈmenʃ(ə)n]</td>
+<td>尺寸、维度</td>
+</tr>
+<tr>
+<td>axes</td>
+<td></td>
+<td>坐标轴</td>
+</tr>
 </tbody></table>
 <h2 align='center' id='其它'>其它</h2>
 
@@ -2362,7 +2372,7 @@
 <p>选择一个靠谱的ip</p>
 <p>在 C:\Windows\System32\drivers\etc\hosts 文件添加 ip 与 域名</p>
 <p>例如</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/image-20210618164259451.png" alt="image-20210618164259451"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/image-20210618164259451.png" alt="image-20210618164259451"></p>
 <p>在 hosts 文件后 添加</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">13.114.40.48 github.com</span><br></pre></td></tr></table></figure>
 ]]></content>
@@ -2455,7 +2465,7 @@
     <content><![CDATA[<h3 id="先背一遍Qt代码："><a href="#先背一遍Qt代码：" class="headerlink" title="先背一遍Qt代码："></a>先背一遍Qt代码：</h3><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QApplication&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QMainWindow&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>* argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">QApplication <span class="title">app</span><span class="params">(argc, argv)</span></span>;</span><br><span class="line">    QMainWindow mw;</span><br><span class="line">    mw.show();</span><br><span class="line">    app.exec();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="编译生成"><a href="#编译生成" class="headerlink" title="编译生成"></a>编译生成</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">qmake -project QT+=widgets</span><br><span class="line">qmake</span><br><span class="line">make</span><br></pre></td></tr></table></figure>
 <hr>
-<h3 id="运行错误"><a href="#运行错误" class="headerlink" title="运行错误"></a>运行错误</h3><p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/image-20210926164814895.png" alt="image-20210926164814895"></p>
+<h3 id="运行错误"><a href="#运行错误" class="headerlink" title="运行错误"></a>运行错误</h3><p><img src="https://qzwjer.top/doc/blogImg/img/image-20210926164814895.png" alt="image-20210926164814895"></p>
 <p>出现以上问题，是动态链接库被污染了，某些程序中也包含Qt5Core.dll文件，且在Path相对考前的位置，因此调用时会找错地方。</p>
 <p>解决：把Qt官方路径放到Path前列。</p>
 ]]></content>
@@ -2658,7 +2668,7 @@
     <title>js浮点数处理</title>
     <url>/2021/10/js%E6%B5%AE%E7%82%B9%E6%95%B0%E5%A4%84%E7%90%86/</url>
     <content><![CDATA[<h2 id="1-参考"><a href="#1-参考" class="headerlink" title="1.参考"></a>1.参考</h2><p><a href="https://cloud.tencent.com/developer/ask/180535">https://cloud.tencent.com/developer/ask/180535</a></p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/cloud.tencent.com_developer_ask_180535%20(3).png" alt="cloud.tencent.com_developer_ask_180535 (3)"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/cloud.tencent.com_developer_ask_180535%20(3).png" alt="cloud.tencent.com_developer_ask_180535 (3)"></p>
 <h2 id="2-正确示例"><a href="#2-正确示例" class="headerlink" title="2.正确示例"></a>2.正确示例</h2><figure class="highlight"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> fnumb = <span class="built_in">Math</span>.PI;</span><br><span class="line"><span class="keyword">const</span> fstr = fnumb.toString();</span><br><span class="line"></span><br><span class="line">#浮点数转字节数组</span><br><span class="line"><span class="keyword">const</span> buffer = <span class="keyword">new</span> <span class="built_in">ArrayBuffer</span>(<span class="number">4</span>);  <span class="comment">//双精度为8</span></span><br><span class="line"><span class="keyword">const</span> uf8 = <span class="keyword">new</span> <span class="built_in">Uint8Array</span>(buffer);</span><br><span class="line"><span class="keyword">const</span> f32 = <span class="keyword">new</span> <span class="built_in">Float32Array</span>(buffer);</span><br><span class="line">f32[<span class="number">0</span>] = fnumb;</span><br><span class="line"><span class="built_in">console</span>.log(uf8);</span><br><span class="line"></span><br><span class="line">#字节数组转浮点数</span><br><span class="line">uf8[<span class="number">0</span>] = <span class="number">219</span>;</span><br><span class="line">uf8[<span class="number">1</span>] = <span class="number">15</span>;</span><br><span class="line">uf8[<span class="number">2</span>] = <span class="number">73</span>;</span><br><span class="line">uf8[<span class="number">3</span>] = <span class="number">64</span>;</span><br><span class="line"><span class="built_in">console</span>.log(f32);</span><br><span class="line"></span><br><span class="line">#浮点数转字符串数组</span><br><span class="line"><span class="number">1.</span>先将浮点数转为字节数组</span><br><span class="line"><span class="number">2.</span>再将字节数组toString()</span><br><span class="line"></span><br><span class="line">#字符串相关操作与上类似</span><br></pre></td></tr></table></figure>
 
 
@@ -2785,23 +2795,23 @@
     <content><![CDATA[<h2 id="ssh连接虚拟机上的ubuntu失败"><a href="#ssh连接虚拟机上的ubuntu失败" class="headerlink" title="ssh连接虚拟机上的ubuntu失败"></a>ssh连接虚拟机上的ubuntu失败</h2><ul>
 <li>在windows上使用putty无法连上虚拟机，提示连接被拒绝。</li>
 </ul>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/image-20210914182259322.png" alt="image-20210914182259322"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/image-20210914182259322.png" alt="image-20210914182259322"></p>
 <ul>
 <li>查看端口号以及防火墙，都已经打开</li>
 </ul>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/ssh-2.png" alt="ssh-2"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/ssh-2.png" alt="ssh-2"></p>
 <ul>
 <li>windows能ping通虚拟机，但telnet无法连接</li>
 </ul>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/ssh-1.png" alt="ssh-1"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/ssh-1.png" alt="ssh-1"></p>
 <ul>
 <li>另外，虚拟机上，普通用户 <code>ssh localhost</code> 正常，root用户无法连接，显示权限不足。</li>
 </ul>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/ssh.png" alt="ssh"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/ssh.png" alt="ssh"></p>
 <ul>
 <li>虚拟机网络选择桥接模式</li>
 </ul>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/image-20210914182512984.png" alt="image-20210914182512984"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/image-20210914182512984.png" alt="image-20210914182512984"></p>
 <h2 id="换另一个虚拟机"><a href="#换另一个虚拟机" class="headerlink" title="换另一个虚拟机"></a>换另一个虚拟机</h2><p>回到家中，用另个电脑测试，（上个是笔记本，家里是台式机）。</p>
 <p>台式机，windows 用 telnet 虚拟机上的 ubuntu 仍旧失败（是端口23没开），但是 ssh 可以正常连接台式机上的 ubuntu，也可以连接笔记本上的 ubuntu。</p>
 <p>笔记本上的 windows 可以 ssh 上 台式机上的 ubuntu，笔记本上的 Ubuntu 也可以连上台式机上的 ubuntu。</p>
@@ -3544,7 +3554,7 @@ rightNode --> 7</pre>
 </li>
 <li><p>之前的网站未经过 SSL 认证，没有 HTTPS 加密，微信小程序是不支持没有 HTTPS 加密的地址的，因此需要进行 SSL 认证。因为使用的阿里云服务器，阿里云有该服务。阿里云提供免费证书，申请配置完域名后，放到 <strong>tomcat 根目录 cert</strong> 文件夹下。</p>
 <p>证书目录：</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/image-20211130095508197.png" alt="image-20211130095508197"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/image-20211130095508197.png" alt="image-20211130095508197"></p>
 <p>修改 conf&#x2F;server.xml 文件，配置 https 所用端口 443</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&#x27;1.0&#x27; encoding=&#x27;utf-8&#x27;?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">Server</span> <span class="attr">port</span>=<span class="string">&quot;8005&quot;</span> <span class="attr">shutdown</span>=<span class="string">&quot;SHUTDOWN&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.startup.VersionLoggerListener&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.core.AprLifecycleListener&quot;</span> <span class="attr">SSLEngine</span>=<span class="string">&quot;on&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.core.JasperListener&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.core.JreMemoryLeakPreventionListener&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.mbeans.GlobalResourcesLifecycleListener&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.core.ThreadLocalLeakPreventionListener&quot;</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">GlobalNamingResources</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Resource</span> <span class="attr">name</span>=<span class="string">&quot;UserDatabase&quot;</span> <span class="attr">auth</span>=<span class="string">&quot;Container&quot;</span></span></span><br><span class="line"><span class="tag">              <span class="attr">type</span>=<span class="string">&quot;org.apache.catalina.UserDatabase&quot;</span></span></span><br><span class="line"><span class="tag">              <span class="attr">description</span>=<span class="string">&quot;User database that can be updated and saved&quot;</span></span></span><br><span class="line"><span class="tag">              <span class="attr">factory</span>=<span class="string">&quot;org.apache.catalina.users.MemoryUserDatabaseFactory&quot;</span></span></span><br><span class="line"><span class="tag">              <span class="attr">pathname</span>=<span class="string">&quot;conf/tomcat-users.xml&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">GlobalNamingResources</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">Service</span> <span class="attr">name</span>=<span class="string">&quot;Catalina&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">&quot;80&quot;</span> <span class="attr">protocol</span>=<span class="string">&quot;HTTP/1.1&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">maxHttpHeaderSize</span>=<span class="string">&quot;8192&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">maxThreads</span>=<span class="string">&quot;150&quot;</span> <span class="attr">minSpareThreads</span>=<span class="string">&quot;25&quot;</span> <span class="attr">maxSpareThreads</span>=<span class="string">&quot;75&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">enableLookups</span>=<span class="string">&quot;false&quot;</span>  <span class="attr">acceptCount</span>=<span class="string">&quot;100&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">connectionTimeout</span>=<span class="string">&quot;20000&quot;</span> <span class="attr">disableUploadTimeout</span>=<span class="string">&quot;true&quot;</span> </span></span><br><span class="line"><span class="tag">               <span class="attr">redirectPort</span>=<span class="string">&quot;8443&quot;</span>  <span class="attr">URIEncoding</span>=<span class="string">&quot;UTF-8&quot;</span>/&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">&quot;8443&quot;</span> <span class="attr">protocol</span>=<span class="string">&quot;org.apache.coyote.http11.Http11Protocol&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">maxThreads</span>=<span class="string">&quot;150&quot;</span> <span class="attr">SSLEnabled</span>=<span class="string">&quot;true&quot;</span> <span class="attr">scheme</span>=<span class="string">&quot;https&quot;</span> <span class="attr">secure</span>=<span class="string">&quot;true&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">clientAuth</span>=<span class="string">&quot;false&quot;</span> <span class="attr">sslProtocol</span>=<span class="string">&quot;TLS&quot;</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">&quot;443&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">protocol</span>=<span class="string">&quot;HTTP/1.1&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">SSLEnabled</span>=<span class="string">&quot;true&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">scheme</span>=<span class="string">&quot;https&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">secure</span>=<span class="string">&quot;true&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">keystoreFile</span>=<span class="string">&quot;D:\apache-tomcat-7.0.65\cert\5568913_liyunlong.xdt-iot.com.pfx&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">keystoreType</span>=<span class="string">&quot;PKCS12&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">keystorePass</span>=<span class="string">&quot;r0ftyhrF&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">clientAuth</span>=<span class="string">&quot;false&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">SSLProtocol</span>=<span class="string">&quot;TLSv1+TLSv1.1+TLSv1.2&quot;</span></span></span><br><span class="line"><span class="tag"><span class="attr">ciphers</span>=<span class="string">&quot;TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA256&quot;</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">&quot;8009&quot;</span> <span class="attr">protocol</span>=<span class="string">&quot;AJP/1.3&quot;</span> <span class="attr">redirectPort</span>=<span class="string">&quot;8443&quot;</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">Engine</span> <span class="attr">name</span>=<span class="string">&quot;Catalina&quot;</span> <span class="attr">defaultHost</span>=<span class="string">&quot;localhost&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">Realm</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.realm.LockOutRealm&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">Realm</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.realm.UserDatabaseRealm&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">resourceName</span>=<span class="string">&quot;UserDatabase&quot;</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">Realm</span>&gt;</span></span><br><span class="line"></span><br><span class="line">      <span class="tag">&lt;<span class="name">Host</span> <span class="attr">name</span>=<span class="string">&quot;localhost&quot;</span>  <span class="attr">appBase</span>=<span class="string">&quot;webapps&quot;</span></span></span><br><span class="line"><span class="tag">            <span class="attr">unpackWARs</span>=<span class="string">&quot;true&quot;</span> <span class="attr">autoDeploy</span>=<span class="string">&quot;true&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">Valve</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.valves.AccessLogValve&quot;</span> <span class="attr">directory</span>=<span class="string">&quot;logs&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">prefix</span>=<span class="string">&quot;localhost_access_log.&quot;</span> <span class="attr">suffix</span>=<span class="string">&quot;.txt&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">pattern</span>=<span class="string">&quot;%h %l %u %t <span class="symbol">&amp;quot;</span>%r<span class="symbol">&amp;quot;</span> %s %b&quot;</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">Host</span>&gt;</span></span><br><span class="line"></span><br><span class="line">	  <span class="tag">&lt;<span class="name">Host</span> <span class="attr">name</span>=<span class="string">&quot;liyunlong.xdt-iot.com&quot;</span>  <span class="attr">appBase</span>=<span class="string">&quot;&quot;</span> <span class="attr">unpackWARs</span>=<span class="string">&quot;true&quot;</span> <span class="attr">autoDeploy</span>=<span class="string">&quot;true&quot;</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">Context</span> <span class="attr">path</span>=<span class="string">&quot;&quot;</span> <span class="attr">docBase</span>=<span class="string">&quot;D:\apache-tomcat-7.0.65\webapps_xassp\DCWLW&quot;</span> <span class="attr">reloadable</span>=<span class="string">&quot;true&quot;</span> &gt;</span> </span><br><span class="line">          <span class="tag">&lt;/<span class="name">Context</span>&gt;</span></span><br><span class="line">		  <span class="tag">&lt;<span class="name">Context</span> <span class="attr">path</span>=<span class="string">&quot;/upload&quot;</span> <span class="attr">docBase</span>=<span class="string">&quot;D:\uploads&quot;</span>  <span class="attr">reloadable</span>=<span class="string">&quot;true&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">Context</span>&gt;</span></span><br><span class="line">		  <span class="tag">&lt;<span class="name">Context</span> <span class="attr">path</span>=<span class="string">&quot;/download&quot;</span> <span class="attr">docBase</span>=<span class="string">&quot;D:\apache-tomcat-7.0.65\webapps_xassp\download&quot;</span>  <span class="attr">reloadable</span>=<span class="string">&quot;true&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">Context</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">Valve</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.valves.AccessLogValve&quot;</span> <span class="attr">directory</span>=<span class="string">&quot;logs&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">prefix</span>=<span class="string">&quot;localhost_access_log.&quot;</span> <span class="attr">suffix</span>=<span class="string">&quot;.txt&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">pattern</span>=<span class="string">&quot;%h %l %u %t <span class="symbol">&amp;quot;</span>%r<span class="symbol">&amp;quot;</span> %s %b&quot;</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">Host</span>&gt;</span> </span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="name">Engine</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">Service</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Server</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
 </ol>
@@ -3639,7 +3649,7 @@ rightNode --> 7</pre>
     <url>/2021/08/%E5%AE%89%E8%A3%85SSL%E8%AF%81%E4%B9%A6/</url>
     <content><![CDATA[<h3 id="1-在阿里云-tomcat-服务器上安装-ssl-证书"><a href="#1-在阿里云-tomcat-服务器上安装-ssl-证书" class="headerlink" title="1.在阿里云 tomcat 服务器上安装 ssl 证书"></a>1.在阿里云 tomcat 服务器上安装 ssl 证书</h3><p>首先得有服务器，开通域名，并且搭建好 tomcat 网站。</p>
 <p>其次申请 ssl 证书，我申请的是阿里云免费证书，绑定域名，下载证书。</p>
-<p><img src="https://gitee.com/qzwjer/blogImg/raw/master/img/image-20210730140745634.png" alt="image-20210730140745634"></p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/image-20210730140745634.png" alt="image-20210730140745634"></p>
 <p>按照阿里云 SSL 证书安装指南，<a href="https://help.aliyun.com/document_detail/98576.htm?spm=a2c4g.11186623.2.3.6fe960e0JLtFaB#concept-omf-lxn-yfb">在 tomcat 服务器安装 SSL 证书，安装 pfx 格式证书</a>。</p>
 <h3 id="2-前提条件"><a href="#2-前提条件" class="headerlink" title="2.前提条件"></a>2.前提条件</h3><ul>
 <li>您的Tomcat服务器上已经开启了443端口（HTTPS服务的默认端口）。</li>
