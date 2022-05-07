@@ -2308,22 +2308,43 @@
 </tr>
 </tbody></table>
 <h2 align='center' id='变量定义'>变量定义</h2>
-| 变量  | 全程                  |
-| ----- | --------------------- |
-| argc  | argument count        |
-| argv  | argument vector       |
-| atoi  | ascii to int          |
-| htonl | host to network long  |
-| htons | host ot network short |
-| ntohl | network to host long  |
-| ntohs | network to host short |
 
-
-
-
-
-
-
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>全程</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>argc</td>
+<td>argument count</td>
+</tr>
+<tr>
+<td>argv</td>
+<td>argument vector</td>
+</tr>
+<tr>
+<td>atoi</td>
+<td>ascii to int</td>
+</tr>
+<tr>
+<td>htonl</td>
+<td>host to network long</td>
+</tr>
+<tr>
+<td>htons</td>
+<td>host ot network short</td>
+</tr>
+<tr>
+<td>ntohl</td>
+<td>network to host long</td>
+</tr>
+<tr>
+<td>ntohs</td>
+<td>network to host short</td>
+</tr>
+</tbody></table>
 <p><a href="#常用英语词汇" id='底部' >回到顶部</a></p>
 ]]></content>
       <categories>
@@ -2764,6 +2785,16 @@
 <h2 id="3-mysql配置文件怎么写？"><a href="#3-mysql配置文件怎么写？" class="headerlink" title="3.mysql配置文件怎么写？"></a>3.mysql配置文件怎么写？</h2><p>参考链接：<a href="https://www.cnblogs.com/langdashu/p/5889352.html">https://www.cnblogs.com/langdashu/p/5889352.html</a></p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim <span class="variable">$HOME</span>/.my.cnf    <span class="comment">#注意，文件名为 .my.cnf，不是 .my.conf，手残写错后找了1个小时</span></span><br><span class="line"><span class="comment">#内容：</span></span><br><span class="line">[client]</span><br><span class="line">password = 123456</span><br><span class="line"><span class="comment">#当然，配置文件还可以更多，按照需求写</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#登录</span></span><br><span class="line">mysql -u root </span><br></pre></td></tr></table></figure>
 
+
+
+<h2 id="4-MySQL-忘记密码怎么办？"><a href="#4-MySQL-忘记密码怎么办？" class="headerlink" title="4.MySQL 忘记密码怎么办？"></a>4.MySQL 忘记密码怎么办？</h2><p>对MySQL5.7有效，其它版本没试过。在Ubuntu系统下。</p>
+<ol>
+<li>停止服务：&#x2F;etc&#x2F;init.d&#x2F;mysql stop</li>
+<li>安全启动，跳过授权表：mysqld_safe –user&#x3D;mysql –skip-grant-tables –skip-networking &amp;</li>
+<li>登录：mysql -uroot -p 不输入密码进入</li>
+<li>重设密码：参考<strong>问题2：密码如何修改</strong></li>
+<li>退出重启：&#x2F;etc&#x2F;init.d&#x2F;mysql restart</li>
+</ol>
 ]]></content>
       <categories>
         <category>疑难杂症</category>
@@ -3981,6 +4012,305 @@ rightNode --> 7</pre>
       </categories>
       <tags>
         <tag>微信小程序</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Nginx安装SSL</title>
+    <url>/2022/05/Nginx%E5%AE%89%E8%A3%85SSL/</url>
+    <content><![CDATA[<p>1.购买申请证书</p>
+<p>2.下载Nginx证书</p>
+<p>3.在&#x2F;etc&#x2F;nginx&#x2F;下新建cert目录，拷贝证书到该目录下</p>
+<p>4.证书改个人类友好的名字</p>
+<p>5.修改Nginx配置文件，添加对443端口的监听</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">listen 443 ssl default_server;</span><br><span class="line">listen [::]:443 ssl default_server;</span><br><span class="line"></span><br><span class="line">ssl_certificate &#x2F;etc&#x2F;nginx&#x2F;cert&#x2F;sslconfigure.pem;</span><br><span class="line">ssl_certificate_key &#x2F;etc&#x2F;nginx&#x2F;cert&#x2F;sslconfigure.key;</span><br></pre></td></tr></table></figure>
+
+<p>6.测试配置是否正常<code>nginx -t</code></p>
+<p>7.云服务器平台开启443端口</p>
+<p>8.防火墙打开443端口<code>ufw allow 443</code></p>
+<p>9.Nginx重新加载配置文件<code>nginx -s reload</code></p>
+<p>10.测试<code>curl -I https://xxx.com</code></p>
+<p>11.浏览器验证</p>
+<p>12.将http重定向到https，<code>rewrite ^(.*)$ https://$host$1;</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">upstream my_server&#123;</span><br><span class="line">        server xxx.xx.xx.xx:8080;</span><br><span class="line">        keepalive 2000;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># Default server configuration</span><br><span class="line">#</span><br><span class="line">server &#123;</span><br><span class="line">        listen 80 default_server;</span><br><span class="line">        listen [::]:80 default_server;</span><br><span class="line">    	rewrite ^(.*)$ https:&#x2F;&#x2F;$host$1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line"></span><br><span class="line">        listen 443 ssl default_server;</span><br><span class="line">        listen [::]:443 ssl default_server;</span><br><span class="line"></span><br><span class="line">        root &#x2F;var&#x2F;www&#x2F;html;</span><br><span class="line"></span><br><span class="line">        index index.html index.htm index.nginx-debian.html;</span><br><span class="line"></span><br><span class="line">        server_name qzwjer.top;</span><br><span class="line">    	ssl_certificate &#x2F;etc&#x2F;nginx&#x2F;cert&#x2F;sslconfigure.pem;</span><br><span class="line">    	ssl_certificate_key &#x2F;etc&#x2F;nginx&#x2F;cert&#x2F;sslconfigure.key;</span><br><span class="line"></span><br><span class="line">        location &#x2F; &#123;</span><br><span class="line">	    	    proxy_pass http:&#x2F;&#x2F;my_server;</span><br><span class="line">    	    	proxy_set_header Host $host:$server_port;</span><br><span class="line">                try_files $uri $uri&#x2F; &#x3D;404;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        location ^~ &#x2F;doc&#x2F; &#123;</span><br><span class="line">                alias &#x2F;root&#x2F;doc&#x2F;;</span><br><span class="line">                autoindex on;</span><br><span class="line">                autoindex_exact_size off;</span><br><span class="line">                autoindex_localtime on;</span><br><span class="line">                charset utf-8,gbk;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    location ~ .* &#123;</span><br><span class="line">        proxy_pass http:&#x2F;&#x2F;my_server;</span><br><span class="line">        proxy_set_header Host $http_host;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>学习总结</category>
+      </categories>
+      <tags>
+        <tag>Nginx</tag>
+        <tag>SSL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>vscode上配置Qt环境</title>
+    <url>/2022/05/vscode%E4%B8%8A%E9%85%8D%E7%BD%AEQt%E7%8E%AF%E5%A2%83/</url>
+    <content><![CDATA[<p>参考博客：</p>
+<p>Qt+VSCode开发环境搭建：<a href="https://blog.csdn.net/cttckl/article/details/123533340">https://blog.csdn.net/cttckl/article/details/123533340</a></p>
+<p>cmake+VSCode编译与断点调试：<a href="https://blog.csdn.net/weixin_44445507/article/details/117436661">https://blog.csdn.net/weixin_44445507/article/details/117436661</a></p>
+<hr>
+<p>按照第一篇，</p>
+<p>首先：安装Qt和VSCode，这个不需多讲</p>
+<p>第二：将Qt的编译工具加入系统环境变量，三个：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">APPS&#x2F;Qt&#x2F;Tools&#x2F;CMake_64&#x2F;bin             ---cmake</span><br><span class="line"></span><br><span class="line">APPS&#x2F;Qt&#x2F;5.15.2&#x2F;mingw81_64&#x2F;bin          ---Qt软件，这个无所谓</span><br><span class="line"></span><br><span class="line">APPS&#x2F;Qt&#x2F;Tools&#x2F;mingw810_64&#x2F;bin          ---gcc</span><br></pre></td></tr></table></figure>
+
+<p>第三：VSCode安装插件四个</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">C&#x2F;C++</span><br><span class="line">CMake</span><br><span class="line">CMake Tools</span><br><span class="line">Qt tools</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>测试：</p>
+<p>Qt创建工程，编译工具选择cmake</p>
+<p>VSCode打开文件夹，在底部选择gcc工具，选Qt的，如下图</p>
+<p><img src="https://qzwjer.top/doc/blogImg/img/image-20220411162959041.png" alt="image-20220411162959041"></p>
+<p>点击Build即可生成</p>
+<p>点击run（底部三角形），发现运行不正常，打印信息：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[cpptools] The build configurations generated do not contain the active build configuration. Using &quot;&quot; for CMAKE_BUILD_TYPE instead of &quot;Debug&quot; to ensure that ...</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://qzwjer.top/doc/blogImg/img/image-20220411163159432.png" alt="image-20220411163159432"></p>
+<p>第二篇博客提到，在CMakeLists.txt中添加定义</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SET(CMAKE_BUILD_TYPE &quot;Debug&quot;)</span><br></pre></td></tr></table></figure>
+
+<p>重新生成后正常运行。</p>
+]]></content>
+      <categories>
+        <category>学习总结</category>
+      </categories>
+      <tags>
+        <tag>Qt</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>高效工作命令</title>
+    <url>/2022/05/%E9%AB%98%E6%95%88%E5%B7%A5%E4%BD%9C%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<h3 id="1-复制-x2F-移动文件"><a href="#1-复制-x2F-移动文件" class="headerlink" title="1. 复制&#x2F;移动文件"></a>1. 复制&#x2F;移动文件</h3><p>例如复制&#x2F;移动文件a.txt到b.txt</p>
+   <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cp &#123;a.txt,b.txt&#125;</span><br><span class="line">mv &#123;a.txt,b.txt&#125;</span><br><span class="line"><span class="meta">#</span><span class="bash">以上后缀相同，甚至可写为</span></span><br><span class="line">cp &#123;a,b&#125;.txt</span><br><span class="line">mv &#123;a,b&#125;.txt</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">如果a.txt在目录 /opt/text/下，则</span></span><br><span class="line">cp /opt/text/&#123;a.txt,b.txt&#125;</span><br><span class="line">mv /opt/text/&#123;a.txt,b.txt&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">如果要将/opt/text/a.txt复制/移动到其它目录，则b.txt使用相对于/opt/text/的相对目录</span></span><br><span class="line">cp /opt/text/&#123;a.txt,../b.txt&#125;  #复制到/opt/b.txt</span><br><span class="line">mv /opt/text/&#123;a.txt,test/b.txt&#125; #移动到/opt/text/test/b.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-删除文件"><a href="#2-删除文件" class="headerlink" title="2. 删除文件"></a>2. 删除文件</h3><p>删除目录下除某些文件以外的其余文件。</p>
+   <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">删除所有文件</span></span><br><span class="line">rm *</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">删除除.cpp和.h后缀的其它文件</span></span><br><span class="line">rm !(.cpp|.h)</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">删除除 a.txt,b.cc,c.h外的其它文件</span></span><br><span class="line">rm !(a.txt|b.cc|c.h)</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-ssh快速登录"><a href="#3-ssh快速登录" class="headerlink" title="3. ssh快速登录"></a>3. ssh快速登录</h3>   <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">检查是否有ssh公钥，看是否有id_rsa,id_rsa.pub</span></span><br><span class="line">ls ~/.ssh</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">如果没有则生成</span></span><br><span class="line">ssh-keygen -t rsa -C &quot;abc@mail.com&quot;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">将id_rsa.pub公钥放到远程连接上的authorized_keys(~/.ssh/authorized_keys)</span></span><br><span class="line"><span class="meta">#</span><span class="bash">可以手动复制，也可以用命令</span></span><br><span class="line">ssh-copy-id root@xxx.xx.xxx.xxx</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">为方便可在~/.ssh/config中配置，如果没有config则创建</span></span><br><span class="line">Host ali</span><br><span class="line">    HostName xxx.xxx.xxx.xxx</span><br><span class="line">    User root</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">ssh登录</span></span><br><span class="line">ssh ali</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-scp命令快速使用"><a href="#4-scp命令快速使用" class="headerlink" title="4. scp命令快速使用"></a>4. scp命令快速使用</h3>   <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">未配置ssh公钥</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">将本地a.txt上传到远程/root/doc/a.txt</span></span><br><span class="line">scp a.txt root@xxx.xxx.xxx.xx:/root/doc/.    </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">将远程连接/root/doc/a.txt下载到本地</span></span><br><span class="line">scp root@xxx.xxx.xxx.xx:/root/doc/a.txt .</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">配置好ssh公钥后</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">上传</span></span><br><span class="line">scp a.txt ali:/root/doc/.</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">下载</span></span><br><span class="line">scp ali:/root/doc/a.txt .</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-批量将文件编码格式转换为utf-8"><a href="#5-批量将文件编码格式转换为utf-8" class="headerlink" title="5. 批量将文件编码格式转换为utf-8"></a>5. 批量将文件编码格式转换为utf-8</h3>   <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> file命令查看文件类型：</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> bluetooth.c:      C <span class="built_in">source</span>, ISO-8859 text, with CRLF line terminators</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> grep命令过滤出编码格式是 ISO-8859 text 的文件</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> awk命令获取文件名，-F <span class="string">&#x27;:&#x27;</span> =》 以冒号为分隔符</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> find -name *.c -o -name *.h   <span class="comment">#第二个必须带 -o</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> find -name <span class="string">&quot;*.[c|h]&quot;</span>    <span class="comment">#必须带双引号</span></span></span><br><span class="line">fileName=$(file $(find -name &quot;*.[c|h]&quot;) | grep ISO | awk -F &#x27;:&#x27; &#x27;&#123;print $1&#125;&#x27;)</span><br><span class="line"></span><br><span class="line">echo $fileName</span><br><span class="line"></span><br><span class="line">for i in $fileName ;</span><br><span class="line">do</span><br><span class="line">    echo $i</span><br><span class="line">    # vim -c 选项后跟命令(此命令在.vimrc之前执行)，主要目的是自动执行命令并且退出文件</span><br><span class="line">    # set fileencoding 更改编码格式</span><br><span class="line">    # set ff 更改换行格式</span><br><span class="line">    # x 保存退出</span><br><span class="line">    vim -c &quot;set fileencoding=utf-8&quot; -c &quot;set ff=unix&quot; -c &quot;x&quot; $i</span><br><span class="line">    # 延时1s，sleep 默认单位是秒，0.1是0.1秒，m-分钟，h-小时，d-天</span><br><span class="line">    sleep 1s</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="6-fs"><a href="#6-fs" class="headerlink" title="6. fs"></a>6. fs</h3>]]></content>
+      <categories>
+        <category>学习总结</category>
+      </categories>
+      <tags>
+        <tag>shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>git配置</title>
+    <url>/2022/05/git%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<hr>
+<h3 id="1-更改remote地址"><a href="#1-更改remote地址" class="headerlink" title="1.更改remote地址"></a>1.更改remote地址</h3><p>git上传公钥后，每次git push 仍需要填写用户名与密码？</p>
+<p>git的remote要使用ssh地址，而首次clone时使用了https地址，需要将remote地址改为ssh地址：</p>
+<p><code>git remote set-url origin git@gitee.com:*****.git</code></p>
+<p>当然，以上命令在git仓库迁移到新的地址时使用也有效</p>
+<hr>
+<h3 id="2-git-status中文显示"><a href="#2-git-status中文显示" class="headerlink" title="2.git status中文显示"></a>2.git status中文显示</h3><p>git status   中文显示为8进制数字</p>
+<p>使用以下命令正常：</p>
+<p><code>git config --global core.quotePath false</code></p>
+<hr>
+<h3 id="3-创建仓库"><a href="#3-创建仓库" class="headerlink" title="3.创建仓库"></a>3.创建仓库</h3><p>在服务器上创建git仓库，例如在&#x2F;root&#x2F;下创建books仓库：</p>
+<p><code>git init --bare books</code></p>
+]]></content>
+      <categories>
+        <category>杂文集合</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hexo配置杂疑</title>
+    <url>/2022/05/Hexo%E9%85%8D%E7%BD%AE%E6%9D%82%E7%96%91/</url>
+    <content><![CDATA[<hr>
+<h3 id="1-修改文件名称大小写"><a href="#1-修改文件名称大小写" class="headerlink" title="1.修改文件名称大小写"></a>1.修改文件名称大小写</h3><p>Hexo博客框架，修改tag或文件大小写，发布后发现大小写并未改变？</p>
+<p>网上的解决方法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">修改.deploy_git.git目录下的config，</span><br><span class="line">将</span><br><span class="line">ignorecase &#x3D; true 改为 false</span><br></pre></td></tr></table></figure>
+
+
+<p>我的工程下没有.deploy_git.git目录，但有.deploy_git目录，目录下有.git目录，还有本应在public下生成的博客目录。</p>
+<p><strong>按照以上方法修改config后，发现仍未解决，只有将.deploy_git目录下的除.git外的文件删除后方可</strong>。</p>
+<hr>
+<h3 id="2-警告LF-gt-CRLF"><a href="#2-警告LF-gt-CRLF" class="headerlink" title="2.警告LF-&gt;CRLF"></a>2.警告LF-&gt;CRLF</h3><p>Hexo Git部署警告<code>warning： LF will be replaced by CRLF</code>的去除方法。</p>
+<p>在windows下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">The file will have its original line endings in your working directory</span><br><span class="line">warning: LF will be replaced by CRLF in xxx.html.</span><br></pre></td></tr></table></figure>
+
+<p>这是因为Git将LF替换为CRLF，使用以下命令禁止此功能：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git config --global core.autocrlf false</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="3-butterfly主题添加备案信息"><a href="#3-butterfly主题添加备案信息" class="headerlink" title="3.butterfly主题添加备案信息"></a>3.butterfly主题添加备案信息</h3><p>进入 Butterfly 主题目录，打开 <code>layout/includes/footer.pug</code> 文件，在末尾添加如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">if theme.ICP.enable</span><br><span class="line">  .icp</span><br><span class="line">    a(href&#x3D;theme.ICP.url)</span><br><span class="line">      if theme.ICP.icon</span><br><span class="line">        img.icp-icon(src&#x3D;url_for(theme.ICP.icon))</span><br><span class="line">      span&#x3D;theme.ICP.text</span><br><span class="line">if theme.NSP.enable</span><br><span class="line">  .icp</span><br><span class="line">    a(href&#x3D;theme.NSP.url)</span><br><span class="line">      if theme.NSP.icon</span><br><span class="line">        img.icp-icon(src&#x3D;url_for(theme.NSP.icon))</span><br><span class="line">      span&#x3D;theme.NSP.text</span><br></pre></td></tr></table></figure>
+
+<p>修改butterfly配置文件_config.yml，在footer setting下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ICP:</span><br><span class="line">  enable: true  # 是否启用ICP</span><br><span class="line">  url: http:&#x2F;&#x2F;www.beian.miit.gov.cn&#x2F;  # 点击后的链接地址</span><br><span class="line">  text: 京ICP备xxxx  # 备案号</span><br><span class="line">  icon:    # 图标</span><br><span class="line">NSP:</span><br><span class="line">  enable: true   # 是否启用NSP</span><br><span class="line">  url: http:&#x2F;&#x2F;www.beian.gov.cn&#x2F;  # 点击后的链接地址</span><br><span class="line">  text: 京公网安备 xxxxx号    # 公安备案号</span><br><span class="line">  icon: http:&#x2F;&#x2F;www.beian.gov.cn&#x2F;img&#x2F;new&#x2F;gongan.png  # 图标</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="4-Hexo增加搜索功能"><a href="#4-Hexo增加搜索功能" class="headerlink" title="4.Hexo增加搜索功能"></a>4.Hexo增加搜索功能</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1. 安装搜索：在Hexo根目录下执行命令：</span><br><span class="line">   npm install hexo-generator-searchdb --save</span><br><span class="line"></span><br><span class="line">2. 配置Hexo的_config.yml文件，新增search：</span><br><span class="line">   search:</span><br><span class="line">     path: search.xml</span><br><span class="line">     field: post</span><br><span class="line">     format: html</span><br><span class="line">     limit: 10000</span><br><span class="line"></span><br><span class="line">3. 在主题配置文件_config.yml中，修改local_search为true</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>疑难杂症</category>
+      </categories>
+      <tags>
+        <tag>建站</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>开发CAN上位机</title>
+    <url>/2022/05/%E5%BC%80%E5%8F%91CAN%E4%B8%8A%E4%BD%8D%E6%9C%BA/</url>
+    <content><![CDATA[<p>首先，用C++实现这个上位机不是什么难事，主要是记录一下遇到的额外问题。</p>
+<p>因为需要使用动态链接库，一开始以为是Qt不熟练，使用动态链接库的方式有问题，但尝试许久还是无法解决。</p>
+<p>在运行程序时，Qt程序直接中断，错误</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">The program has unexpectedly finished. </span><br><span class="line">The process was ended forcefully.</span><br></pre></td></tr></table></figure>
+
+<p>不知道是什么原因。</p>
+<p>因此在vs2019上重新尝试，报错：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">应用程序无法正常启动(0xc0150002)</span><br></pre></td></tr></table></figure>
+
+<p>搜索</p>
+<p>，网络上有牛人博客解释这个问题，</p>
+<p>在计算机管理》事件查看器》Windows日志》应用程序中</p>
+<p>查看错误信息：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">“D:\workspace\c++\cantest\x64\Debug\ControlCAN.dll”的激活上下文生成失败。 找不到从属程序集 Microsoft.VC90.MFC,processorArchitecture&#x3D;&quot;amd64&quot;,publicKeyToken&#x3D;&quot;1fc8b3b9a1e18e3b&quot;,type&#x3D;&quot;win32&quot;,version&#x3D;&quot;9.0.21022.8&quot;。 请使用 sxstrace.exe 进行详细诊断。</span><br></pre></td></tr></table></figure>
+
+
+
+<p>说明是链接库加载的问题，ControlCAN.dll的依赖 Microsoft.VC90.MFC，该程序包含在 VC++ 2008 sp1 runtime，因此需要安装此环境。在软件管家里搜索，发现一个游戏环境程序集合安装包，该包中有vc08x64.exe，安装后，程序即可正常运行。</p>
+<p>好几个小时的迷茫就这么简单的解决了。</p>
+<p>但是有个疑问是，为何厂家的例程可以正常运行？</p>
+<p>写到这里，突然想起有一项还没试过。即是编译完程序后，不在Qt或vs2019里运行，直接在编译目录里运行，不知道是否正常？</p>
+<hr>
+<p>总结以上经历，此次遇到的问题耗费了我差不多六七个小时，但最终解决时，才发现这并不是一个多难得问题。那时间用在了哪？在Qt上。</p>
+<p>实际上如果我已经安装了VC++2008 sp1 runtime，那么从我写代码一开始，这个问题就不会发生。</p>
+<p>但我没有安装，此问题发生了。</p>
+<p>我首先将怀疑归到Qt调用动态链接库的方式上，因为我对Qt也是个初学者，在遇到问题时首先是对自己的不自信，Qt是否是这样调用链接库的，这样调用对不对？</p>
+<p>我将大部分的时间耗费到了调用链接库的方式上，但这样的尝试其实一开始是必须的，但四五个小时就没有意义了。钻了牛角尖。</p>
+<p>我对Qt并不熟悉，所以再多尝试也只是去碰运气，下一次没准就能正常运行了呢？</p>
+<p>长时间的失败使我意识到是该换个熟悉的工具试试了，果然用vs2019后，虽然也不成功，但它给出了与Qt不一样的错误提示，根据此错误提示，我知道接下来该怎么做。</p>
+<p>问题就在使用vs2019后的不到半小时解决了，这让人开心，但同时也让我郁闷。</p>
+<p>也许这就是学习一样新的东西所要付出的一些代价吧。</p>
+<p>浪费了时间只为得到一个经验教训。</p>
+<p>在使用新工具遇到无法解决的问题时，不妨先回头用熟悉的工具去验证，找到问题的真正原因，避免白白浪费时间。</p>
+]]></content>
+      <categories>
+        <category>生活感想</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Qt-OpenCV人脸识别</title>
+    <url>/2022/05/Qt-OpenCV%E4%BA%BA%E8%84%B8%E8%AF%86%E5%88%AB/</url>
+    <content><![CDATA[<p>本文记录安装openCV以及在Qt上创建桌面程序进行人脸识别的全过程。</p>
+<blockquote>
+<p>安装OpenCV参考自博客：</p>
+<p>Qt配置OpenCV教程，亲测已试过（详细版）：<a href="https://blog.csdn.net/weixin_43763292/article/details/112975207">https://blog.csdn.net/weixin_43763292/article/details/112975207</a></p>
+<p>Qt人脸识别程序参考自博客：</p>
+<p>基于Qt的OpenCV人脸识别：<a href="https://blog.csdn.net/huhuandk/category_8468159.html">https://blog.csdn.net/huhuandk/category_8468159.html</a></p>
+</blockquote>
+<h3 id="一、安装环境"><a href="#一、安装环境" class="headerlink" title="一、安装环境"></a>一、安装环境</h3><ul>
+<li><p>OS：Windows10</p>
+</li>
+<li><p>Qt版本：5.15.2</p>
+</li>
+<li><p>CMake版本：3.20.2</p>
+</li>
+<li><p>OpenCV</p>
+<p>版本：起初选择的版本是4.5.5，安装完后发现程序运行有问题，后来换成了3.4.16版本。</p>
+<p>说明：<em>安装版本4.5.5，运行Qt程序总是崩溃，下意识怀疑是该版本与Qt版本不匹配。但实际是不是版本问题尚不确定，因为是第一次安装和在Qt上使用OpenCV，可能存在误判。后续需要重新测试一下4.5.5版本。</em></p>
+</li>
+<li><p>OpenCV-contrib</p>
+<p>与OpenCV版本一致（3.4.16），这是从OpenCV分离出来的未稳定的功能模块，人脸识别需要的face库就在该文件下。到github上选择相应的tag下载。</p>
+</li>
+</ul>
+<h3 id="二、安装前配置"><a href="#二、安装前配置" class="headerlink" title="二、安装前配置"></a>二、安装前配置</h3><p>添加三个路径到系统PATH：</p>
+<ol>
+<li><p>Qt库的MinGw路径：<code>Qt/5.15.2/mingw81_64/bin</code></p>
+</li>
+<li><p>Qt的MinGw工具路径：<code>Qt/Tools/mingw810_64/bin</code></p>
+</li>
+<li><p>CMake路径：<code>CMake/bin</code></p>
+</li>
+</ol>
+<p>配置完后需要重启电脑。</p>
+<h3 id="三、下载"><a href="#三、下载" class="headerlink" title="三、下载"></a>三、下载</h3><p>OpenCV和OpenCV-contrib，这两个都可以在github上下载</p>
+<ul>
+<li><p>OpenCV：<a href="https://github.com/opencv/opencv/releases">https://github.com/opencv/opencv/releases</a></p>
+</li>
+<li><p>OpenCV-contrib：<a href="https://github.com/opencv/opencv_contrib/tags">https://github.com/opencv/opencv_contrib/tags</a></p>
+</li>
+</ul>
+<h3 id="四、安装"><a href="#四、安装" class="headerlink" title="四、安装"></a>四、安装</h3><ol>
+<li><p>将OpenCV文件解压至将要安装的目录下：<code>D:/Tools/opencv/opencv-3.4.16</code></p>
+</li>
+<li><p>将OpenCV-contrib放到OpenCV的解压目录下，与sources同级：<code>D:/Tools/opencv/opencv-3.4.16/opencv-contrib-3.4.16</code></p>
+</li>
+<li><p>前往CMake目录下运行cmake-gui.exe，</p>
+<ol>
+<li><p>配置source code目录为sources路径：<code>D:/Tools/opencv/opencv-3.4.16/sources</code></p>
+</li>
+<li><p>配置build目录为与sources同级的新建目录opencv-build：<code>D:/Tools/opencv/opencv-3.4.16/opencv-build</code></p>
+</li>
+<li><p>勾选Advanced</p>
+</li>
+<li><p>点击Configure</p>
+<ol>
+<li><p>选择<code>MinGw Makefiles</code>，<code>Specify native compilers</code></p>
+</li>
+<li><p>选择Compilers，</p>
+<ul>
+<li><p>C：<code>Qt/Tools/mingw810_64/bin/gcc.exe</code></p>
+</li>
+<li><p>C++：<code>Qt/Tools/mingw810_64/bin/g++.exe</code></p>
+</li>
+</ul>
+</li>
+<li><p>Finish</p>
+</li>
+</ol>
+</li>
+<li><p>Configuring done后，在opencv配置参数中选中<strong>WITH_OPENGL</strong>和<strong>WITH_QT</strong>，搜索<strong>OPENCV_EXTRA_MODULES_PATH</strong>，填入opencv-contrib目录下的modules路径：<code>D:/Tools/opencv/opencv-3.4.16/opencv_contrib-3.4.16/modules</code></p>
+</li>
+<li><p>点击Configure，done之后，opencv配置参数中有红色条框，确认路径无误后，再次点击Configure</p>
+</li>
+<li><p>红色消失，Generate，生成完成</p>
+</li>
+</ol>
+</li>
+<li><p>进入opencv-build目录下，生成安装文件：<code>mingw32-make -j 12</code></p>
+</li>
+<li><p>100%完成后，安装：<code>mingw32-make install</code>，完成</p>
+</li>
+</ol>
+<h3 id="五、将OpenCV加入PATH"><a href="#五、将OpenCV加入PATH" class="headerlink" title="五、将OpenCV加入PATH"></a>五、将OpenCV加入PATH</h3><p>添加动态链接库：<code>D:/Tools/opencv/opencv-3.4.16/opencv-build/install/x64/mingw/bin</code></p>
+<h3 id="六、Qt人脸识别程序"><a href="#六、Qt人脸识别程序" class="headerlink" title="六、Qt人脸识别程序"></a>六、Qt人脸识别程序</h3><ol>
+<li><p>新建Qt的MainWindow工程opencv-test，选择生成器qmake，编译工具Qt MinGw 64-bit</p>
+</li>
+<li><p>设计ui，一个用于显示摄像头拍摄的QLabel，三个QPushButton分别是开启摄像头，关闭摄像头，拍照</p>
+</li>
+<li><p>在opencv-test.pro文件中添加头文件搜索路径（INCLUDEPATH）和链接库（LIBS），opencv-test.pro文件如下：</p>
+<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="attr">QT</span>       <span class="string">+= core gui</span></span><br><span class="line"></span><br><span class="line"><span class="meta">greaterThan(QT_MAJOR_VERSION,</span> <span class="string">4): QT += widgets</span></span><br><span class="line"></span><br><span class="line"><span class="attr">CONFIG</span> <span class="string">+= c++11</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># You can make your code fail to compile if it uses deprecated APIs.</span></span><br><span class="line"><span class="comment"># In order to do so, uncomment the following line.</span></span><br><span class="line"><span class="comment">#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0</span></span><br><span class="line"></span><br><span class="line"><span class="attr">SOURCES</span> <span class="string">+= \</span></span><br><span class="line">    <span class="meta">main.cpp</span> <span class="string">\</span></span><br><span class="line">    <span class="attr">mainwindow.cpp</span></span><br><span class="line"></span><br><span class="line"><span class="attr">HEADERS</span> <span class="string">+= \</span></span><br><span class="line">    <span class="attr">mainwindow.h</span></span><br><span class="line"></span><br><span class="line"><span class="attr">FORMS</span> <span class="string">+= \</span></span><br><span class="line">    <span class="attr">mainwindow.ui</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#添加这两条</span></span><br><span class="line"><span class="attr">INCLUDEPATH</span> <span class="string">+= D:\Tools\opencv\opencv-3.4.16\opencv-build\install\include</span></span><br><span class="line"><span class="attr">LIBS</span> <span class="string">+= D:\Tools\opencv\opencv-3.4.16\opencv-build\lib\libopencv_*.a</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Default rules for deployment.</span></span><br><span class="line"><span class="attr">qnx</span>: <span class="string">target.path = /tmp/$$&#123;TARGET&#125;/bin</span></span><br><span class="line"><span class="attr">else</span>: <span class="string">unix:!android: target.path = /opt/$$&#123;TARGET&#125;/bin</span></span><br><span class="line"><span class="comment">!isEmpty(target.path): INSTALLS += target</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>头文件mainwindow.h</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> MAINWINDOW_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAINWINDOW_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QMainWindow&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/core/core.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/highgui/highgui.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/imgproc/imgproc.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/objdetect.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/opencv.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/face.hpp&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv::face;</span><br><span class="line"></span><br><span class="line">QT_BEGIN_NAMESPACE</span><br><span class="line"><span class="keyword">namespace</span> Ui &#123; <span class="class"><span class="keyword">class</span> <span class="title">MainWindow</span>;</span> &#125;</span><br><span class="line">QT_END_NAMESPACE</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MainWindow</span> :</span> <span class="keyword">public</span> QMainWindow</span><br><span class="line">&#123;</span><br><span class="line">    Q_OBJECT</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    MainWindow(QWidget *parent = <span class="literal">nullptr</span>);</span><br><span class="line">    ~MainWindow();</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> slots:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">on_openBtn_clicked</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">on_captureBtn_clicked</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">on_closeBtn_clicked</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    Ui::MainWindow *ui;</span><br><span class="line">    VideoCapture capture;</span><br><span class="line">    Mat frame;</span><br><span class="line">    QImage image;</span><br><span class="line">    CascadeClassifier faceDetector;</span><br><span class="line">    CV_OUT <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;Rect&gt; faces;</span><br><span class="line">    Ptr&lt;BasicFaceRecognizer&gt;model;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">closeEvent</span><span class="params">(QCloseEvent *event)</span></span>;</span><br><span class="line">    <span class="function">QImage <span class="title">Mat2QImage</span><span class="params">(Mat cvImg)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Sleep</span><span class="params">(<span class="keyword">int</span> msec)</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">// MAINWINDOW_H</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>源文件mainwindow.cpp</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;mainwindow.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;ui_mainwindow.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QTime&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QDebug&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;QTimer&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Delay_MSec</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">int</span> msec)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    QEventLoop loop;<span class="comment">//定义一个新的事件循环</span></span><br><span class="line">    QTimer::singleShot(msec, &amp;loop, SLOT(quit()));<span class="comment">//创建单次定时器，槽函数为事件循环的退出函数</span></span><br><span class="line">    loop.exec();<span class="comment">//事件循环开始执行，程序会卡在这里，直到定时时间到，本循环被退出</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">MainWindow::MainWindow(QWidget *parent)</span><br><span class="line">    : QMainWindow(parent)</span><br><span class="line">    , ui(<span class="keyword">new</span> Ui::MainWindow)</span><br><span class="line">&#123;</span><br><span class="line">    ui-&gt;setupUi(<span class="keyword">this</span>);</span><br><span class="line">    <span class="comment">//加载人脸检测模型</span></span><br><span class="line">    <span class="keyword">if</span>(!faceDetector.load(<span class="string">&quot;D:\\Tools\\opencv\\opencv-3.4.16\\opencv-build\\install\\etc\\haarcascades\\haarcascade_frontalface_alt.xml&quot;</span>))</span><br><span class="line">    &#123;</span><br><span class="line">        qDebug() &lt;&lt; <span class="string">&quot;--(!)Error loading&quot;</span>;</span><br><span class="line">        QApplication::<span class="built_in">exit</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    model =EigenFaceRecognizer::create();</span><br><span class="line">    <span class="built_in">vector</span>&lt;Mat&gt;images;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;labels;</span><br><span class="line">    Mat mat;</span><br><span class="line">    <span class="comment">/**不直接读成灰度图，而是多经过一步转换，是因为在train时会报错：</span></span><br><span class="line"><span class="comment">    OpenCV: terminate handler is called! The last OpenCV error is:</span></span><br><span class="line"><span class="comment">OpenCV(3.4.16) Error: Image step is wrong (The matrix is not continuous, thus its number of rows can not be changed) in reshape, file D:\Tools\opencv\opencv-3.4.16\sources\modules\core\src\matrix.cpp, line 1115</span></span><br><span class="line"><span class="comment">    从StackOverflow上看到这个问题可能的原因：1、未找到图片，2、图像矩阵不连续，注意图片编码格式，解决方法是多经一步转换</span></span><br><span class="line"><span class="comment">    **/</span></span><br><span class="line">    mat=imread(<span class="string">&quot;myFace/0.png&quot;</span>,<span class="number">1</span>);<span class="comment">//一般样本是提前准本好的，从文件里读取。测试程序就简单点直接从文件夹里读图片。</span></span><br><span class="line">    cvtColor(mat,mat,CV_BGR2GRAY);<span class="comment">//多一步转换，解决上述报错</span></span><br><span class="line">    images.push_back(mat);</span><br><span class="line"></span><br><span class="line">    mat=imread(<span class="string">&quot;myFace/1.png&quot;</span>,<span class="number">1</span>);</span><br><span class="line">    cvtColor(mat,mat,CV_BGR2GRAY);</span><br><span class="line">    images.push_back(mat);</span><br><span class="line"></span><br><span class="line">    mat=imread(<span class="string">&quot;myFace/2.png&quot;</span>,<span class="number">1</span>);</span><br><span class="line">    cvtColor(mat,mat,CV_BGR2GRAY);</span><br><span class="line">    images.push_back(mat)</span><br><span class="line"></span><br><span class="line">    labels.push_back(<span class="number">0</span>);</span><br><span class="line">    labels.push_back(<span class="number">0</span>);</span><br><span class="line">    labels.push_back(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    model-&gt;train(images,labels);<span class="comment">//训练</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">MainWindow::~MainWindow()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">delete</span> ui;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MainWindow::on_openBtn_clicked</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(capture.isOpened())</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    capture.open(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(capture.isOpened())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(;;)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(!capture.isOpened())</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            capture &gt;&gt; frame;</span><br><span class="line">            flip(frame, frame, <span class="number">1</span>);  <span class="comment">//画面翻转</span></span><br><span class="line">            <span class="keyword">if</span> (!frame.empty())</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">//人脸检测</span></span><br><span class="line">                Mat frame_gray;</span><br><span class="line">                Mat dst;</span><br><span class="line">                Mat testSample;</span><br><span class="line">                cvtColor(frame, frame_gray, COLOR_BGR2GRAY);</span><br><span class="line">                equalizeHist(frame_gray, frame_gray);</span><br><span class="line">                faceDetector.detectMultiScale(frame_gray, faces, <span class="number">1.1</span>, <span class="number">2</span>, <span class="number">0</span> | CASCADE_SCALE_IMAGE, Size(<span class="number">30</span>, <span class="number">30</span>));</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; faces.size(); i++)</span><br><span class="line">                &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> 0</span></span><br><span class="line">                    <span class="comment">//只摄像</span></span><br><span class="line">                    rectangle(frame, faces[i], Scalar(<span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>), <span class="number">1</span>, <span class="number">8</span>, <span class="number">0</span>);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line">                    <span class="comment">//人脸识别</span></span><br><span class="line">                    Mat roi = frame(faces[i]);</span><br><span class="line">                    cvtColor(roi, dst, COLOR_BGR2GRAY);</span><br><span class="line">                    cv::resize(dst, testSample, Size(<span class="number">92</span>, <span class="number">112</span>));</span><br><span class="line">                    <span class="keyword">int</span> label = model-&gt;predict(testSample);</span><br><span class="line">                    rectangle(frame, faces[i], Scalar(<span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>), <span class="number">2</span>, <span class="number">8</span>, <span class="number">0</span>);</span><br><span class="line">                    putText(frame, format(<span class="string">&quot;I&#x27;m %s&quot;</span>, (label == <span class="number">0</span> ? <span class="string">&quot;ly&quot;</span> : <span class="string">&quot;Unknow&quot;</span>)),</span><br><span class="line">                            faces[i].tl(), FONT_HERSHEY_PLAIN, <span class="number">1.0</span>, Scalar(<span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>), <span class="number">2</span>, <span class="number">8</span>);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//显示</span></span><br><span class="line">                image = Mat2QImage(frame);</span><br><span class="line">                ui-&gt;label-&gt;setPixmap(QPixmap::fromImage(image));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//Sleep(10); //延时10ms</span></span><br><span class="line">            Delay_MSec(<span class="number">10</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//发现如果不关闭摄像头，直接关闭窗口，则程序不会被杀死，变成僵尸程序在后台运行，因此点击关闭窗口时，先关闭掉摄像头</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MainWindow::closeEvent</span><span class="params">(QCloseEvent *event)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(capture.isOpened()) capture.release();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//要想在Qt上显示OpenCV的图像，必须将Mat转化为QImage</span></span><br><span class="line"><span class="function">QImage <span class="title">MainWindow::Mat2QImage</span><span class="params">(Mat cvImg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    QImage qImg;</span><br><span class="line">    <span class="keyword">if</span>(cvImg.channels()==<span class="number">3</span>)                             <span class="comment">//3 channels color image</span></span><br><span class="line">    &#123;</span><br><span class="line">        cv::cvtColor(cvImg,cvImg,CV_BGR2RGB);</span><br><span class="line">        qImg =QImage((<span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">char</span>*)(cvImg.data),</span><br><span class="line">                      cvImg.cols, cvImg.rows,</span><br><span class="line">                      cvImg.cols*cvImg.channels(),</span><br><span class="line">                      QImage::Format_RGB888);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(cvImg.channels()==<span class="number">1</span>)                    <span class="comment">//grayscale image</span></span><br><span class="line">    &#123;</span><br><span class="line">        qImg =QImage((<span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">char</span>*)(cvImg.data),</span><br><span class="line">                      cvImg.cols,cvImg.rows,</span><br><span class="line">                      cvImg.cols*cvImg.channels(),</span><br><span class="line">                      QImage::Format_Indexed8);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        qImg =QImage((<span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">char</span>*)(cvImg.data),</span><br><span class="line">                      cvImg.cols,cvImg.rows,</span><br><span class="line">                      cvImg.cols*cvImg.channels(),</span><br><span class="line">                      QImage::Format_RGB888);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> qImg;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//延时函数</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MainWindow::Sleep</span><span class="params">(<span class="keyword">int</span> msec)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    QTime dieTime = QTime::currentTime().addMSecs(msec);</span><br><span class="line">    <span class="keyword">while</span>( QTime::currentTime() &lt; dieTime )</span><br><span class="line">        QCoreApplication::processEvents(QEventLoop::AllEvents, <span class="number">100</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MainWindow::on_captureBtn_clicked</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">    Mat dst;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; faces.size(); i++)</span><br><span class="line">    &#123;</span><br><span class="line">        cv::resize(frame(faces[i]), dst, Size(<span class="number">92</span>, <span class="number">112</span>));</span><br><span class="line">        cvtColor(dst,dst,COLOR_BGR2RGB);</span><br><span class="line">        imwrite(format(<span class="string">&quot;myFace/%d.png&quot;</span>, count), dst);</span><br><span class="line">        count++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MainWindow::on_closeBtn_clicked</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(capture.isOpened()) capture.release();</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <categories>
+        <category>项目开发</category>
+      </categories>
+      <tags>
+        <tag>Qt</tag>
+        <tag>OpenCV</tag>
       </tags>
   </entry>
 </search>
