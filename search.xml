@@ -340,8 +340,12 @@
 
 
 
-
-
+<h3 id="4-OTA常见的问题"><a href="#4-OTA常见的问题" class="headerlink" title="4.OTA常见的问题"></a>4.OTA常见的问题</h3><ol>
+<li><p>（stm32f103c8t6）传输完第一个1024字节后，mcu写入flash保存，写入之后程序挂死。</p>
+<p>经过检查，有关升级的代码部分没有问题，查看程序大小，发现超出了自己所分配的程序运行空间（分配了25K的程序运行空间，紧接着是25K的升级包存储空间，而实际上程序大小超出了25K达到了30K），导致升级包被写入到了程序运行空间中。</p>
+<p>解决方法是优化程序大小，或者重新分配程序运行空间和升级包存储空间的大小。</p>
+</li>
+</ol>
 ]]></content>
       <categories>
         <category>学习总结</category>
@@ -1453,6 +1457,7 @@
     <url>/2021/06/%E5%AE%83%E4%BB%AC%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/</url>
     <content><![CDATA[<p>那些我们每天在使用的编程语言、脚本、框架、工具等，是否能准确描述它们的定义？</p>
 <p>当有人问：它是什么？我们至少有一个标准的回答。</p>
+<p>&#x3D;&#x3D;我准备把它做成一个计算机基础知识百科，时时自检&#x3D;&#x3D;</p>
 <h5 id="1-什么是编程语言？"><a href="#1-什么是编程语言？" class="headerlink" title="1.什么是编程语言？"></a>1.什么是编程语言？</h5><p>编程语言（programming language）可以简单的理解为一种计算机和人都能识别的语言。一种计算机语言让程序员能够准确地定义计算机所需要使用的数据，并精确地定义在不同情况下所应当采取的行动。</p>
 <h5 id="3-C是什么？"><a href="#3-C是什么？" class="headerlink" title="3.C是什么？"></a>3.C是什么？</h5><p>C语言是一门面向过程的、抽象化的通用程序设计语言。</p>
 <p>广泛应用于底层开发。C语言能以简易的方式编译、处理低级存储器。C语言是仅产生少量的机器语言以及不需要任何运行环境支持便能运行的高效率程序设计语言。尽管C语言提供了许多低级处理的功能，但仍然保持着跨平台的特性，以一个标准规格写出的C语言程序可在包括类似嵌入式处理器以及超级计算机等作业平台的许多计算机平台上进行编译。</p>
@@ -1475,6 +1480,9 @@
       <categories>
         <category>杂文集合</category>
       </categories>
+      <tags>
+        <tag>基础</tag>
+      </tags>
   </entry>
   <entry>
     <title>嵌入式芯片基础</title>
@@ -1573,9 +1581,11 @@
     </tr>
     <tr>
         <td><a href="#变量定义">变量定义</a></td>
+        <td><a href="#汇编">汇编</a></td>
         <td><a href="#底部">底部</a></td>
     </tr>
 </table>
+
 
 
 
@@ -1759,6 +1769,11 @@
 <td>CMSIS</td>
 <td>Cortex Microcontroller Software Interface Standard</td>
 <td>ARM Cortex™ 微控制器软件接口标准</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </tbody></table>
 <hr>
@@ -2188,7 +2203,7 @@
 <tr>
 <td>MQTT</td>
 <td>Message Queuing Telemetry Transport</td>
-<td></td>
+<td>消息队列遥测传输协议</td>
 </tr>
 <tr>
 <td>retain</td>
@@ -2234,6 +2249,31 @@
 <td>crypto</td>
 <td></td>
 <td>加密</td>
+</tr>
+<tr>
+<td>assignment</td>
+<td></td>
+<td>分配</td>
+</tr>
+<tr>
+<td>peak</td>
+<td></td>
+<td>峰值</td>
+</tr>
+<tr>
+<td>manipulate</td>
+<td></td>
+<td>操作、操纵</td>
+</tr>
+<tr>
+<td>versus</td>
+<td></td>
+<td>比对（VS）</td>
+</tr>
+<tr>
+<td>justify</td>
+<td></td>
+<td>证明；两端对齐（CSS）</td>
 </tr>
 </tbody></table>
 <h2 align='center' id='Linux'>Linux</h2>
@@ -2343,6 +2383,67 @@
 <tr>
 <td>ntohs</td>
 <td>network to host short</td>
+</tr>
+</tbody></table>
+<h2 align='center' id='汇编'>汇编</h2>
+
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>释义</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LDR</td>
+<td>从存储器中加载字到一个寄存器中</td>
+<td></td>
+</tr>
+<tr>
+<td>BL</td>
+<td>跳转到寄存器&#x2F;标号给出的地址，并把跳转前的下条指令地址保存到LR</td>
+<td></td>
+</tr>
+<tr>
+<td>BLX</td>
+<td>跳转到寄存器给出的地址，根据LSE确定确定处理器的状态，下一指令存到LR</td>
+<td></td>
+</tr>
+<tr>
+<td>BX</td>
+<td>跳转到寄存器&#x2F;标号给出的地址，不用返回</td>
+<td></td>
+</tr>
+<tr>
+<td>STR</td>
+<td>把值存储到寄存器所指的地址中</td>
+<td></td>
+</tr>
+<tr>
+<td>STRB</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>AREA</td>
+<td>指示汇编器汇编一个新的代码段或数据段。段是独立的、指定的、不可见的代码或数据块，它们由连接器处理。</td>
+<td>AREA STACK, NOINIT, READWRITE, ALIGN&#x3D;3</td>
+</tr>
+<tr>
+<td>SPACE</td>
+<td>保留一个用零填充的存储器块</td>
+<td></td>
+</tr>
+<tr>
+<td>ORR</td>
+<td>按位或操作</td>
+<td></td>
+</tr>
+<tr>
+<td>BIC</td>
+<td>把立即数取反，再按位与</td>
+<td></td>
 </tr>
 </tbody></table>
 <p><a href="#常用英语词汇" id='底部' >回到顶部</a></p>
@@ -2754,6 +2855,18 @@
 <li>芯片全擦除</li>
 </ol>
 <p>个人遇到这个问题，烧录时设置为芯片全擦除，成功。</p>
+<h3 id="7-J-Link烧录，检测不到芯片"><a href="#7-J-Link烧录，检测不到芯片" class="headerlink" title="7.J-Link烧录，检测不到芯片"></a>7.J-Link烧录，检测不到芯片</h3><p>该问题与博客<a href="https://blog.csdn.net/Jun626/article/details/80686263%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%80%E8%87%B4%E3%80%82">https://blog.csdn.net/Jun626/article/details/80686263的情况一致。</a></p>
+<p>描述：</p>
+<p>在我将工程移到另一个电脑后，烧录时出现了检测不到芯片的情况。</p>
+<p>详情：</p>
+<p>工程移动到另一个电脑后，打开，keil弹出了一个提示框，让选择芯片：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-- J-link Vxxx Device Selection --</span><br><span class="line">The selected device &quot;XXXXXXX&quot; is unknown to this version of the jlink-software.</span><br><span class="line"></span><br><span class="line">Please make sure ....</span><br></pre></td></tr></table></figure>
+
+<p>就是说让重新选择芯片型号，我因为用的MXD2660，是ARMM0的因此就直接选了ARMM0。</p>
+<p>然后就烧录不进程序，查看Debug，发现检测不到芯片。</p>
+<p>解决方法：</p>
+<p>网上查找刚好发现上述博客与我遭遇一致，原因是芯片型号选错了，MXD2660应该选Cortex-M0+。</p>
+<p>将JlinkSetting.ini删除后，重新选择型号即可。</p>
 ]]></content>
       <categories>
         <category>疑难杂症</category>
@@ -3563,32 +3676,38 @@ rightNode --> 7</pre>
       </tags>
   </entry>
   <entry>
-    <title>Java后台维护所遇之问题</title>
+    <title>Java后台维护</title>
     <url>/2022/02/Java%E5%90%8E%E5%8F%B0%E7%BB%B4%E6%8A%A4%E6%89%80%E9%81%87%E4%B9%8B%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<p>一个 Java 小白维护一套没有文档的，代码凌乱的 Java 后台系统，遇到一些新手问题这里记录。</p>
-<ol>
-<li><p>在更新 Java 后端程序时，需要修改一个 JAR 包里面的文件，替换里面的部分内容。</p>
+<h3 id="一、更新jar包"><a href="#一、更新jar包" class="headerlink" title="一、更新jar包"></a>一、更新jar包</h3><p>在更新 Java 后端程序时，需要修改一个 JAR 包里面的文件，替换里面的部分内容。</p>
 <p>使用 <code>jar -xvf xxx.jar</code> 解压到当前文件夹，文件夹包含 META-INF&#x2F;MANIFEST.MF 和其它要打包的文件。</p>
 <p>替换要修改的文件后，使用 <code>jar -cvfm xxx.jar META-INF/MANIFEST.MF xx</code> 打包，其中 xx 表示其它要打包的文件。</p>
 <p>MANIFEST.MF</p>
 <figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="meta">Manifest-Version</span>: <span class="string">1.0</span></span><br><span class="line"><span class="meta">Ant-Version</span>: <span class="string">Apache Ant 1.6.1</span></span><br><span class="line"><span class="meta">Specification-Title</span>: <span class="string">DCWLW</span></span><br><span class="line"><span class="meta">Class-Path</span>: <span class="string">conn.jar commons-codec-1.3.jar commons-dbcp-1.2.2.jar comm</span></span><br><span class="line"> <span class="meta">ons-lang-2.4.jar</span> <span class="string">commons-lang3-3.2.jar commons-logging-1.0.4.jar comm</span></span><br><span class="line"> <span class="meta">ons-pool-1.3.jar</span> <span class="string">dom4j.jar httpclient-4.5.6.jar httpcore-4.4.11.jar j</span></span><br><span class="line"> <span class="meta">dom-1.0.jar</span> <span class="string">jtds-1.2.jar log4j-1.2.14.jar ojdbc14.jar msutil.jar slf4</span></span><br><span class="line"> <span class="meta">j-api-1.6.6.jar</span> <span class="string">slf4j-log4j12-1.6.6.jar sqljdbc4.jar</span></span><br><span class="line"><span class="meta">Created-By</span>: <span class="string">xinli.zhangxlei</span></span><br><span class="line"><span class="meta">Specification-Version</span>: <span class="string">1.0</span></span><br><span class="line"><span class="meta">Main-Class</span>: <span class="string">com.servs.main.ServiceInit</span></span><br></pre></td></tr></table></figure>
+<p><strong>更新：</strong>在Linux下更简单的方法是，复制更改的文件，连同其路径，使用命令<code>jar uf</code>命令进行更新。</p>
+<p>例如：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">jar uf WLWServ.jar com&#x2F;servs&#x2F;main&#x2F;HandlerTest.class</span><br></pre></td></tr></table></figure>
 
 
-</li>
-<li><p>在迁移服务后，需要修改数据库配置文件到当前使用的数据库，因此要改变其 IP 地址，为此找了好一会，最后仔细观察 log，才发现配置文件所在位置在 conn.jar 文件中，将其修改后重新打包。</p>
+
+<h3 id="二、查看数据库配置"><a href="#二、查看数据库配置" class="headerlink" title="二、查看数据库配置"></a>二、查看数据库配置</h3><p>在迁移服务后，需要修改数据库配置文件到当前使用的数据库，因此要改变其 IP 地址，为此找了好一会，最后仔细观察 log，才发现配置文件所在位置在 conn.jar 文件中，将其修改后重新打包。</p>
 <p>db.properties</p>
 <figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="comment">#This is DataBase config files.</span></span><br><span class="line"><span class="comment">#Please copy to &quot; tomcat\conf &quot; file.properties</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># postgresql</span></span><br><span class="line"><span class="comment"># user=xx</span></span><br><span class="line"><span class="comment"># password=yyyyy</span></span><br><span class="line"><span class="comment"># drivers=org.postgresql.Driver</span></span><br><span class="line"><span class="comment"># url=jdbc:postgresql://192.168.3.198:5432/radius</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># sqlserver2000 -dts</span></span><br><span class="line"><span class="comment">#user=xx</span></span><br><span class="line"><span class="comment">#password=yyyyy</span></span><br><span class="line"><span class="comment">#drivers=net.sourceforge.jtds.jdbc.Driver</span></span><br><span class="line"><span class="comment">#url=jdbc:jtds:sqlserver://xx.xx.xxx.xx:1433/PHBase;SelectMethod=cursor</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#sqlserver2005 -2.0  localhost</span></span><br><span class="line"><span class="attr">user</span>=<span class="string">xx</span></span><br><span class="line"><span class="attr">password</span>=<span class="string">yyyyy</span></span><br><span class="line"><span class="attr">drivers</span>=<span class="string">com.microsoft.sqlserver.jdbc.SQLServerDriver</span></span><br><span class="line"><span class="attr">url</span>=<span class="string">jdbc:sqlserver://xx.xx.xxx.xx;database=DCWLW;</span></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"><span class="comment">#other</span></span><br><span class="line"><span class="attr">MaxConnectionCount</span>=<span class="string">60</span></span><br><span class="line"><span class="attr">MaxIdleCount</span>=<span class="string">3</span></span><br><span class="line"><span class="attr">MaxWait</span>=<span class="string">1000</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#MinConnectionCount=2</span></span><br><span class="line"><span class="comment">#ManageType=0</span></span><br></pre></td></tr></table></figure>
 
 
-</li>
-<li><p>早前在搬迁一些云服务器文件时，突然发现网站无法访问，最后查清是防火墙的问题，关闭防火墙后服务恢复正常。在搬迁服务器文件过程中，<strong>唯一有过的可疑操作是打开过网络共享</strong>，并共享了一个文件夹（该操作没有成功，可能阿里云服务器禁止网络共享），尚未清楚该操作是否与防火墙的策略有何关联。</p>
-</li>
-<li><p>之前的网站未经过 SSL 认证，没有 HTTPS 加密，微信小程序是不支持没有 HTTPS 加密的地址的，因此需要进行 SSL 认证。因为使用的阿里云服务器，阿里云有该服务。阿里云提供免费证书，申请配置完域名后，放到 <strong>tomcat 根目录 cert</strong> 文件夹下。</p>
+
+<h3 id="三、防火墙"><a href="#三、防火墙" class="headerlink" title="三、防火墙"></a>三、防火墙</h3><p>早前在搬迁一些云服务器文件时，突然发现网站无法访问，最后查清是防火墙的问题，关闭防火墙后服务恢复正常。在搬迁服务器文件过程中，<strong>唯一有过的可疑操作是打开过网络共享</strong>，并共享了一个文件夹（该操作没有成功，可能阿里云服务器禁止网络共享），尚未清楚该操作是否与防火墙的策略有何关联。</p>
+<h3 id="四、tomcat添加SSL认证"><a href="#四、tomcat添加SSL认证" class="headerlink" title="四、tomcat添加SSL认证"></a>四、tomcat添加SSL认证</h3><p>之前的网站未经过 SSL 认证，没有 HTTPS 加密，微信小程序是不支持没有 HTTPS 加密的地址的，因此需要进行 SSL 认证。因为使用的阿里云服务器，阿里云有该服务。阿里云提供免费证书，申请配置完域名后，放到 <strong>tomcat 根目录 cert</strong> 文件夹下。</p>
 <p>证书目录：</p>
 <p><img src="https://qzwjer.top/doc/blogImg/img/image-20211130095508197.png" alt="image-20211130095508197"></p>
 <p>修改 conf&#x2F;server.xml 文件，配置 https 所用端口 443</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&#x27;1.0&#x27; encoding=&#x27;utf-8&#x27;?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">Server</span> <span class="attr">port</span>=<span class="string">&quot;8005&quot;</span> <span class="attr">shutdown</span>=<span class="string">&quot;SHUTDOWN&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.startup.VersionLoggerListener&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.core.AprLifecycleListener&quot;</span> <span class="attr">SSLEngine</span>=<span class="string">&quot;on&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.core.JasperListener&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.core.JreMemoryLeakPreventionListener&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.mbeans.GlobalResourcesLifecycleListener&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.core.ThreadLocalLeakPreventionListener&quot;</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">GlobalNamingResources</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Resource</span> <span class="attr">name</span>=<span class="string">&quot;UserDatabase&quot;</span> <span class="attr">auth</span>=<span class="string">&quot;Container&quot;</span></span></span><br><span class="line"><span class="tag">              <span class="attr">type</span>=<span class="string">&quot;org.apache.catalina.UserDatabase&quot;</span></span></span><br><span class="line"><span class="tag">              <span class="attr">description</span>=<span class="string">&quot;User database that can be updated and saved&quot;</span></span></span><br><span class="line"><span class="tag">              <span class="attr">factory</span>=<span class="string">&quot;org.apache.catalina.users.MemoryUserDatabaseFactory&quot;</span></span></span><br><span class="line"><span class="tag">              <span class="attr">pathname</span>=<span class="string">&quot;conf/tomcat-users.xml&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">GlobalNamingResources</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">Service</span> <span class="attr">name</span>=<span class="string">&quot;Catalina&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">&quot;80&quot;</span> <span class="attr">protocol</span>=<span class="string">&quot;HTTP/1.1&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">maxHttpHeaderSize</span>=<span class="string">&quot;8192&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">maxThreads</span>=<span class="string">&quot;150&quot;</span> <span class="attr">minSpareThreads</span>=<span class="string">&quot;25&quot;</span> <span class="attr">maxSpareThreads</span>=<span class="string">&quot;75&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">enableLookups</span>=<span class="string">&quot;false&quot;</span>  <span class="attr">acceptCount</span>=<span class="string">&quot;100&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">connectionTimeout</span>=<span class="string">&quot;20000&quot;</span> <span class="attr">disableUploadTimeout</span>=<span class="string">&quot;true&quot;</span> </span></span><br><span class="line"><span class="tag">               <span class="attr">redirectPort</span>=<span class="string">&quot;8443&quot;</span>  <span class="attr">URIEncoding</span>=<span class="string">&quot;UTF-8&quot;</span>/&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">&quot;8443&quot;</span> <span class="attr">protocol</span>=<span class="string">&quot;org.apache.coyote.http11.Http11Protocol&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">maxThreads</span>=<span class="string">&quot;150&quot;</span> <span class="attr">SSLEnabled</span>=<span class="string">&quot;true&quot;</span> <span class="attr">scheme</span>=<span class="string">&quot;https&quot;</span> <span class="attr">secure</span>=<span class="string">&quot;true&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">clientAuth</span>=<span class="string">&quot;false&quot;</span> <span class="attr">sslProtocol</span>=<span class="string">&quot;TLS&quot;</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">&quot;443&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">protocol</span>=<span class="string">&quot;HTTP/1.1&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">SSLEnabled</span>=<span class="string">&quot;true&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">scheme</span>=<span class="string">&quot;https&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">secure</span>=<span class="string">&quot;true&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">keystoreFile</span>=<span class="string">&quot;D:\apache-tomcat-7.0.65\cert\5568913_liyunlong.xdt-iot.com.pfx&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">keystoreType</span>=<span class="string">&quot;PKCS12&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">keystorePass</span>=<span class="string">&quot;r0ftyhrF&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">clientAuth</span>=<span class="string">&quot;false&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">SSLProtocol</span>=<span class="string">&quot;TLSv1+TLSv1.1+TLSv1.2&quot;</span></span></span><br><span class="line"><span class="tag"><span class="attr">ciphers</span>=<span class="string">&quot;TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA256&quot;</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">&quot;8009&quot;</span> <span class="attr">protocol</span>=<span class="string">&quot;AJP/1.3&quot;</span> <span class="attr">redirectPort</span>=<span class="string">&quot;8443&quot;</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">Engine</span> <span class="attr">name</span>=<span class="string">&quot;Catalina&quot;</span> <span class="attr">defaultHost</span>=<span class="string">&quot;localhost&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">Realm</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.realm.LockOutRealm&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">Realm</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.realm.UserDatabaseRealm&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">resourceName</span>=<span class="string">&quot;UserDatabase&quot;</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">Realm</span>&gt;</span></span><br><span class="line"></span><br><span class="line">      <span class="tag">&lt;<span class="name">Host</span> <span class="attr">name</span>=<span class="string">&quot;localhost&quot;</span>  <span class="attr">appBase</span>=<span class="string">&quot;webapps&quot;</span></span></span><br><span class="line"><span class="tag">            <span class="attr">unpackWARs</span>=<span class="string">&quot;true&quot;</span> <span class="attr">autoDeploy</span>=<span class="string">&quot;true&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">Valve</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.valves.AccessLogValve&quot;</span> <span class="attr">directory</span>=<span class="string">&quot;logs&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">prefix</span>=<span class="string">&quot;localhost_access_log.&quot;</span> <span class="attr">suffix</span>=<span class="string">&quot;.txt&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">pattern</span>=<span class="string">&quot;%h %l %u %t <span class="symbol">&amp;quot;</span>%r<span class="symbol">&amp;quot;</span> %s %b&quot;</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">Host</span>&gt;</span></span><br><span class="line"></span><br><span class="line">	  <span class="tag">&lt;<span class="name">Host</span> <span class="attr">name</span>=<span class="string">&quot;liyunlong.xdt-iot.com&quot;</span>  <span class="attr">appBase</span>=<span class="string">&quot;&quot;</span> <span class="attr">unpackWARs</span>=<span class="string">&quot;true&quot;</span> <span class="attr">autoDeploy</span>=<span class="string">&quot;true&quot;</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">Context</span> <span class="attr">path</span>=<span class="string">&quot;&quot;</span> <span class="attr">docBase</span>=<span class="string">&quot;D:\apache-tomcat-7.0.65\webapps_xassp\DCWLW&quot;</span> <span class="attr">reloadable</span>=<span class="string">&quot;true&quot;</span> &gt;</span> </span><br><span class="line">          <span class="tag">&lt;/<span class="name">Context</span>&gt;</span></span><br><span class="line">		  <span class="tag">&lt;<span class="name">Context</span> <span class="attr">path</span>=<span class="string">&quot;/upload&quot;</span> <span class="attr">docBase</span>=<span class="string">&quot;D:\uploads&quot;</span>  <span class="attr">reloadable</span>=<span class="string">&quot;true&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">Context</span>&gt;</span></span><br><span class="line">		  <span class="tag">&lt;<span class="name">Context</span> <span class="attr">path</span>=<span class="string">&quot;/download&quot;</span> <span class="attr">docBase</span>=<span class="string">&quot;D:\apache-tomcat-7.0.65\webapps_xassp\download&quot;</span>  <span class="attr">reloadable</span>=<span class="string">&quot;true&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">Context</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">Valve</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.valves.AccessLogValve&quot;</span> <span class="attr">directory</span>=<span class="string">&quot;logs&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">prefix</span>=<span class="string">&quot;localhost_access_log.&quot;</span> <span class="attr">suffix</span>=<span class="string">&quot;.txt&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">pattern</span>=<span class="string">&quot;%h %l %u %t <span class="symbol">&amp;quot;</span>%r<span class="symbol">&amp;quot;</span> %s %b&quot;</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">Host</span>&gt;</span> </span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="name">Engine</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">Service</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Server</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-</ol>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&#x27;1.0&#x27; encoding=&#x27;utf-8&#x27;?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">Server</span> <span class="attr">port</span>=<span class="string">&quot;8005&quot;</span> <span class="attr">shutdown</span>=<span class="string">&quot;SHUTDOWN&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.startup.VersionLoggerListener&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.core.AprLifecycleListener&quot;</span> <span class="attr">SSLEngine</span>=<span class="string">&quot;on&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.core.JasperListener&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.core.JreMemoryLeakPreventionListener&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.mbeans.GlobalResourcesLifecycleListener&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.core.ThreadLocalLeakPreventionListener&quot;</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">GlobalNamingResources</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Resource</span> <span class="attr">name</span>=<span class="string">&quot;UserDatabase&quot;</span> <span class="attr">auth</span>=<span class="string">&quot;Container&quot;</span></span></span><br><span class="line"><span class="tag">              <span class="attr">type</span>=<span class="string">&quot;org.apache.catalina.UserDatabase&quot;</span></span></span><br><span class="line"><span class="tag">              <span class="attr">description</span>=<span class="string">&quot;User database that can be updated and saved&quot;</span></span></span><br><span class="line"><span class="tag">              <span class="attr">factory</span>=<span class="string">&quot;org.apache.catalina.users.MemoryUserDatabaseFactory&quot;</span></span></span><br><span class="line"><span class="tag">              <span class="attr">pathname</span>=<span class="string">&quot;conf/tomcat-users.xml&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">GlobalNamingResources</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">Service</span> <span class="attr">name</span>=<span class="string">&quot;Catalina&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">&quot;80&quot;</span> <span class="attr">protocol</span>=<span class="string">&quot;HTTP/1.1&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">maxHttpHeaderSize</span>=<span class="string">&quot;8192&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">maxThreads</span>=<span class="string">&quot;150&quot;</span> <span class="attr">minSpareThreads</span>=<span class="string">&quot;25&quot;</span> <span class="attr">maxSpareThreads</span>=<span class="string">&quot;75&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">enableLookups</span>=<span class="string">&quot;false&quot;</span>  <span class="attr">acceptCount</span>=<span class="string">&quot;100&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">connectionTimeout</span>=<span class="string">&quot;20000&quot;</span> <span class="attr">disableUploadTimeout</span>=<span class="string">&quot;true&quot;</span> </span></span><br><span class="line"><span class="tag">               <span class="attr">redirectPort</span>=<span class="string">&quot;8443&quot;</span>  <span class="attr">URIEncoding</span>=<span class="string">&quot;UTF-8&quot;</span>/&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">&quot;8443&quot;</span> <span class="attr">protocol</span>=<span class="string">&quot;org.apache.coyote.http11.Http11Protocol&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">maxThreads</span>=<span class="string">&quot;150&quot;</span> <span class="attr">SSLEnabled</span>=<span class="string">&quot;true&quot;</span> <span class="attr">scheme</span>=<span class="string">&quot;https&quot;</span> <span class="attr">secure</span>=<span class="string">&quot;true&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">clientAuth</span>=<span class="string">&quot;false&quot;</span> <span class="attr">sslProtocol</span>=<span class="string">&quot;TLS&quot;</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">	</span><br><span class="line">	<span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">&quot;443&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">protocol</span>=<span class="string">&quot;HTTP/1.1&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">SSLEnabled</span>=<span class="string">&quot;true&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">scheme</span>=<span class="string">&quot;https&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">secure</span>=<span class="string">&quot;true&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">keystoreFile</span>=<span class="string">&quot;D:\apache-tomcat-7.0.65\cert\5568913_liyunlong.xdt-iot.com.pfx&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">keystoreType</span>=<span class="string">&quot;PKCS12&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">keystorePass</span>=<span class="string">&quot;r0ftyhrF&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">clientAuth</span>=<span class="string">&quot;false&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">SSLProtocol</span>=<span class="string">&quot;TLSv1+TLSv1.1+TLSv1.2&quot;</span></span></span><br><span class="line"><span class="tag"><span class="attr">ciphers</span>=<span class="string">&quot;TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA256&quot;</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">&quot;8009&quot;</span> <span class="attr">protocol</span>=<span class="string">&quot;AJP/1.3&quot;</span> <span class="attr">redirectPort</span>=<span class="string">&quot;8443&quot;</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">Engine</span> <span class="attr">name</span>=<span class="string">&quot;Catalina&quot;</span> <span class="attr">defaultHost</span>=<span class="string">&quot;localhost&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">Realm</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.realm.LockOutRealm&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">Realm</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.realm.UserDatabaseRealm&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">resourceName</span>=<span class="string">&quot;UserDatabase&quot;</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">Realm</span>&gt;</span></span><br><span class="line"></span><br><span class="line">      <span class="tag">&lt;<span class="name">Host</span> <span class="attr">name</span>=<span class="string">&quot;localhost&quot;</span>  <span class="attr">appBase</span>=<span class="string">&quot;webapps&quot;</span></span></span><br><span class="line"><span class="tag">            <span class="attr">unpackWARs</span>=<span class="string">&quot;true&quot;</span> <span class="attr">autoDeploy</span>=<span class="string">&quot;true&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">Valve</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.valves.AccessLogValve&quot;</span> <span class="attr">directory</span>=<span class="string">&quot;logs&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">prefix</span>=<span class="string">&quot;localhost_access_log.&quot;</span> <span class="attr">suffix</span>=<span class="string">&quot;.txt&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">pattern</span>=<span class="string">&quot;%h %l %u %t <span class="symbol">&amp;quot;</span>%r<span class="symbol">&amp;quot;</span> %s %b&quot;</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">Host</span>&gt;</span></span><br><span class="line"></span><br><span class="line">	  <span class="tag">&lt;<span class="name">Host</span> <span class="attr">name</span>=<span class="string">&quot;liyunlong.xdt-iot.com&quot;</span>  <span class="attr">appBase</span>=<span class="string">&quot;&quot;</span> <span class="attr">unpackWARs</span>=<span class="string">&quot;true&quot;</span> <span class="attr">autoDeploy</span>=<span class="string">&quot;true&quot;</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">Context</span> <span class="attr">path</span>=<span class="string">&quot;&quot;</span> <span class="attr">docBase</span>=<span class="string">&quot;D:\apache-tomcat-7.0.65\webapps_xassp\DCWLW&quot;</span> <span class="attr">reloadable</span>=<span class="string">&quot;true&quot;</span> &gt;</span> </span><br><span class="line">          <span class="tag">&lt;/<span class="name">Context</span>&gt;</span></span><br><span class="line">		  <span class="tag">&lt;<span class="name">Context</span> <span class="attr">path</span>=<span class="string">&quot;/upload&quot;</span> <span class="attr">docBase</span>=<span class="string">&quot;D:\uploads&quot;</span>  <span class="attr">reloadable</span>=<span class="string">&quot;true&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">Context</span>&gt;</span></span><br><span class="line">		  <span class="tag">&lt;<span class="name">Context</span> <span class="attr">path</span>=<span class="string">&quot;/download&quot;</span> <span class="attr">docBase</span>=<span class="string">&quot;D:\apache-tomcat-7.0.65\webapps_xassp\download&quot;</span>  <span class="attr">reloadable</span>=<span class="string">&quot;true&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">Context</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">Valve</span> <span class="attr">className</span>=<span class="string">&quot;org.apache.catalina.valves.AccessLogValve&quot;</span> <span class="attr">directory</span>=<span class="string">&quot;logs&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">prefix</span>=<span class="string">&quot;localhost_access_log.&quot;</span> <span class="attr">suffix</span>=<span class="string">&quot;.txt&quot;</span></span></span><br><span class="line"><span class="tag">               <span class="attr">pattern</span>=<span class="string">&quot;%h %l %u %t <span class="symbol">&amp;quot;</span>%r<span class="symbol">&amp;quot;</span> %s %b&quot;</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">Host</span>&gt;</span> </span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="name">Engine</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">Service</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Server</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="五、java程序未释放临时文件"><a href="#五、java程序未释放临时文件" class="headerlink" title="五、java程序未释放临时文件"></a>五、java程序未释放临时文件</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">root@lyl-linux:WLWpack$ ps -ef | grep WLWServ</span><br><span class="line">root     27719     1  5 14:10 ?        00:00:54 java -jar -Xms1536m -Xmx2046m -XX:PermSize=128M -XX:MaxPermSize=256M /opt/Xassp/DCServer/WLWServ.jar</span><br><span class="line">root     30118 28413  0 14:26 pts/2    00:00:00 grep --color=auto WLWServ</span><br><span class="line">root@lyl-linux:WLWpack$ ls -l /proc/27719/fd</span><br><span class="line">total 0</span><br><span class="line">lr-x------ 1 root root 64 May 11 14:10 0 -&gt; /dev/null</span><br><span class="line">l-wx------ 1 root root 64 May 11 14:10 1 -&gt; /opt/Xassp/DCServer/DC.log</span><br><span class="line">lr-x------ 1 root root 64 May 11 14:10 10 -&gt; /dev/urandom</span><br><span class="line">lr-x------ 1 root root 64 May 11 14:10 100 -&gt; /usr/java/jdk1.8.0_151/jre/lib/jce.jar</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:10 101 -&gt; socket:[65960083]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:10 102 -&gt; socket:[65958648]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:10 103 -&gt; socket:[65958649]</span><br><span class="line">*</span><br><span class="line">*</span><br><span class="line">*</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:11 849 -&gt; socket:[65962399]</span><br><span class="line">lr-x------ 1 root root 64 May 11 14:10 85 -&gt; /tmp/jar_cache1697996469127696081.tmp (deleted)</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:11 850 -&gt; socket:[65956493]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:11 851 -&gt; socket:[65956497]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:11 852 -&gt; socket:[65956667]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:11 853 -&gt; socket:[65962423]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:11 855 -&gt; socket:[65962615]</span><br><span class="line">lr-x------ 1 root root 64 May 11 14:10 86 -&gt; /tmp/jar_cache7396855417572440361.tmp (deleted)</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:11 860 -&gt; socket:[65967045]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:11 861 -&gt; socket:[65966819]</span><br><span class="line">lr-x------ 1 root root 64 May 11 14:10 87 -&gt; /tmp/jar_cache5532799349897305199.tmp (deleted)</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:20 871 -&gt; socket:[65968386]</span><br><span class="line">lr-x------ 1 root root 64 May 11 14:10 88 -&gt; /tmp/jar_cache3266479730475853680.tmp (deleted)</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:20 880 -&gt; socket:[65968209]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:20 884 -&gt; socket:[65967056]</span><br><span class="line">lr-x------ 1 root root 64 May 11 14:10 89 -&gt; /tmp/jar_cache8112640596215738372.tmp (deleted)</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:20 894 -&gt; socket:[65972740]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:20 895 -&gt; socket:[65972730]</span><br><span class="line">lr-x------ 1 root root 64 May 11 14:10 9 -&gt; /dev/random</span><br><span class="line">lr-x------ 1 root root 64 May 11 14:10 90 -&gt; /tmp/jar_cache5110604533158166258.tmp (deleted)</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:20 900 -&gt; socket:[65972734]</span><br><span class="line">lr-x------ 1 root root 64 May 11 14:10 91 -&gt; /tmp/jar_cache7000421609336413492.tmp (deleted)</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:20 915 -&gt; socket:[65969067]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:20 917 -&gt; socket:[65966968]</span><br><span class="line">lr-x------ 1 root root 64 May 11 14:10 92 -&gt; /tmp/jar_cache6363263715093382132.tmp (deleted)</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:22 920 -&gt; socket:[65972778]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:22 922 -&gt; socket:[65972339]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:22 923 -&gt; socket:[65968715]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:22 924 -&gt; socket:[65967706]</span><br><span class="line">lr-x------ 1 root root 64 May 11 14:10 93 -&gt; /tmp/jar_cache733013011657608974.tmp (deleted)</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:24 931 -&gt; socket:[65972801]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:24 932 -&gt; socket:[65972824]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:24 933 -&gt; socket:[65969142]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:25 934 -&gt; socket:[65972838]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:25 935 -&gt; socket:[65974276]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:25 936 -&gt; socket:[65974298]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:25 937 -&gt; socket:[65974306]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:25 938 -&gt; socket:[65972881]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:25 939 -&gt; socket:[65972882]</span><br><span class="line">lr-x------ 1 root root 64 May 11 14:10 94 -&gt; /tmp/jar_cache4426843942519086123.tmp (deleted)</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:25 940 -&gt; socket:[65972885]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:25 941 -&gt; socket:[65974317]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:25 942 -&gt; socket:[65972914]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:25 943 -&gt; socket:[65974398]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:25 944 -&gt; socket:[65972940]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:25 945 -&gt; socket:[65974409]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:25 946 -&gt; socket:[65972959]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:25 947 -&gt; socket:[65973448]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:25 948 -&gt; socket:[65974430]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:25 949 -&gt; socket:[65974440]</span><br><span class="line">lr-x------ 1 root root 64 May 11 14:10 95 -&gt; /tmp/jar_cache6962183311593254185.tmp (deleted)</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:25 950 -&gt; socket:[65974476]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:25 951 -&gt; socket:[65974480]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:25 952 -&gt; socket:[65974506]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:25 953 -&gt; socket:[65974524]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:25 954 -&gt; socket:[65973053]</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:25 955 -&gt; socket:[65974549]</span><br><span class="line">lr-x------ 1 root root 64 May 11 14:10 96 -&gt; /tmp/jar_cache3916538713653732339.tmp (deleted)</span><br><span class="line">lr-x------ 1 root root 64 May 11 14:10 97 -&gt; /usr/java/jdk1.8.0_151/jre/lib/resources.jar</span><br><span class="line">l-wx------ 1 root root 64 May 11 14:10 98 -&gt; /root/keep/DC_400.log</span><br><span class="line">lrwx------ 1 root root 64 May 11 14:10 99 -&gt; socket:[65958644]</span><br></pre></td></tr></table></figure>
+
+<p>以上，使用<code>ps -ef | grep WLWServ</code>查看WLWServ程序的进程号，然后用<code>ls -l /proc/27719/fd</code>查看进程占用的文件，发现很多线程使用deleted的文件。</p>
 ]]></content>
       <categories>
         <category>项目开发</category>
@@ -4311,6 +4430,307 @@ rightNode --> 7</pre>
       <tags>
         <tag>Qt</tag>
         <tag>OpenCV</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Qt配置文件详解</title>
+    <url>/2022/07/Qt%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<p>Qt配置文件总是不知其然，每次工程建立，需要改配置文件，不论是qmake的.pro，还是cmake的CMakeLists.txt，都是靠一手浏览器解决，从未真正掌握过。因此这篇文章开始学习和掌握Qt配置文件的语法和书写，进行知识总结。</p>
+<p><em><strong>以参考官方手册为佳</strong></em></p>
+<h3 id="一、Qt工具moc，uic，rcc详解"><a href="#一、Qt工具moc，uic，rcc详解" class="headerlink" title="一、Qt工具moc，uic，rcc详解"></a>一、Qt工具moc，uic，rcc详解</h3><p>Qt可看作一个C++界面库，对C++语法进行了扩展，可以跨平台编译。</p>
+<h4 id="MOC"><a href="#MOC" class="headerlink" title="MOC"></a>MOC</h4><p>Qt将源码交给标准C++编译器前，需要事先将这些扩展的语法解析，完成这一操作的就是moc。</p>
+<p>moc全称Meta-Object Compiler，元对象编译器。MOC分析Qt的C++源文件时，如果发现在一个头文件中包含了宏Q_OBJECT，则会生成另一个C++源文件，该文件中包含了Q_OBJECT宏的实现代码，该文件的名称将会是原文件名前加上“moc_”构成。moc的执行在预处理器之前，因为预处理器执行后，Q_OBJECT宏就不存在了。新生成的源文件参与到标准编译器的编译中，编译过程中如果找不到对应的moc文件将出现链接错误。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">moc myclass.h -o moc_myclass.cpp</span><br></pre></td></tr></table></figure>
+
+<h4 id="UIC"><a href="#UIC" class="headerlink" title="UIC"></a>UIC</h4><p>用designer设计的x.ui文件可通过uic工具转换为头文件，名称为ui_x.ui。ui文件的使用就是利用默认工具uic自动产生一个类，然后用该类的setui函数加载界面到相应的对象上。</p>
+<p>.ui文件使用有三种形式：1.直接使用，2.定义一个新类，声明一个ui子对象，利用该对象来加载界面，3.将ui作为基类派生新的类。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">uic app.ui -o ui_app.h</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="RCC"><a href="#RCC" class="headerlink" title="RCC"></a>RCC</h4><p>rcc用于将.qrc里面描述的图片、文档等编译成对应的源代码文件qrc_*.cpp或者独立的二进制资源文件*.rcc。</p>
+<p><strong>生成独立的二进制资源文件.rcc</strong></p>
+<p>对于太大的图片、音频、视频等文件，不适合集成到目标程序内部，可以放到操作系统文件目录，或单独编译成外挂资源.rcc。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">rcc -binary myresource.qrc -o myresource.rcc</span><br></pre></td></tr></table></figure>
+
+<p>代码中使用myresource.rcc，需要在main函数开始的位置注册这个独立的二进制资源文件：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">QResource::registerResource(<span class="string">&quot;/path/to/myresource.rcc&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>使用文件时用虚拟文件路径，在qml中使用rcc的内容，前缀是<code>qrc:/</code>；在Qt C++中前缀是<code>:</code>。</p>
+<p><strong>应用程序内嵌资源</strong></p>
+<p>如果希望一个资源描述文件application.qrc在程序编译时内嵌到目标程序里，需要在*.pro文件里添加：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">RESOURCES +&#x3D; application.qrc</span><br></pre></td></tr></table></figure>
+
+<p>qmake会自动为application.qrc添加编译脚本。</p>
+<p>rcc工具会解析 application.qrc内的 XML文本，找到需要添加的各种文件，默认情况下，rcc 工具会对这些文件做ZIP压缩，然后将压缩后的ZIP数据的每个字节转换成比如 0x6f数值形式，所有文件压缩后的数据对应一个C++静态数组 qt_resource_data[]，并添加注册、取消注册、初始化、清除等函数和资源描述结构体，最终形成一个 qrc_application.cpp文件。然后用编译器编译qrc_application.cpp文件，得到 qrc_applicaotion.o ，链接到目标程序内部，就可以用 “:&#x2F;images&#x2F;copy.png” 等形式访问程序内嵌资源了。<br>注意到刚才向 .pro 文件里添加 qrc 资源描述文件使用的运算符是+&#x3D;，也就是说可以为应用程序添加多个.qrc 文件，如果涉及的图片比较多，可以用多个*.qrc 对图片分类存放：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">RESOURCES +&#x3D; buttons.qrc </span><br><span class="line">RESOURCES +&#x3D; backgrounds.qrc</span><br></pre></td></tr></table></figure>
+
+<p>使用多个<code>*.qrc</code> 与使用一个<code>*.qrc</code> 的方式是一样的，虚拟文件路径都类似 “:&#x2F;buttons&#x2F;ok.png” 、”:&#x2F;backgrounds&#x2F;bgmain.png” 等，这里的 ok.png 放在项目文件夹的 buttons 子文件夹里，而 bgmain.png 是放在项目文件夹的 backgrounds 子文件夹里，因此两个文件的路径是不同的。<br>qmake 为内嵌资源添加的 rcc 编译命令，类似下面这样：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">rcc -name application  application.qrc -o qrc_application.cpp</span><br></pre></td></tr></table></figure>
+
+
+<p>得到 qrc_application.cpp 源文件之后，剩下的编译、链接就与普通 .cpp 文件一模一样了。<br>qrc_application.cpp 文件中不仅有各种图片、文档对应的静态数组，还有些结构体和函数，比如初始化和清除函数。<br>对于rcc命令，如果不加-name application选项参数，那么在 qrc_application.cpp 里面生成的初始化和清除函数名为：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int QT_RCC_MANGLE_NAMESPACE(qInitResources)();</span><br><span class="line">int QT_RCC_MANGLE_NAMESPACE(qCleanupResources)();</span><br></pre></td></tr></table></figure>
+
+<p>如果加了-name application选项参数，那么资源的初始化和清除函数名变为：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int QT_RCC_MANGLE_NAMESPACE(qInitResources_application)();</span><br><span class="line">int QT_RCC_MANGLE_NAMESPACE(qCleanupResources_application)();</span><br></pre></td></tr></table></figure>
+
+<p>QT_RCC_MANGLE_NAMESPACE() 这个宏其实没什么用，仅用于提示作用。资源的初始化函数和清除函数会在资源加载和卸载时自动被调用。<br>应用程序的内嵌资源通常不需要手动初始化，但也有例外情况，比如在使用某些链接库中的资源文件时，如果出现使用了正确的文件路径 “:&#x2F;images&#x2F;copy.png” 却找不到资源里图片文件的情况，那么需要在使用该资源的类声明里或者在 main 函数里打头的位置加入一句手动初始化：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Q_INIT_RESOURCE(resources);</span><br></pre></td></tr></table></figure>
+
+
+<p>resources 是指 resources.qrc 的简短名字形式，不需要扩展名。</p>
+<h3 id="二、qmake的-pro配置"><a href="#二、qmake的-pro配置" class="headerlink" title="二、qmake的.pro配置"></a>二、qmake的.pro配置</h3><p><em><strong>应当仔细阅读Qt <a href="http://qt5.digitser.net/5.15/zh-CN/qmake-manual.html">qmake手册</a></strong></em></p>
+<p>qmake工具是与Qt一起提供的，为不同平台和编译器生成Makefile。</p>
+<p>对于某些简单的项目，可以在其项目顶层目录下直接执行<code>qmake -project</code>命令来自动生成.pro文件，对复杂程序，需要手动改写.pro文件。</p>
+<h4 id="常用Pro文件变量"><a href="#常用Pro文件变量" class="headerlink" title="常用Pro文件变量"></a>常用Pro文件变量</h4><p><strong>HEADERS</strong></p>
+<p>指定项目的头文件。qmake会自动检测头文件的类中是否需要moc，并增加适当的依赖关系和文件到项目中，来生成和链接moc文件</p>
+<p><strong>SOURCES</strong></p>
+<p>指定项目的C++文件</p>
+<p><strong>TEMPLATE</strong></p>
+<p>模板变量告诉qmake为这个应用程序生成哪种makefile。</p>
+<table>
+<thead>
+<tr>
+<th align="left">选项</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">qpp</td>
+<td align="left">创建一个用于构建应用程序的Makefile（默认）。</td>
+</tr>
+<tr>
+<td align="left">lib</td>
+<td align="left">创建一个用于构建库的Makefile。</td>
+</tr>
+<tr>
+<td align="left">subdirs</td>
+<td align="left">创建一个用于构建目标子目录的Makefile，子目录使用SUBDIRS变量指定。</td>
+</tr>
+<tr>
+<td align="left">aux</td>
+<td align="left">创建一个不建任何东西的Makefile。如果没有编译器需要被调用来创建目标，比如你的项目使用解释型语言写的，使用此功能。注：此模板类型只能用于Makefile-based生成器。特别是，它不会工作在vcxproj和Xcode生成器。</td>
+</tr>
+<tr>
+<td align="left">vcapp</td>
+<td align="left">仅适用于Windows。创建一个Visual Studio应用程序项目。</td>
+</tr>
+<tr>
+<td align="left">vclib</td>
+<td align="left">仅适用于Windows。创建一个Visual Studio库项目。</td>
+</tr>
+<tr>
+<td align="left">vcsubdirs</td>
+<td align="left">Visual Studio解决方案，构建子目录项目</td>
+</tr>
+</tbody></table>
+<p><strong>FORMS</strong></p>
+<p>指定需要uic处理的由Qt designer 生成的.ui文件。所有的构建这些UI文件所需的依赖、头文件和源文件都会被自动添加到项目中</p>
+<p><strong>RESOURCES</strong></p>
+<p>指定需要rcc处理的.qrc文件</p>
+<p><strong>DEFINES</strong></p>
+<p>指定预定义的C++预处理器符号</p>
+<p><strong>INCLUDEPATH</strong></p>
+<p>指定C++编译器搜索全局头文件的路径。如果包含空格，需引号。</p>
+<p><strong>LIBS</strong></p>
+<p>指定工程要链接的库。<code>-l library -L library_path</code></p>
+<p><strong>CONFIG</strong></p>
+<p>指定各种用于工程配置和编译的参数。</p>
+<p><strong>QT</strong></p>
+<p>指定工程所要使用的Qt模板（默认是core，gui对应于QtCore和QtGui，以确保标准的GUI应用程序无需进一步的配置就可以构建）。如果想建立一个不包含Qt GUI模块的项目，可以使用<code>-=</code>操作符。</p>
+<p><strong>TARGET</strong></p>
+<p>指定可执行文件的基本文件名</p>
+<p><strong>DESTDIR</strong></p>
+<p>指定可执行文件放置的目录</p>
+<p><strong>DEPENDPATH</strong></p>
+<p>指定查看解决依赖关系的目录列表，当包含文件时使用</p>
+<p><strong>MOC_DIR</strong></p>
+<p>指定来自moc的所有中间文件（含Q_OBJECT宏的头文件转换成标准.h文件的存放目录）放置的目录</p>
+<p><strong>OBJECTS_DIR</strong></p>
+<p>指定所有中间文件.o放置的目录</p>
+<p><strong>RCC_DIR</strong></p>
+<p>指定Qt资源编译器输出文件的目录</p>
+<p><strong>TRANSLATIONS</strong></p>
+<p>指定包含用户界面翻译文本的翻译（.ts）文件列表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">TRANSLATIONS +&#x3D; Resource&#x2F;myapp_zh.ts \</span><br><span class="line">				Resource&#x2F;myapp_en.ts</span><br></pre></td></tr></table></figure>
+
+<p><strong>UI_DIR</strong></p>
+<p>指定来自uic的所有中间文件放置的目录</p>
+<center>|————————————————————————————————————|</center>
+
+<p><strong>CONFIG</strong>变量用于指定编译器选项和项目配置，参数如下：</p>
+<table>
+<thead>
+<tr>
+<th align="center">选项</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">qt</td>
+<td align="center">指应用程序使用Qt。此选项是默认包括的。CONFIG如果包含qt，可以使用QT变量（QT变量默认包含gui和core模块）控制应用程序需要的任何附加Qt模块</td>
+</tr>
+<tr>
+<td align="center">debug</td>
+<td align="center">编译出具有调试信息的可执行程序</td>
+</tr>
+<tr>
+<td align="center">release</td>
+<td align="center">使用release模式构建，如果debug也被指定会被忽略</td>
+</tr>
+<tr>
+<td align="center">dll</td>
+<td align="center">动态编译库文件</td>
+</tr>
+<tr>
+<td align="center">staticlib</td>
+<td align="center">静态编译库文件</td>
+</tr>
+<tr>
+<td align="center">console</td>
+<td align="center">指应用程序需要写控制台（使用cout、cerro、qWarning()等）</td>
+</tr>
+<tr>
+<td align="center">debug_and_release</td>
+<td align="center">项目准备以debug和release两种模式构建。</td>
+</tr>
+<tr>
+<td align="center">debug_and_release_target</td>
+<td align="center">此选项默认设置。如果也指定了debug_and_release，最终的debug和release构建在不同的目录。</td>
+</tr>
+<tr>
+<td align="center">build_all</td>
+<td align="center">如果指定了debug_and_release，默认情况下，该项目会构建为debug和release模式。</td>
+</tr>
+<tr>
+<td align="center">autogen_precompile_source</td>
+<td align="center">自动生成一个.cpp文件，包含在.pro中指定的预编译头文件。</td>
+</tr>
+<tr>
+<td align="center">ordered</td>
+<td align="center">使用subdirs模板时，此选项指定应该按照目录列表的顺序处理它们。</td>
+</tr>
+<tr>
+<td align="center">precompile_header</td>
+<td align="center">可以在项目中使用预编译头文件的支持。</td>
+</tr>
+<tr>
+<td align="center">warn_on</td>
+<td align="center">编译器应该输出尽可能多的警告。如果也指定了warn_off，最后一个生效。</td>
+</tr>
+<tr>
+<td align="center">warn_off</td>
+<td align="center">编译器应该输出尽可能少的警告。</td>
+</tr>
+<tr>
+<td align="center">exceptions</td>
+<td align="center">启用异常支持。默认设置。</td>
+</tr>
+<tr>
+<td align="center">exceptions_off</td>
+<td align="center">禁用异常支持。</td>
+</tr>
+<tr>
+<td align="center">rtti</td>
+<td align="center">启用RTTI支持。默认情况下，使用编译器默认。</td>
+</tr>
+<tr>
+<td align="center">rtti_off</td>
+<td align="center">禁用RTTI支持。默认情况下，使用编译器默认。</td>
+</tr>
+<tr>
+<td align="center">stl</td>
+<td align="center">启用STL支持。默认情况下，使用编译器默认。</td>
+</tr>
+<tr>
+<td align="center">stl_off</td>
+<td align="center">禁用STL支持。默认情况下，使用编译器默认。</td>
+</tr>
+<tr>
+<td align="center">thread</td>
+<td align="center">启用线程支持。当CONFIG包括qt时启用，这是缺省设置。</td>
+</tr>
+<tr>
+<td align="center">c++11</td>
+<td align="center">启用c++11支持。如果编译器不支持c++11这个选项，没有影响。默认情况下，支持是禁用的。</td>
+</tr>
+<tr>
+<td align="center">c++14</td>
+<td align="center">启用c++14支持。如果编译器不支持c++14这个选项，没有影响。默认情况下，支持是禁用的。</td>
+</tr>
+</tbody></table>
+<h4 id="内置函数和控制流"><a href="#内置函数和控制流" class="headerlink" title="内置函数和控制流"></a>内置函数和控制流</h4><p>include()可引用外部项目</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">include(other.pro)</span><br></pre></td></tr></table></figure>
+
+<p>通过作用域实现条件语句，类似编程语言中的if语句</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">win32 &#123;</span><br><span class="line">	SOURCES +&#x3D; paintwidget_win.cpp</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其它包括find()，unique()，count()等</p>
+<p>同时CONFIG()可以用来测试配置选项是否被包含</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CONFIG(opengl)&#123;</span><br><span class="line">	message(Building with OpenGL support.)</span><br><span class="line">&#125;else&#123;</span><br><span class="line">	message(OpenGL support is not avilable.)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="变量扩展"><a href="#变量扩展" class="headerlink" title="变量扩展"></a>变量扩展</h4><p><code>$$</code>操作符用来提取变量的值，可被用来将值在变量与函数间传递</p>
+<h4 id="访问qmake特性"><a href="#访问qmake特性" class="headerlink" title="访问qmake特性"></a>访问qmake特性</h4><p>特殊<code>$$[...]</code>操作符可用来访问qmake特性：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">message(Qt version: $$[QT_VERSION])</span><br><span class="line">message(Qt is installed in $$[QT_INSTALL_PREFIX])</span><br><span class="line">message(Qt resources can be found in the following locations:)</span><br><span class="line">message(Documentation: $$[QT_INSTALL_DOCS])</span><br><span class="line">message(Header files: $$[QT_INSTALL_HEADERS])</span><br><span class="line">message(Libraries: $$[QT_INSTALL_LIBS])</span><br><span class="line">message(Binary files (executables): $$[QT_INSTALL_BINS])</span><br><span class="line">message(Plugins: $$[QT_INSTALL_PLUGINS])</span><br><span class="line">message(Data files: $$[QT_INSTALL_DATA])</span><br><span class="line">message(Translation files: $$[QT_INSTALL_TRANSLATIONS])</span><br><span class="line">message(Settings: $$[QT_INSTALL_CONFIGURATION])</span><br><span class="line">message(Examples: $$[QT_INSTALL_EXAMPLES])</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="三、cmake的CMakeLists-txt"><a href="#三、cmake的CMakeLists-txt" class="headerlink" title="三、cmake的CMakeLists.txt"></a>三、cmake的CMakeLists.txt</h3><p><em><strong>应参考</strong></em></p>
+<p><em><strong><a href="https://runebook.dev/zh-CN/docs/cmake/manual/cmake-qt.7">cmake-qt手册（中文）</a></strong></em></p>
+<p><em><strong><a href="https://cmake.org/cmake/help/v3.21/manual/cmake-qt.7.html">cmake-qt手册（英文）</a></strong></em>)</p>
+<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>CMake可以找到并使用Qt 4 和Qt 5。Qt 4库是由CMake附带的 FindQt4 查找模块找到的，而Qt 5库是使用Qt 5附带的“配置文件包”找到的。</p>
+<p>Qt 4和Qt 5可以在同一 CMake buildsystem 一起使用：</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.8</span>.<span class="number">0</span> FATAL_ERROR)</span><br><span class="line"></span><br><span class="line"><span class="keyword">project</span>(Qt4And5)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_AUTOMOC <span class="keyword">ON</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_package</span>(Qt5 COMPONENTS Widgets DBus REQUIRED)</span><br><span class="line"><span class="keyword">add_executable</span>(publisher publisher.cpp)</span><br><span class="line"><span class="keyword">target_link_libraries</span>(publisher Qt5::Widgets Qt5::DBus)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_package</span>(Qt4 REQUIRED)</span><br><span class="line"><span class="keyword">add_executable</span>(subscriber subscriber.cpp)</span><br><span class="line"><span class="keyword">target_link_libraries</span>(subscriber Qt4::QtGui Qt4::QtDBus)</span><br></pre></td></tr></table></figure>
+
+<p>一个 CMake 目标不能同时链接到 Qt 4 和 Qt 5。如果试图这样做或者是目标依赖性评估的结果,就会发出一个诊断。</p>
+<h4 id="Qt构建工具"><a href="#Qt构建工具" class="headerlink" title="Qt构建工具"></a>Qt构建工具</h4><p>Qt依赖于一些捆绑的代码生成工具，例如moc用于元对象代码生成，uic用于小部件布局和填充，以及rcc用于虚拟文件系统内容生成。如果满足适当的条件，这些工具可以有cmake自动调用。自动工具调用可以与Qt 4和Qt 5一起使用。</p>
+<h4 id="AUTOMOC"><a href="#AUTOMOC" class="headerlink" title="AUTOMOC"></a>AUTOMOC</h4><p>AUTOMOC属性控制cmake是否检查目标中的C++文件，以确定它们是否需要运行moc，并在适当的时间创建规则执行moc。</p>
+<p>如果在头文件中找到来自AUTOMOC_MACRO_NAMES的宏，则将在该文件上运行moc。结果将放入如moc_&lt;basename&gt;.cpp命名的文件中。如果在C++实现文件中找到该宏，则将按照Qt约定将moc输出到如&lt;basename&gt;.moc命名的文件中。用户必须使用预处理器#include将&lt;basename&gt;.moc包含在C++实现文件中。</p>
+<p>包含的<code>moc_*.cpp</code>和<code>*.moc</code>文件将在<code>&lt;AUTOGEN_BUILD_DIR&gt;/include</code>目录中生成，该目录会自动添加到目标的INCLUDE_DIRECTORIES中。</p>
+<ul>
+<li>这与CMake 3.7及以下版本不同，详情请看他们的文档</li>
+<li>对于multi configuration generators，include目录为<code>&lt;AUTOGEN_BUILD_DIR&gt;/include_&lt;CONFIG&gt;</code></li>
+<li>参见AUTOGEN_BUILD_DIR</li>
+</ul>
+<p>不包括在内的<code>moc_&lt;basename&gt;.cpp</code>文件将在自定义文件夹中生成，以避免名称冲突，并包含在一个单独的文件中，该文件已编译到目标中，名为<code>&lt;AUTOGEN_BUILD_DIR&gt;/mocs_compilation.cpp</code>或<code>&lt;AUTOGEN_BUILD_DIR&gt;/mocs_compilation_$&lt;CONFIG&gt;.cpp</code></p>
+<p>moc命令行将消耗从被调用的目标中处理COMPILE_DEFINITIONS和INCLUDE_DIRECTORIES目标属性为适当的构建配置。</p>
+<p>通过设置CMAKE_AUTOMOC变量，AUTOMOC目标属性可为之后所有目标预置。AUTOMOC_MOC_OPTIONS可以填充设置选项传递给moc。可以填充CMAKE_AUTOMOC_MOC_OPTIONS变量，以为之后所有目标预置选项。</p>
+<p>可将其它要搜索的宏名称添加到AUTOMOC_MACRO_NAMES中。</p>
+<p>可使用AUTOMOC_DEPEND_FILTERS从源代码中提取其它moc依赖项文件名。</p>
+<p>通过启用SKIP_AUTOMOC或更广泛的SKIP_AUTOGEN，可将C++源文件从AUTOMOC处理中排除。</p>
+<h4 id="AUTOUIC"><a href="#AUTOUIC" class="headerlink" title="AUTOUIC"></a>AUTOUIC</h4><p>AUTOUIC目标属性控制cmake是否检查目标中的C++文件，以确定它们是否需要运行uic，并在合适时机创建规则运行uic。</p>
+<p>如果找到与 <code>&lt;path&gt;ui_&lt;basename&gt;.h</code> 匹配的预处理器 <code>#include</code> 指令，并且存在 <code>&lt;basename&gt;.ui</code> 文件，则将执行 <code>uic</code> 生成适当的文件。该 <code>&lt;basename&gt;.ui</code> 文件中搜索在以下地方</p>
+<ol>
+<li><code>&lt;source_dir&gt;/&lt;basename&gt;.ui</code></li>
+<li><code>&lt;source_dir&gt;/&lt;path&gt;&lt;basename&gt;.ui</code></li>
+<li><code>&lt;AUTOUIC_SEARCH_PATHS&gt;/&lt;basename&gt;.ui</code></li>
+<li><code>&lt;AUTOUIC_SEARCH_PATHS&gt;/&lt;path&gt;&lt;basename&gt;.ui</code></li>
+</ol>
+<p>其中， <source_dir> 是C ++文件的目录，而 AUTOUIC_SEARCH_PATHS 是其他搜索路径的列表。</p>
+<p>生成的 <code>ui_*.h</code>文件放置在<AUTOGEN_BUILD_DIR>&#x2F;include目录中，该目录会自动添加到目标的 INCLUDE_DIRECTORIES 中。</p>
+<p>该 AUTOUIC 目标属性可以通过设置对所有以下目标预先设定 CMAKE_AUTOUIC 变量。该 AUTOUIC_OPTIONS 目标属性可被填充设置选项传递给 uic 。该 CMAKE_AUTOUIC_OPTIONS 变量可被填充到预先设定的所有以下目标的选项。所述 AUTOUIC_OPTIONS 源文件属性可以在被设置 <code>&lt;basename&gt;.ui</code> 文件为文件组特定选项。这将覆盖来自 AUTOUIC_OPTIONS 目标属性的选项。</p>
+<p>目标可以使用调用 uic 时应使用的选项来填充 INTERFACE_AUTOUIC_OPTIONS 目标属性。这必须与 AUTOUIC_OPTIONS 目标的AUTOUIC_OPTIONS目标属性内容一致。所述 CMAKE_DEBUG_TARGET_PROPERTIES 变量可被用于跟踪这样的原点目标 INTERFACE_AUTOUIC_OPTIONS 。这意味着为Qt提供替代翻译系统的库可以指定在运行 uic 时应使用的选项：</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">add_library</span>(KI18n klocalizedstring.cpp)</span><br><span class="line"><span class="keyword">target_link_libraries</span>(KI18n Qt5::Core)</span><br><span class="line"></span><br><span class="line"><span class="comment"># KI18n uses the tr2i18n() function instead of tr().  That function is</span></span><br><span class="line"><span class="comment"># declared in the klocalizedstring.h header.</span></span><br><span class="line"><span class="keyword">set</span>(autouic_options</span><br><span class="line">  -tr tr2i18n</span><br><span class="line">  -<span class="keyword">include</span> klocalizedstring.h</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set_property</span>(<span class="keyword">TARGET</span> KI18n APPEND PROPERTY</span><br><span class="line">  INTERFACE_AUTOUIC_OPTIONS <span class="variable">$&#123;autouic_options&#125;</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>链接到从上游导出的目标的消耗项目当uic由于AUTOUIC而运行时自动使用适当的选项，作为与导入目标链接的结果：</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">set</span>(CMAKE_AUTOUIC <span class="keyword">ON</span>)</span><br><span class="line"><span class="comment"># Uses a libwidget.ui file:</span></span><br><span class="line"><span class="keyword">add_library</span>(LibWidget libwidget.cpp)</span><br><span class="line"><span class="keyword">target_link_libraries</span>(LibWidget</span><br><span class="line">  KF5::KI18n</span><br><span class="line">  Qt5::Widgets</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>通过启用 SKIP_AUTOUIC 或更广泛的 SKIP_AUTOGEN ,可以将源文件从 AUTOUIC 处理中排除。</p>
+<h4 id="AUTORCC"><a href="#AUTORCC" class="headerlink" title="AUTORCC"></a>AUTORCC</h4><p>AUTORCC目标属性控制cmake是否创建规则来执行 <code>rcc</code> 在适当的时间在其上具有后缀源文件 <code>.qrc</code> 。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">add_executable(myexe main.cpp resource_file.qrc)</span><br></pre></td></tr></table></figure>
+
+<p>该 AUTORCC 目标属性可以通过设置对所有以下目标预先设定 CMAKE_AUTORCC 变量。该 AUTORCC_OPTIONS 目标属性可被填充设置选项传递给 rcc 。该 CMAKE_AUTORCC_OPTIONS 变量可被填充到预先设定的所有以下目标的选项。所述 AUTORCC_OPTIONS 源文件属性可以在被设置<code> &lt;name&gt;.qrc</code> 文件设置为文件特定的选项。这将覆盖来自 AUTORCC_OPTIONS 目标属性的选项。</p>
+<p>通过启用 SKIP_AUTORCC 或更广泛的 SKIP_AUTOGEN ,可以将源文件从 AUTORCC 处理中排除。</p>
+<h4 id="lt-ORIGIN-gt-autogen目标"><a href="#lt-ORIGIN-gt-autogen目标" class="headerlink" title="&lt;ORIGIN&gt;_autogen目标"></a><code>&lt;ORIGIN&gt;_autogen</code>目标</h4><p>moc 和 uic 工具作为由CMake生成的综合的<code>&lt;ORIGIN&gt;_autogen</code> custom target 一部分被执行。默认情况下该 <code>&lt;ORIGIN&gt;_autogen</code> 目标继承 <code>&lt;ORIGIN&gt;</code> 目标的依赖（见 AUTOGEN_ORIGIN_DEPENDS ）。可以通过将目标依赖项添加到  AUTOGEN_TARGET_DEPENDS 目标属性中的方式将它们添加到<code>&lt;ORIGIN&gt;_autogen </code>目标中。</p>
+]]></content>
+      <categories>
+        <category>学习总结</category>
+      </categories>
+      <tags>
+        <tag>Qt</tag>
       </tags>
   </entry>
 </search>
