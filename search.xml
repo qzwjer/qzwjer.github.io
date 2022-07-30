@@ -209,93 +209,6 @@
       </tags>
   </entry>
   <entry>
-    <title>BLE学习笔记</title>
-    <url>/2021/08/BLE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[<p>GATT:Generic Attribute Profile，通用属性配置文件</p>
-<p>GAP:Generic Access Profile，通用访问配置文件</p>
-<h3 align = "center">通过 nRF52832 开发指南学习</h3>
-
-
-
-<p>》1 一个BLE程序通常需要至少包含 4 个必要的部分：系统初始化、启动、空闲管理和事件处理。</p>
-<blockquote>
-<p>日志打印初始化&#x3D;》APP定时器初始化&#x3D;》指示灯初始化&#x3D;》电源管理初始化&#x3D;》协议栈初始化&#x3D;》GAP初始化&#x3D;》GATT初始化&#x3D;》广播初始化&#x3D;》服务初始化&#x3D;》连接参数协商初始化</p>
-</blockquote>
-<p>》》1 BLE 协议栈初始化</p>
-<blockquote>
-<blockquote>
-<p>使能 SoftDevice，配置 BLE 协议栈参数，使能 BLE 协议栈，注册 BLE 协议栈事件回调参数</p>
-</blockquote>
-</blockquote>
-<p>》》2 配置 GAP 参数</p>
-<blockquote>
-<blockquote>
-<p>模式（Mode）和规程（Procedure）</p>
-<p>设置安全模式和名称</p>
-</blockquote>
-</blockquote>
-<p>》》3 GATT 初始化</p>
-<p>》》4 广播初始化</p>
-<p>》》5 服务初始化</p>
-<p>》》6 连接参数协商初始化</p>
-<blockquote>
-<blockquote>
-<p>连接参数协商模块的作用是用于启动和执行连接参数协商规程</p>
-</blockquote>
-</blockquote>
-<p>》》7 启动广播</p>
-<hr>
-<p><span style='color:red;background:white;font-size:20px;font-family:字体;'>服务的 UUID</span></p>
-<p>加入服务 UUID 的步骤：</p>
-<p>1 定义并初始化 UUID 数组</p>
-  <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">ble_uuid_t</span> m_adv_uuids[]          =                                          <span class="comment">/**&lt; Universally unique service identifier. */</span></span><br><span class="line">&#123;</span><br><span class="line">    &#123;BLE_UUID_NUS_SERVICE, NUS_SERVICE_UUID_TYPE&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>2 初始化广播数据（扫描响应）中 UUID 列表</p>
-  <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">.uuid_cnt = <span class="keyword">sizeof</span>(m_adv_uuids) / <span class="keyword">sizeof</span>(m_adv_uuids[<span class="number">0</span>]);</span><br><span class="line">.p_uuids  = m_adv_uuids;</span><br></pre></td></tr></table></figure>
-
-<p>3 初始化广播</p>
-  <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">err_code = ble_advertising_init(&amp;m_advertising, &amp;init);</span><br><span class="line">   APP_ERROR_CHECK(err_code);</span><br></pre></td></tr></table></figure>
-
-<p><span style='color:red;background:white;font-size:20px;font-family:字体;'>服务数据</span></p>
-<p>服务数据用来在广播中发送某个服务的数据，服务数据可以不需要连接就能解析出数据。</p>
-<p>服务数据由 UUID 和数据两部分组成。</p>
-<p>加入服务 UUID 的步骤：</p>
-<p>1 定义服务数据结构体变量</p>
-  <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ble_advdata_service_data_t</span> service_data;</span><br></pre></td></tr></table></figure>
-
-<p> 2 初始化服务数据</p>
-  <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">service_data.service_uuid = BLE_UUID_BATTERY_SERVICE;</span><br><span class="line">service_data.data.size = <span class="keyword">sizeof</span>(battery_data);</span><br><span class="line">service_data.data.p_data = &amp;battery_data;</span><br></pre></td></tr></table></figure>
-
-<p>3 配置广播数据中的服务数据</p>
-  <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">init.davdata.service_data_count = <span class="number">1</span>;</span><br><span class="line">init.advdata.p_service_data_array = &amp;service_data;</span><br></pre></td></tr></table></figure>
-
-<p>4 初始化广播</p>
-  <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">err_code = ble_advertising_init(&amp;m_advertising, &amp;init);</span><br><span class="line">APP_ERROR_CHECK(err_code);</span><br></pre></td></tr></table></figure>
-
-<hr>
-<p><span style='color:red;background:white;font-size:20px;font-family:字体;'>厂商自定义数据</span></p>
-<p>1 定义厂商自定义数据结构体变量</p>
-  <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="keyword">uint16_t</span> company_identifier;   <span class="comment">//厂商ID</span></span><br><span class="line">    <span class="keyword">uint8_array_t</span> data;  <span class="comment">//附件的自定义数据</span></span><br><span class="line">&#125;<span class="keyword">ble_advdata_manuf_data_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">ble_advdata_manuf_data_t</span> manuf_specific_data;</span><br></pre></td></tr></table></figure>
-
-<p>2 初始化厂商自定义数据</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//制造商 ID，0x0059 是 Nordic 的 ID</span></span><br><span class="line">manuf_specific_data.company_identifier = <span class="number">0x0059</span>;</span><br><span class="line"><span class="comment">//指向制造商自定义的数据</span></span><br><span class="line">manuf_specific_data.data.p_data = my_adv_manuf_data;</span><br><span class="line"><span class="comment">//制造商自定义的数据大小（字节数）</span></span><br><span class="line">manuf_specific_data.data.size = <span class="keyword">sizeof</span>(my_adv_manuf_data);</span><br></pre></td></tr></table></figure>
-
-<p>3 配置广播数据中包含厂商自定义数据</p>
-  <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">init.advdata.p_manuf_specific_data = &amp;manuf_specific_data;</span><br></pre></td></tr></table></figure>
-
-<p>4 初始化广播</p>
-  <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">err_code = ble_advertising_init(&amp;m_advertising, &amp;init);</span><br><span class="line">APP_ERROR_CHECK(err_code);</span><br></pre></td></tr></table></figure>
-
-<hr>
-]]></content>
-      <categories>
-        <category>杂文集合</category>
-      </categories>
-      <tags>
-        <tag>BLE</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>OTA常用代码</title>
     <url>/2021/10/OTA%E5%B8%B8%E7%94%A8%E4%BB%A3%E7%A0%81/</url>
     <content><![CDATA[<p>在嵌入式开发中，使产品的软件能够更新升级是个很常见的需求，作为开发人员，能够快速熟练地实现该功能是基本能力。</p>
@@ -1173,10 +1086,16 @@
   <entry>
     <title>Qt：应用程序无法运行</title>
     <url>/2022/02/Qt%EF%BC%9A%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E6%97%A0%E6%B3%95%E8%BF%90%E8%A1%8C/</url>
-    <content><![CDATA[<p>Qt创建的应用程序，直接运行时弹出错误窗口：应用程序无法正常启动0xc000007b</p>
+    <content><![CDATA[<h2 id="一、0xc000007b"><a href="#一、0xc000007b" class="headerlink" title="一、0xc000007b"></a>一、0xc000007b</h2><p>Qt创建的应用程序，直接运行时弹出错误窗口：应用程序无法正常启动0xc000007b</p>
 <p>发现是64位机器，创建的Qt应用是32位，该换为64位编译即可。</p>
 <p>应用打包：</p>
 <p>release编译后，将exe文件移动到应用文件夹中，然后使用windeployqt打包：windeployqt.exe xxx.exe</p>
+<h2 id="二、无法找到入口"><a href="#二、无法找到入口" class="headerlink" title="二、无法找到入口"></a>二、无法找到入口</h2><p>Qt创建的应用程序，在Qt Creator中运行时正常，在文件夹中点击运行时弹出：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">无法找到入口 ——无法定位程序输入点 XXXXX 于动态链接库 。。。</span><br></pre></td></tr></table></figure>
+
+<p>同样使用windeployqt打包的程序也是如此。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">以上问题是选择编译生成的工具和在系统PATH下的Qt链接库不匹配导致的。</span><br><span class="line"></span><br><span class="line">如选择的是MinGW_64生成的程序，但系统PATH下Qt链接库是MSVC2019_64，或者系统PATH中的Qt链接库MSVC2019_64在MinGW_64之前，导致程序运行时链接到了不匹配的库文件，造成无法定位程序输入点。</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
         <category>杂文集合</category>
@@ -2345,6 +2264,11 @@
 <td>procfs</td>
 <td></td>
 <td>进程文件系统</td>
+</tr>
+<tr>
+<td>probe</td>
+<td></td>
+<td>探针，探测</td>
 </tr>
 </tbody></table>
 <h2 align='center' id='变量定义'>变量定义</h2>
@@ -4680,7 +4604,7 @@ rightNode --> 7</pre>
 
 <h3 id="三、cmake的CMakeLists-txt"><a href="#三、cmake的CMakeLists-txt" class="headerlink" title="三、cmake的CMakeLists.txt"></a>三、cmake的CMakeLists.txt</h3><p><em><strong>应参考</strong></em></p>
 <p><em><strong><a href="https://runebook.dev/zh-CN/docs/cmake/manual/cmake-qt.7">cmake-qt手册（中文）</a></strong></em></p>
-<p><em><strong><a href="https://cmake.org/cmake/help/v3.21/manual/cmake-qt.7.html">cmake-qt手册（英文）</a></strong></em>)</p>
+<p><em><strong><a href="https://cmake.org/cmake/help/v3.21/manual/cmake-qt.7.html">cmake-qt手册（英文）</a></strong></em></p>
 <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>CMake可以找到并使用Qt 4 和Qt 5。Qt 4库是由CMake附带的 FindQt4 查找模块找到的，而Qt 5库是使用Qt 5附带的“配置文件包”找到的。</p>
 <p>Qt 4和Qt 5可以在同一 CMake buildsystem 一起使用：</p>
 <figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.8</span>.<span class="number">0</span> FATAL_ERROR)</span><br><span class="line"></span><br><span class="line"><span class="keyword">project</span>(Qt4And5)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_AUTOMOC <span class="keyword">ON</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_package</span>(Qt5 COMPONENTS Widgets DBus REQUIRED)</span><br><span class="line"><span class="keyword">add_executable</span>(publisher publisher.cpp)</span><br><span class="line"><span class="keyword">target_link_libraries</span>(publisher Qt5::Widgets Qt5::DBus)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_package</span>(Qt4 REQUIRED)</span><br><span class="line"><span class="keyword">add_executable</span>(subscriber subscriber.cpp)</span><br><span class="line"><span class="keyword">target_link_libraries</span>(subscriber Qt4::QtGui Qt4::QtDBus)</span><br></pre></td></tr></table></figure>
@@ -4731,6 +4655,390 @@ rightNode --> 7</pre>
       </categories>
       <tags>
         <tag>Qt</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>BLE学习笔记</title>
+    <url>/2022/07/BLE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<p>GATT:Generic Attribute Profile，通用属性配置文件</p>
+<p>GAP:Generic Access Profile，通用访问配置文件</p>
+<h4 id="nRF52832-开发指南"><a href="#nRF52832-开发指南" class="headerlink" title="nRF52832 开发指南"></a>nRF52832 开发指南</h4><p>一个BLE程序通常需要至少包含 4 个必要的部分：系统初始化、启动、空闲管理和事件处理。</p>
+<ul>
+<li><p>BLE 协议栈初始化</p>
+<p>使能 SoftDevice，配置 BLE 协议栈参数，使能 BLE 协议栈，注册 BLE 协议栈事件回调参数</p>
+</li>
+<li><p>配置 GAP 参数</p>
+<p>模式（Mode）和规程（Procedure）</p>
+<p>设置安全模式和名称</p>
+</li>
+<li><p>GATT 初始化</p>
+</li>
+<li><p>广播初始化</p>
+</li>
+<li><p>服务初始化</p>
+</li>
+<li><p>连接参数协商初始化</p>
+<p>连接参数协商模块的作用是用于启动和执行连接参数协商规程</p>
+</li>
+<li><p>启动广播</p>
+</li>
+</ul>
+<h4 id="服务的-UUID"><a href="#服务的-UUID" class="headerlink" title="服务的 UUID"></a>服务的 UUID</h4><p>加入服务 UUID 的步骤：</p>
+<p>1 定义并初始化 UUID 数组</p>
+  <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">ble_uuid_t</span> m_adv_uuids[] =   <span class="comment">/**&lt; Universally unique service identifier. */</span></span><br><span class="line">&#123;</span><br><span class="line">    &#123;BLE_UUID_NUS_SERVICE, NUS_SERVICE_UUID_TYPE&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>2 初始化广播数据（扫描响应）中 UUID 列表</p>
+  <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">.uuid_cnt = <span class="keyword">sizeof</span>(m_adv_uuids) / <span class="keyword">sizeof</span>(m_adv_uuids[<span class="number">0</span>]);</span><br><span class="line">.p_uuids  = m_adv_uuids;</span><br></pre></td></tr></table></figure>
+
+<p>3 初始化广播</p>
+  <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">err_code = ble_advertising_init(&amp;m_advertising, &amp;init);</span><br><span class="line">   APP_ERROR_CHECK(err_code);</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="服务数据"><a href="#服务数据" class="headerlink" title="服务数据"></a>服务数据</h4><p>服务数据用来在广播中发送某个服务的数据，服务数据可以不需要连接就能解析出数据。</p>
+<p>服务数据由 UUID 和数据两部分组成。</p>
+<p>加入服务 UUID 的步骤：</p>
+<p>1 定义服务数据结构体变量</p>
+  <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ble_advdata_service_data_t</span> service_data;</span><br></pre></td></tr></table></figure>
+
+<p> 2 初始化服务数据</p>
+  <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">service_data.service_uuid = BLE_UUID_BATTERY_SERVICE;</span><br><span class="line">service_data.data.size = <span class="keyword">sizeof</span>(battery_data);</span><br><span class="line">service_data.data.p_data = &amp;battery_data;</span><br></pre></td></tr></table></figure>
+
+<p>3 配置广播数据中的服务数据</p>
+  <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">init.davdata.service_data_count = <span class="number">1</span>;</span><br><span class="line">init.advdata.p_service_data_array = &amp;service_data;</span><br></pre></td></tr></table></figure>
+
+<p>4 初始化广播</p>
+  <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">err_code = ble_advertising_init(&amp;m_advertising, &amp;init);</span><br><span class="line">APP_ERROR_CHECK(err_code);</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="厂商自定义数据"><a href="#厂商自定义数据" class="headerlink" title="厂商自定义数据"></a>厂商自定义数据</h4><p>1 定义厂商自定义数据结构体变量</p>
+  <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="keyword">uint16_t</span> company_identifier;   <span class="comment">//厂商ID</span></span><br><span class="line">    <span class="keyword">uint8_array_t</span> data;  <span class="comment">//附件的自定义数据</span></span><br><span class="line">&#125;<span class="keyword">ble_advdata_manuf_data_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">ble_advdata_manuf_data_t</span> manuf_specific_data;</span><br></pre></td></tr></table></figure>
+
+<p>2 初始化厂商自定义数据</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//制造商 ID，0x0059 是 Nordic 的 ID</span></span><br><span class="line">manuf_specific_data.company_identifier = <span class="number">0x0059</span>;</span><br><span class="line"><span class="comment">//指向制造商自定义的数据</span></span><br><span class="line">manuf_specific_data.data.p_data = my_adv_manuf_data;</span><br><span class="line"><span class="comment">//制造商自定义的数据大小（字节数）</span></span><br><span class="line">manuf_specific_data.data.size = <span class="keyword">sizeof</span>(my_adv_manuf_data);</span><br></pre></td></tr></table></figure>
+
+<p>3 配置广播数据中包含厂商自定义数据</p>
+  <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">init.advdata.p_manuf_specific_data = &amp;manuf_specific_data;</span><br></pre></td></tr></table></figure>
+
+<p>4 初始化广播</p>
+  <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">err_code = ble_advertising_init(&amp;m_advertising, &amp;init);</span><br><span class="line">APP_ERROR_CHECK(err_code);</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="BLE常见的4中模式"><a href="#BLE常见的4中模式" class="headerlink" title="BLE常见的4中模式"></a>BLE常见的4中模式</h4><h5 id="蓝牙广播模式（broadcast）"><a href="#蓝牙广播模式（broadcast）" class="headerlink" title="蓝牙广播模式（broadcast）"></a>蓝牙广播模式（broadcast）</h5><p>比较有代表例子就是基于低功耗蓝牙的beacon设备。</p>
+<p>beacon处于广播模式时，一般会被设置成了不可连接的状态，Beacon 会每隔一定的时间（SKYLAB的beacon为100毫秒）广播一个数据包到周围，作为独立的蓝牙主机在执行扫描动作时，会间隔地接收到 Beacon 广播出来的数据包。该数据包内容最多可以包含 31 个字节的内容。同时，在主机接收到广播包时，其中会指示该广播包来自于哪一个蓝牙从机 MAC 地址(每个 Beacon 拥有唯一的 MAC 地址)的从机设备和当前的接收发送信号强度指示值(RSSI)为多少。</p>
+<h5 id="蓝牙从机模式（peripheral）"><a href="#蓝牙从机模式（peripheral）" class="headerlink" title="蓝牙从机模式（peripheral）"></a>蓝牙从机模式（peripheral）</h5><p>代表例子是蓝牙心率带，蓝牙智能手环等</p>
+<p>工作在从机模式的低功耗蓝牙模块也处于广播状态，等待被扫描。和广播模式不同的是，从机模式的蓝牙模块是可以被连接的，在数据传输过程中作从机； 下图是SKYLAB的蓝牙智能手环VG08，可以向蓝牙主机发送一些心率数据、记步数据、消耗的卡路里等等数据。</p>
+<h5 id="蓝牙主机模式（center）"><a href="#蓝牙主机模式（center）" class="headerlink" title="蓝牙主机模式（center）"></a>蓝牙主机模式（center）</h5><p>代表例子：智能手机，数据传输中做主机的蓝牙模块。</p>
+<p>Ble蓝牙模块处于主机模式时，无广播，可扫描周围广播设备，可以要求与广播设备的连接。在连接中做主机。主从一体蓝牙模块可以做主机、从机、主从一体三种模式。</p>
+<h5 id="观察者模式（observer）"><a href="#观察者模式（observer）" class="headerlink" title="观察者模式（observer）"></a>观察者模式（observer）</h5><p>代表的例子是蓝牙网关。</p>
+<p>Ble蓝牙处于观察者模式，无广播，可扫描周围的广播设备，不能要求与广播设备的连接。</p>
+<hr>
+]]></content>
+      <categories>
+        <category>杂文集合</category>
+      </categories>
+      <tags>
+        <tag>BLE</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>设计模式</title>
+    <url>/2022/07/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h1><h2 id="一、设计模式来源"><a href="#一、设计模式来源" class="headerlink" title="一、设计模式来源"></a>一、设计模式来源</h2><p>设计模式（Design Pattern）是前辈们对代码开发经验的总结，是解决特定问题的一系列套路。它不是语法规定，而是一套用来提高代码可复用性、可维护性、可读性、稳健性以及安全性的解决方案。</p>
+<h2 id="二、设计模式六大原则"><a href="#二、设计模式六大原则" class="headerlink" title="二、设计模式六大原则"></a>二、设计模式六大原则</h2><p>总原则——开闭原则（Open Closed principle）</p>
+<blockquote>
+<p>一个软件实体，如类、模块和函数应该对扩展开放，对修改关闭。</p>
+</blockquote>
+<p>在程序需要进行拓展的时候，不能去修改原有的代码，而是要扩展原有代码，实现一个热插拔的效果。所以一句话概括就是：为了使程序的扩展性好，易于维护和升级。</p>
+<p>想要达到这样的效果，我们需要使用接口和抽象类等。</p>
+<h3 id="单一职责原则"><a href="#单一职责原则" class="headerlink" title="单一职责原则"></a>单一职责原则</h3><p>Single Responsibility Principle</p>
+<blockquote>
+<p>一个类应该只有一个发生变化的原因</p>
+</blockquote>
+<p>不要存在多于一个导致类变更的原因，也就是说每个类应该实现单一的职责，否则就应该把类拆分。</p>
+<h3 id="里氏替换原则"><a href="#里氏替换原则" class="headerlink" title="里氏替换原则"></a>里氏替换原则</h3><p>Liskov Substitution Principle</p>
+<blockquote>
+<p>所有引用基类的地方必须能透明地使用其子类的对象</p>
+</blockquote>
+<p>任何基类可以出现的地方，子类一定可以出现。里氏替换原则是继承复用的基石，只有当衍生类可以替换基类，软件单位的功能不受到影响时，基类才能真正被复用，而衍生类也能够在基类的基础上增加新的行为。</p>
+<p>里氏替换原则是对“开-闭”原则的补充。实现“开闭”原则的关键步骤就是抽象化。而基类与子类的继承关系就是抽象化的具体实现，所以里氏替换原则是对实现抽象化的具体步骤的规范。里氏替换原则中，子类对父类的方法尽量不要重写和重载。因为父类代表了定义好的结构，通过这个规范的接口与外界交互，子类不应该随便破坏它。</p>
+<h3 id="依赖倒置原则"><a href="#依赖倒置原则" class="headerlink" title="依赖倒置原则"></a>依赖倒置原则</h3><p>Dependence Inversion Principle</p>
+<blockquote>
+<ol>
+<li>上层模块不应该依赖底层模块，它们都应该依赖于抽象</li>
+<li>抽象不应该依赖于细节，细节应该依赖于抽象</li>
+</ol>
+</blockquote>
+<p>面向接口编程，依赖于抽象而不依赖于具体。写代码时用到具体类时，不与具体类交互，而与具体类的上层接口交互。</p>
+<h3 id="接口隔离原则"><a href="#接口隔离原则" class="headerlink" title="接口隔离原则"></a>接口隔离原则</h3><p>Interface Segregation Principle</p>
+<blockquote>
+<ol>
+<li>客户端不应该依赖它不需要的接口</li>
+<li>类间的依赖关系应该建立在最小的接口上</li>
+</ol>
+</blockquote>
+<p>每个接口中不存在子类用不到却必须实现的方法，如果不然，就要将接口拆分。使用多个隔离的接口，比使用单个接口（多个接口方法集合到一个的接口）要好。</p>
+<h3 id="迪米特法则（最少知道原则）"><a href="#迪米特法则（最少知道原则）" class="headerlink" title="迪米特法则（最少知道原则）"></a>迪米特法则（最少知道原则）</h3><p>Law of Demeter</p>
+<blockquote>
+<p>只与你的直接朋友交谈，不跟“陌生人”说话</p>
+</blockquote>
+<p>一个类对自己依赖的类知道的越少越好。无论被依赖的类多么复杂，都应该将逻辑封装在方法的内部，通过public方法提供给外部。这样当被依赖的类变化时，才能最小的影响该类。</p>
+<p>最少知道原则的另一个表达方式是：只与直接的朋友通信。类之间只要有耦合关系，就叫朋友关系。耦合分为依赖、关联、聚合、组合等。我们称出现为成员变量、方法参数、方法返回值中的类为直接朋友。局部变量、临时变量则不是直接的朋友。我们要求陌生的类不要作为局部变量出现在类中。</p>
+<h3 id="合成复用原则"><a href="#合成复用原则" class="headerlink" title="合成复用原则"></a>合成复用原则</h3><p>Composite Reuse Principle</p>
+<blockquote>
+<p>尽量使用对象组合&#x2F;聚合，而不是继承关系达到软件复用的目的。</p>
+</blockquote>
+<p>合成或聚合可以将已有对象纳入到新对象中，使之成为新对象的一部分，因此新对象可以调用已有对象的功能。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SOLID CD</span><br><span class="line">S: single responsibility principle</span><br><span class="line">O: open closed principle</span><br><span class="line">L: liskov substitution principle</span><br><span class="line">I: interface segregation principle</span><br><span class="line">D: dependence inversion principle</span><br><span class="line"></span><br><span class="line">C: composite reuse principle</span><br><span class="line">D: law of Demeter</span><br></pre></td></tr></table></figure>
+
+<h2 id="三、设计模式的三大类"><a href="#三、设计模式的三大类" class="headerlink" title="三、设计模式的三大类"></a>三、设计模式的三大类</h2><h3 id="创建型模式"><a href="#创建型模式" class="headerlink" title="创建型模式"></a>创建型模式</h3><p>Creational Pattern</p>
+<p>关注如何创建对象，核心思想是要把对象的创建和使用相分离，这样使得两者能相对独立地变换。</p>
+<p>包括：</p>
+<ul>
+<li>工厂方法：Factory Method</li>
+<li>抽象工厂：Abstract Factory</li>
+<li>建造者：Builder</li>
+<li>原型：Prototype</li>
+<li>单例：Singleton</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">创工原单建抽（创公园，但见愁）</span><br></pre></td></tr></table></figure>
+
+<h3 id="结构型模式"><a href="#结构型模式" class="headerlink" title="结构型模式"></a>结构型模式</h3><p>Structural Pattern</p>
+<p>关注对象的组成以及对象间的依赖关系，描述如何将类或者对象结合在一起形成更大的结构，就像搭积木，可以通过简单积木的组合形成复杂的、功能更为强大的结构。</p>
+<p>包括：</p>
+<ul>
+<li>适配器</li>
+<li>装饰着</li>
+<li>代理</li>
+<li>外观</li>
+<li>桥接</li>
+<li>组合</li>
+<li>享元</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">结享外组适代装桥（姐想外租，世代装桥）</span><br></pre></td></tr></table></figure>
+
+<h3 id="行为型模式"><a href="#行为型模式" class="headerlink" title="行为型模式"></a>行为型模式</h3><p>Behavioral Pattern</p>
+<p>关注对象的行为问题，是对在不同的对象之间划分责任和算法的抽象化；不仅仅关注类和对象的结构，而且重点关注它们之间的相互作用。</p>
+<p>包括：</p>
+<ul>
+<li>策略模式</li>
+<li>模板方法</li>
+<li>观察者</li>
+<li>迭代器</li>
+<li>责任链</li>
+<li>命令模式</li>
+<li>备忘录</li>
+<li>状态模式</li>
+<li>访问者</li>
+<li>中介者</li>
+<li>解释器</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">行状责中模访解备观策命迭（形状折中模仿，戒备观测鸣笛）</span><br></pre></td></tr></table></figure>
+
+<h2 id="四、C-常见设计模式"><a href="#四、C-常见设计模式" class="headerlink" title="四、C++常见设计模式"></a>四、C++常见设计模式</h2><ol>
+<li>智能指针shared_ptr，unique_ptr，weak_ptr：代理模式</li>
+<li>STL中的queue：适配器模式</li>
+<li>STL中的iterator：迭代器模式</li>
+<li>拷贝构造函数&#x2F;拷贝复制运算符进行深拷贝：原型模式</li>
+<li>std::optional：空对象模式</li>
+<li>虚函数实现运行时多态：策略模式</li>
+<li>std::string_view：享元模式</li>
+</ol>
+<h2 id="五、编码常用设计模式"><a href="#五、编码常用设计模式" class="headerlink" title="五、编码常用设计模式"></a>五、编码常用设计模式</h2><p>以下内容参考 <a href="https://github.com/FengJungle/DesignPattern">https://github.com/FengJungle/DesignPattern</a></p>
+<h3 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h3><p>创建型模式关注对象的创建过程，在软件开发中应用非常广泛。创建型模式描述如何将对象的创建和使用分离，让用户在使用对象过程中无须关心对象的创建细节，从而降低系统耦合度，并且让系统易于修改和扩展。</p>
+<p>简单工厂模式是最简单的设计模式之一，其实它并不属于Gof的23中设计模式，但应用也十分频繁，同时也是其余创建模式的基础，因此有必要先学习简单工厂模式。</p>
+<p><a href="https://github.com/FengJungle/DesignPattern/blob/master/01.SimpleFactory/01.SimpleFactory.md">https://github.com/FengJungle/DesignPattern/blob/master/01.SimpleFactory/01.SimpleFactory.md</a></p>
+<h3 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h3><h3 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h3><h3 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h3><h3 id="外观模式"><a href="#外观模式" class="headerlink" title="外观模式"></a>外观模式</h3><h3 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h3><h3 id="包装模式（装饰器模式）"><a href="#包装模式（装饰器模式）" class="headerlink" title="包装模式（装饰器模式）"></a>包装模式（装饰器模式）</h3><h3 id="桥接模式"><a href="#桥接模式" class="headerlink" title="桥接模式"></a>桥接模式</h3><h3 id="模板方法模式"><a href="#模板方法模式" class="headerlink" title="模板方法模式"></a>模板方法模式</h3><h3 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h3><h3 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h3><h3 id="责任链模式"><a href="#责任链模式" class="headerlink" title="责任链模式"></a>责任链模式</h3>]]></content>
+      <categories>
+        <category>学习总结</category>
+      </categories>
+      <tags>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>工厂模式</title>
+    <url>/2022/07/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<pre class="mermaid">classDiagram
+class AbstractFactory{
+ -成员名
+ -getBall() Sport
+}
+class BasketballFactory{
+ -成员名
+ -getBall() Sport
+}
+class FootballFactory{
+ -成员名
+ -getBall() Sport
+}
+class VolleyballFactory{
+ -成员名
+ -getBall() Sport
+}
+class Sport{
+ -
+ -play() void
+ -printName() void
+}
+class Basketball{
+ -
+ -play() void
+ -printName() void
+}
+class Football{
+ -
+ -play() void
+ -printName() void
+}
+class Volleyball{
+ -
+ -play() void
+ -printName() void
+}
+class Client{
+ -成员名
+ -成员名
+}
+Client ..> AbstractFactory
+Client ..> Sport
+AbstractFactory <|-- BasketballFactory
+AbstractFactory <|-- FootballFactory
+AbstractFactory <|-- VolleyballFactory
+BasketballFactory ..> Basketball
+FootballFactory ..> Football
+VolleyballFactory ..> Volleyball
+Sport <|-- Basketball
+Sport <|-- Football
+Sport <|-- Volleyball</pre>
+
+]]></content>
+      <categories>
+        <category>学习总结</category>
+      </categories>
+      <tags>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Qt蓝牙开发</title>
+    <url>/2022/07/Qt%E8%93%9D%E7%89%99%E5%BC%80%E5%8F%91/</url>
+    <content><![CDATA[<p><strong>QBluetoothDeviceDiscoveryAgent类发现附近的蓝牙设备：</strong></p>
+<ul>
+<li>创建一个QBluetoothDeviceDiscoveryAgent实体</li>
+<li>connect信号deviceDiscovered()或finished()</li>
+<li>调用start()</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MyClass::startDeviceDiscovery</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    QBluetoothDeviceDiscoveryAgent * discoveryAgent = <span class="keyword">new</span> QBluetoothDeviceDiscoveryAgent(<span class="keyword">this</span>);</span><br><span class="line">    connect(discoveryAgent, SIGNAL(deviceDiscovered(QBluetoothDeviceInfo)), <span class="keyword">this</span>, SLOT(deviceDiscovered(QBluetoothDeviceInfo)));</span><br><span class="line">    discoveryAgent-&gt;start();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MyClass::deviceDiscovered</span><span class="params">(<span class="keyword">const</span> QBluetoothDeviceInfo &amp;device)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    qDebug()&lt;&lt;<span class="string">&quot;Found new device:&quot;</span>&lt;&lt;device.name()&lt;&lt;<span class="string">&#x27;(&#x27;</span>&lt;&lt;device.address().toString()&lt;&lt;<span class="string">&#x27;)&#x27;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>要异步检索结果，则connect信号deviceDiscovered()。要获取发现设备的列表，在finished信号后调用discoveredDevices()。</p>
+<p>该类能发现经典和低功耗蓝牙设备。单个设备类型可以通过QBluetoothDeviceInfo::coreConfigurations () 属性确定。在大多数情况下，由foundDevices () 返回的列表包含两种类型的设备。然而，并非每个平台都能检测到这两种类型的设备。在具有此限制的平台上（例如 iOS 仅支持低能耗发现），发现程序会将搜索限制为支持的类型。</p>
+<p>其它示例：</p>
+<p>第一步，扫描设备，发现所有外设。使用QBluetoothDeviceDiscoveryAgent类发现设备，使用start()函数开始，每个新设备通过deviceDiscovered()信号发现。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">discoveryAgent = <span class="keyword">new</span> QBluetoothDeviceDiscoveryAgent();</span><br><span class="line">discoveryAgent-&gt;setLowEnergyDiscoveryTimeout(<span class="number">5000</span>);</span><br><span class="line">connect(discoveryAgent, &amp;QBluetoothDeviceDiscoveryAgent::deviceDiscovered,</span><br><span class="line">        <span class="keyword">this</span>, &amp;Device::addDevice);</span><br><span class="line">connect(discoveryAgent, QOverload&lt;QBluetoothDeviceDiscoveryAgent::Error&gt;::of(&amp;QBluetoothDeviceDiscoveryAgent::error),</span><br><span class="line">        <span class="keyword">this</span>, &amp;Device::deviceScanError);</span><br><span class="line">connect(discoveryAgent, &amp;QBluetoothDeviceDiscoveryAgent::finished, <span class="keyword">this</span>, &amp;Device::deviceScanFinished);</span><br><span class="line">discoveryAgent-&gt;start(QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);</span><br></pre></td></tr></table></figure>
+
+<p>addDevice()槽函数作为发现新设备的相应被触发，它过滤所有被发现的有QBluetoothDeviceInfo::LowEnergyCoreConfiguration标记的设备，并将它们加入列表展示给用户。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Device::addDevice</span><span class="params">(<span class="keyword">const</span> QBluetoothDeviceInfo &amp;info)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(info.coreConfigurations() &amp; QBluetoothDeviceInfo::LowEnergyCoreConfiguration)</span><br><span class="line">        setUpdate(<span class="string">&quot;Last device added: &quot;</span> + info.name());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p><strong>注意：</strong>从 Android 6.0 开始，检测设备的能力需要 ACCESS_COARSE_LOCATION。</p>
+</blockquote>
+<blockquote>
+<p><strong>注意：</strong>由于 API 限制，只能在 Windows 上查找已使用 Windows 设置配对的设备。</p>
+</blockquote>
+<blockquote>
+<p><strong>注意：</strong> Win32 后端目前不支持接收信号强度指示器 (RSSI)，以及制造商特定数据，或蓝牙 LE 设备在发现后公布的其他数据更新。</p>
+</blockquote>
+<p>&#x3D;&#x3D;<strong>经测，在win10下Qt 5.15版本，使用MinGW编译的软件搜索蓝牙只能搜到曾连过保存的蓝牙，使用MSVC2019 64bit则正常</strong>&#x3D;&#x3D;</p>
+<p><strong>QBluetoothDeviceInfo类用来保存蓝牙设备的名称、地址和设备类</strong></p>
+<p><strong>QBluetoothLocalDevice类提供获取和设置本地蓝牙设备支持</strong></p>
+<p><strong>QLowEnergyController类提供访问低功耗蓝牙的功能</strong></p>
+<p>QLowEnergyController类充当低功耗蓝牙开发的入口。</p>
+<p>低功耗蓝牙设备包含两种类型：外设型和中央型。每种支持不同的功能。外设型设备提供中央型设备所需的数据。例如湿度传感器检测冬景花园的水分湿度。诸如手机之类的设备可能会读取传感器的值，并将同一环境中更大背景下的所有传感器值显示给用户。在这种情况下，传感器是外围设备，手机充当中央设备。</p>
+<p>createCentral()工厂方法创建中央型控制器。这样的对象本质上充当远程低能耗外围设备的占位符，支持服务发现和状态跟踪等功能。</p>
+<p>在中心角色创建控制器对象后，第一步是通过connectToDevice ()建立连接。建立连接后，控制器的state () 将更改为QLowEnergyController::ConnectedState并发出connected () 信号。值得一提的是，某些平台（例如基于BlueZ的 Linux）无法将QLowEnergyController的两个连接实例维护到同一个远程设备。在这种情况下，第二次调用connectToDevice () 可能会失败。这种限制可能会在未来的某个阶段消失。disconnectFromDevice _() 函数用于断开现有连接。</p>
+<p>建立连接后的第二步是发现远程外围设备提供的服务。这个过程通过discoverServices () 启动，并在discoveryFinished () 信号发出后完成。发现的服务可以通过services () 进行枚举。</p>
+<p>最后一步是创建服务对象。createServiceObject () 函数充当每个服务对象的工厂，并期望服务 UUID 作为参数。调用上下文应该拥有返回的QLowEnergyService实例的所有权。</p>
+<p>一旦控制器与远程低功耗蓝牙设备断开连接，以后从此控制器的连接创建的任何QLowEnergyService、QLowEnergyCharacteristic或QLowEnergyDescriptor实例都将变为无效。</p>
+<p>外围角色的控制器是通过createPeripheral () 工厂方法创建的。这样的对象本身充当外围设备，支持广播服务等功能，并允许客户收到有关特征值更改的通知。</p>
+<p>在外围角色中创建控制器对象后，第一步是填充通过调用addService () 提供给客户端设备的 GATT 服务集。之后，调用startAdvertising () 让设备广播一些数据，并且根据正在执行的广播类型，还监听来自 GATT 客户端的传入连接。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//QBluetoothDeviceInfo remoteDevice;</span></span><br><span class="line"><span class="comment">//remoteDevice为扫描到的将要连接的设备</span></span><br><span class="line">QLowEnergyController *m_control = <span class="keyword">new</span> QLowEnergyController(remoteDevice, <span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">connect(m_control, SIGNAL(serviceDiscovered(QBluetoothUuid)), <span class="keyword">this</span>, SLOT(BlueServiceDiscovered(QBluetoothUuid)));</span><br><span class="line"></span><br><span class="line"><span class="comment">//正在运行的服务发现完成时发出此信号。</span></span><br><span class="line">connect(m_control, SIGNAL(discoveryFinished()), <span class="keyword">this</span>, SLOT(BlueServiceScanDone()));</span><br><span class="line"><span class="comment">//当控制器成功连接到远程Low Energy设备时，会发出此信号。</span></span><br><span class="line">connect(m_control, SIGNAL(connected()), <span class="keyword">this</span>, SLOT(BlueDeviceConnected()));</span><br><span class="line"><span class="comment">//当控制器从远程低功耗设备断开时发出此信号。</span></span><br><span class="line">connect(m_control, SIGNAL(disconnected()), <span class="keyword">this</span>, SLOT(BlueDeviceDisconnected()));</span><br><span class="line">connect(m_control, <span class="keyword">static_cast</span>&lt;<span class="keyword">void</span>(QLowEnergyController::(QLowEnergyController::Error)&gt;(&amp;QLowEnergyController::error),[=](QLowEnergyController::Error error) &#123;</span><br><span class="line">	<span class="keyword">if</span> (error == QLowEnergyController::NoError)</span><br><span class="line">    &#123;</span><br><span class="line">    	ui.plainTextEdit-&gt;setText(QSL(<span class="string">&quot;没有发生错误&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (error == QLowEnergyController::UnknownError)</span><br><span class="line">    &#123;</span><br><span class="line">        ui.plainTextEdit-&gt;setText(QSL(<span class="string">&quot;出现未知错误&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (error == QLowEnergyController::UnknownRemoteDeviceError)</span><br><span class="line">    &#123;</span><br><span class="line">        ui.plainTextEdit-&gt;setText(QSL(<span class="string">&quot;无法找到传递给此类构造函数的远程Bluetooth Low Energy设备&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (error == QLowEnergyController::NetworkError)</span><br><span class="line">    &#123;</span><br><span class="line">    	ui.plainTextEdit-&gt;setText(QSL(<span class="string">&quot;尝试读取或写入远程设备失败&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (error == QLowEnergyController::InvalidBluetoothAdapterError)</span><br><span class="line">    &#123;</span><br><span class="line">    	ui.plainTextEdit-&gt;setText(QSL(<span class="string">&quot;传递给此类构造函数的本地蓝牙设备无法找到，或者没有本地蓝牙设备&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (error == QLowEnergyController::InvalidBluetoothAdapterError)</span><br><span class="line">    &#123;</span><br><span class="line">    	ui.plainTextEdit-&gt;setText(QSL(<span class="string">&quot;尝试连接到远程设备失败&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//else</span></span><br><span class="line">    <span class="comment">//	ui.plainTextEdit-&gt;setText(QSL(&quot;*****未知错误!******\n&quot;));</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//连接到远程蓝牙低功耗设备。</span></span><br><span class="line">m_control-&gt;connectToDevice();</span><br></pre></td></tr></table></figure>
+
+<p>connected()信号触发的槽函数（以上是BlueDeviceConnected()）立即调用QLowEnergyController::discoverServices()来开始发现连接的设备的服务。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">BlueDeviceConnected</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	m_control-&gt;discoverServices();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>当服务被选择后，相关的QLowEnergyService实例被创建来允许与其交互：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">QLowEnergyService *service = m_control-&gt;createServiceObject(serviceUuid);</span><br><span class="line"><span class="keyword">if</span>(!service)&#123;</span><br><span class="line">    qWarning()&lt;&lt;<span class="string">&quot;Cannot create service for uuid&quot;</span>;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>服务对象提供所需的信号和函数来发现服务细节，读写特征值和描述符，并且接收数据更改通知。更新通知将被捕获，通过写值或由设备上的内部逻辑的更新可能触发。在最初的详细信息搜索中，服务的state()从DiscoveryRequired到DiscoveringServices，并最终以ServiceDiscovered结束。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">connect(service, &amp;QLowEnergyService::stateChanged, <span class="keyword">this</span>, &amp;Device::serviceDetailsDiscovered);</span><br><span class="line">service-&gt;discoverDetails();</span><br><span class="line">setUpdate(<span class="string">&quot;Back\n(Discovering details...)&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>通过QLowEnergyService::characteristics()检索服务的特征值，并且通过QLowEnergyCharacteristic::descriptors()获取每个描述符。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> QList&lt;QLowEnergyCharacteristic&gt;chars = service-&gt;characteristics();</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">const</span> QLowEnergyCharacteristic &amp;ch : chars)&#123;</span><br><span class="line">    <span class="keyword">auto</span> cInfo = <span class="keyword">new</span> CharacteristicInfo(ch);</span><br><span class="line">    m_characterisitics.append(cInfo);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+]]></content>
+      <categories>
+        <category>杂文集合</category>
+      </categories>
+      <tags>
+        <tag>BLE</tag>
+        <tag>Qt</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>git添加.gitignore</title>
+    <url>/2022/07/git%E6%B7%BB%E5%8A%A0-gitignore/</url>
+    <content><![CDATA[<p>转自 <a href="https://zhuanlan.zhihu.com/p/334908553">https://zhuanlan.zhihu.com/p/334908553</a></p>
+<p>项目开发中使用Git作为版本管理工具时，有时并非在项目一开始就添加了.gitignore文件来管理Git忽略规则，或是在项目开发过程中添加或移除了忽略规则，这时由于Git在本地维护着一份遵从创建本地项目时的gitignore规则的Git缓存，因此会造成.gitignore文件不起作用的现象。</p>
+<p>解决这个问题的方式就是清除掉本地项目的Git缓存，通过重新创建Git索引的方式来生成遵从新.gitignore文件中规则的本地Git版本，再将该Git版本提交到主干。</p>
+<p>例如，如果先使用NPM创建了项目，然后才创建了如下内容的.gitignore文件，那么在提交时本地Git并不会忽略相应的文件和路径。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># .gitignore</span><br><span class="line"></span><br><span class="line">.DS_Store</span><br><span class="line">node_modules</span><br><span class="line">package-lock.json</span><br></pre></td></tr></table></figure>
+
+<p>此时，可通过如下命令解决这个问题：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.清除本地当前的Git缓存</span><br><span class="line">git rm -r --cached .</span><br><span class="line"></span><br><span class="line">2.应用.gitignore等本地配置文件重新建立Git索引</span><br><span class="line">git add .</span><br><span class="line"></span><br><span class="line">3.提交当前Git版本并备注说明</span><br><span class="line">git commit -m &quot;update .gitignore&quot;</span><br><span class="line"></span><br><span class="line">4.推送。推送后Git仓库中会删去.gitignore中忽略的文件</span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>杂文集合</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
       </tags>
   </entry>
 </search>

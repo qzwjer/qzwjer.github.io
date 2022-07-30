@@ -1,0 +1,329 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Qt蓝牙开发 | 飞椅档案</title><meta name="keywords" content="BLE,Qt"><meta name="author" content="大笑之"><meta name="copyright" content="大笑之"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="QBluetoothDeviceDiscoveryAgent类发现附近的蓝牙设备：  创建一个QBluetoothDeviceDiscoveryAgent实体 connect信号deviceDiscovered()或finished() 调用start()  1234567891011void MyClass::startDeviceDiscovery()&amp;#123;    QBluetoothD">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Qt蓝牙开发">
+<meta property="og:url" content="https://www.qzwjer.top/2022/07/Qt%E8%93%9D%E7%89%99%E5%BC%80%E5%8F%91/index.html">
+<meta property="og:site_name" content="飞椅档案">
+<meta property="og:description" content="QBluetoothDeviceDiscoveryAgent类发现附近的蓝牙设备：  创建一个QBluetoothDeviceDiscoveryAgent实体 connect信号deviceDiscovered()或finished() 调用start()  1234567891011void MyClass::startDeviceDiscovery()&amp;#123;    QBluetoothD">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2022-07-30T08:04:19.000Z">
+<meta property="article:modified_time" content="2022-07-30T08:11:09.111Z">
+<meta property="article:author" content="大笑之">
+<meta property="article:tag" content="BLE">
+<meta property="article:tag" content="Qt">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.qzwjer.top/2022/07/Qt%E8%93%9D%E7%89%99%E5%BC%80%E5%8F%91/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/%E5%A4%A7%E7%AC%91%E4%B9%8B" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":false,"highlightLang":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2022-07-30 16:11:09'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/my.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">88</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">45</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">飞椅档案</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Qt蓝牙开发</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-07-30T08:04:19.000Z" title="发表于 2022-07-30 16:04:19">2022-07-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-07-30T08:11:09.111Z" title="更新于 2022-07-30 16:11:09">2022-07-30</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%9D%82%E6%96%87%E9%9B%86%E5%90%88/">杂文集合</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p><strong>QBluetoothDeviceDiscoveryAgent类发现附近的蓝牙设备：</strong></p>
+<ul>
+<li>创建一个QBluetoothDeviceDiscoveryAgent实体</li>
+<li>connect信号deviceDiscovered()或finished()</li>
+<li>调用start()</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MyClass::startDeviceDiscovery</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    QBluetoothDeviceDiscoveryAgent * discoveryAgent = <span class="keyword">new</span> QBluetoothDeviceDiscoveryAgent(<span class="keyword">this</span>);</span><br><span class="line">    connect(discoveryAgent, SIGNAL(deviceDiscovered(QBluetoothDeviceInfo)), <span class="keyword">this</span>, SLOT(deviceDiscovered(QBluetoothDeviceInfo)));</span><br><span class="line">    discoveryAgent-&gt;start();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MyClass::deviceDiscovered</span><span class="params">(<span class="keyword">const</span> QBluetoothDeviceInfo &amp;device)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    qDebug()&lt;&lt;<span class="string">&quot;Found new device:&quot;</span>&lt;&lt;device.name()&lt;&lt;<span class="string">&#x27;(&#x27;</span>&lt;&lt;device.address().toString()&lt;&lt;<span class="string">&#x27;)&#x27;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>要异步检索结果，则connect信号deviceDiscovered()。要获取发现设备的列表，在finished信号后调用discoveredDevices()。</p>
+<p>该类能发现经典和低功耗蓝牙设备。单个设备类型可以通过QBluetoothDeviceInfo::coreConfigurations () 属性确定。在大多数情况下，由foundDevices () 返回的列表包含两种类型的设备。然而，并非每个平台都能检测到这两种类型的设备。在具有此限制的平台上（例如 iOS 仅支持低能耗发现），发现程序会将搜索限制为支持的类型。</p>
+<p>其它示例：</p>
+<p>第一步，扫描设备，发现所有外设。使用QBluetoothDeviceDiscoveryAgent类发现设备，使用start()函数开始，每个新设备通过deviceDiscovered()信号发现。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">discoveryAgent = <span class="keyword">new</span> QBluetoothDeviceDiscoveryAgent();</span><br><span class="line">discoveryAgent-&gt;setLowEnergyDiscoveryTimeout(<span class="number">5000</span>);</span><br><span class="line">connect(discoveryAgent, &amp;QBluetoothDeviceDiscoveryAgent::deviceDiscovered,</span><br><span class="line">        <span class="keyword">this</span>, &amp;Device::addDevice);</span><br><span class="line">connect(discoveryAgent, QOverload&lt;QBluetoothDeviceDiscoveryAgent::Error&gt;::of(&amp;QBluetoothDeviceDiscoveryAgent::error),</span><br><span class="line">        <span class="keyword">this</span>, &amp;Device::deviceScanError);</span><br><span class="line">connect(discoveryAgent, &amp;QBluetoothDeviceDiscoveryAgent::finished, <span class="keyword">this</span>, &amp;Device::deviceScanFinished);</span><br><span class="line">discoveryAgent-&gt;start(QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);</span><br></pre></td></tr></table></figure>
+
+<p>addDevice()槽函数作为发现新设备的相应被触发，它过滤所有被发现的有QBluetoothDeviceInfo::LowEnergyCoreConfiguration标记的设备，并将它们加入列表展示给用户。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Device::addDevice</span><span class="params">(<span class="keyword">const</span> QBluetoothDeviceInfo &amp;info)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(info.coreConfigurations() &amp; QBluetoothDeviceInfo::LowEnergyCoreConfiguration)</span><br><span class="line">        setUpdate(<span class="string">&quot;Last device added: &quot;</span> + info.name());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p><strong>注意：</strong>从 Android 6.0 开始，检测设备的能力需要 ACCESS_COARSE_LOCATION。</p>
+</blockquote>
+<blockquote>
+<p><strong>注意：</strong>由于 API 限制，只能在 Windows 上查找已使用 Windows 设置配对的设备。</p>
+</blockquote>
+<blockquote>
+<p><strong>注意：</strong> Win32 后端目前不支持接收信号强度指示器 (RSSI)，以及制造商特定数据，或蓝牙 LE 设备在发现后公布的其他数据更新。</p>
+</blockquote>
+<p>&#x3D;&#x3D;<strong>经测，在win10下Qt 5.15版本，使用MinGW编译的软件搜索蓝牙只能搜到曾连过保存的蓝牙，使用MSVC2019 64bit则正常</strong>&#x3D;&#x3D;</p>
+<p><strong>QBluetoothDeviceInfo类用来保存蓝牙设备的名称、地址和设备类</strong></p>
+<p><strong>QBluetoothLocalDevice类提供获取和设置本地蓝牙设备支持</strong></p>
+<p><strong>QLowEnergyController类提供访问低功耗蓝牙的功能</strong></p>
+<p>QLowEnergyController类充当低功耗蓝牙开发的入口。</p>
+<p>低功耗蓝牙设备包含两种类型：外设型和中央型。每种支持不同的功能。外设型设备提供中央型设备所需的数据。例如湿度传感器检测冬景花园的水分湿度。诸如手机之类的设备可能会读取传感器的值，并将同一环境中更大背景下的所有传感器值显示给用户。在这种情况下，传感器是外围设备，手机充当中央设备。</p>
+<p>createCentral()工厂方法创建中央型控制器。这样的对象本质上充当远程低能耗外围设备的占位符，支持服务发现和状态跟踪等功能。</p>
+<p>在中心角色创建控制器对象后，第一步是通过connectToDevice ()建立连接。建立连接后，控制器的state () 将更改为QLowEnergyController::ConnectedState并发出connected () 信号。值得一提的是，某些平台（例如基于BlueZ的 Linux）无法将QLowEnergyController的两个连接实例维护到同一个远程设备。在这种情况下，第二次调用connectToDevice () 可能会失败。这种限制可能会在未来的某个阶段消失。disconnectFromDevice _() 函数用于断开现有连接。</p>
+<p>建立连接后的第二步是发现远程外围设备提供的服务。这个过程通过discoverServices () 启动，并在discoveryFinished () 信号发出后完成。发现的服务可以通过services () 进行枚举。</p>
+<p>最后一步是创建服务对象。createServiceObject () 函数充当每个服务对象的工厂，并期望服务 UUID 作为参数。调用上下文应该拥有返回的QLowEnergyService实例的所有权。</p>
+<p>一旦控制器与远程低功耗蓝牙设备断开连接，以后从此控制器的连接创建的任何QLowEnergyService、QLowEnergyCharacteristic或QLowEnergyDescriptor实例都将变为无效。</p>
+<p>外围角色的控制器是通过createPeripheral () 工厂方法创建的。这样的对象本身充当外围设备，支持广播服务等功能，并允许客户收到有关特征值更改的通知。</p>
+<p>在外围角色中创建控制器对象后，第一步是填充通过调用addService () 提供给客户端设备的 GATT 服务集。之后，调用startAdvertising () 让设备广播一些数据，并且根据正在执行的广播类型，还监听来自 GATT 客户端的传入连接。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//QBluetoothDeviceInfo remoteDevice;</span></span><br><span class="line"><span class="comment">//remoteDevice为扫描到的将要连接的设备</span></span><br><span class="line">QLowEnergyController *m_control = <span class="keyword">new</span> QLowEnergyController(remoteDevice, <span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">connect(m_control, SIGNAL(serviceDiscovered(QBluetoothUuid)), <span class="keyword">this</span>, SLOT(BlueServiceDiscovered(QBluetoothUuid)));</span><br><span class="line"></span><br><span class="line"><span class="comment">//正在运行的服务发现完成时发出此信号。</span></span><br><span class="line">connect(m_control, SIGNAL(discoveryFinished()), <span class="keyword">this</span>, SLOT(BlueServiceScanDone()));</span><br><span class="line"><span class="comment">//当控制器成功连接到远程Low Energy设备时，会发出此信号。</span></span><br><span class="line">connect(m_control, SIGNAL(connected()), <span class="keyword">this</span>, SLOT(BlueDeviceConnected()));</span><br><span class="line"><span class="comment">//当控制器从远程低功耗设备断开时发出此信号。</span></span><br><span class="line">connect(m_control, SIGNAL(disconnected()), <span class="keyword">this</span>, SLOT(BlueDeviceDisconnected()));</span><br><span class="line">connect(m_control, <span class="keyword">static_cast</span>&lt;<span class="keyword">void</span>(QLowEnergyController::(QLowEnergyController::Error)&gt;(&amp;QLowEnergyController::error),[=](QLowEnergyController::Error error) &#123;</span><br><span class="line">	<span class="keyword">if</span> (error == QLowEnergyController::NoError)</span><br><span class="line">    &#123;</span><br><span class="line">    	ui.plainTextEdit-&gt;setText(QSL(<span class="string">&quot;没有发生错误&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (error == QLowEnergyController::UnknownError)</span><br><span class="line">    &#123;</span><br><span class="line">        ui.plainTextEdit-&gt;setText(QSL(<span class="string">&quot;出现未知错误&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (error == QLowEnergyController::UnknownRemoteDeviceError)</span><br><span class="line">    &#123;</span><br><span class="line">        ui.plainTextEdit-&gt;setText(QSL(<span class="string">&quot;无法找到传递给此类构造函数的远程Bluetooth Low Energy设备&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (error == QLowEnergyController::NetworkError)</span><br><span class="line">    &#123;</span><br><span class="line">    	ui.plainTextEdit-&gt;setText(QSL(<span class="string">&quot;尝试读取或写入远程设备失败&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (error == QLowEnergyController::InvalidBluetoothAdapterError)</span><br><span class="line">    &#123;</span><br><span class="line">    	ui.plainTextEdit-&gt;setText(QSL(<span class="string">&quot;传递给此类构造函数的本地蓝牙设备无法找到，或者没有本地蓝牙设备&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (error == QLowEnergyController::InvalidBluetoothAdapterError)</span><br><span class="line">    &#123;</span><br><span class="line">    	ui.plainTextEdit-&gt;setText(QSL(<span class="string">&quot;尝试连接到远程设备失败&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//else</span></span><br><span class="line">    <span class="comment">//	ui.plainTextEdit-&gt;setText(QSL(&quot;*****未知错误!******\n&quot;));</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//连接到远程蓝牙低功耗设备。</span></span><br><span class="line">m_control-&gt;connectToDevice();</span><br></pre></td></tr></table></figure>
+
+<p>connected()信号触发的槽函数（以上是BlueDeviceConnected()）立即调用QLowEnergyController::discoverServices()来开始发现连接的设备的服务。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">BlueDeviceConnected</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	m_control-&gt;discoverServices();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>当服务被选择后，相关的QLowEnergyService实例被创建来允许与其交互：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">QLowEnergyService *service = m_control-&gt;createServiceObject(serviceUuid);</span><br><span class="line"><span class="keyword">if</span>(!service)&#123;</span><br><span class="line">    qWarning()&lt;&lt;<span class="string">&quot;Cannot create service for uuid&quot;</span>;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>服务对象提供所需的信号和函数来发现服务细节，读写特征值和描述符，并且接收数据更改通知。更新通知将被捕获，通过写值或由设备上的内部逻辑的更新可能触发。在最初的详细信息搜索中，服务的state()从DiscoveryRequired到DiscoveringServices，并最终以ServiceDiscovered结束。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">connect(service, &amp;QLowEnergyService::stateChanged, <span class="keyword">this</span>, &amp;Device::serviceDetailsDiscovered);</span><br><span class="line">service-&gt;discoverDetails();</span><br><span class="line">setUpdate(<span class="string">&quot;Back\n(Discovering details...)&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>通过QLowEnergyService::characteristics()检索服务的特征值，并且通过QLowEnergyCharacteristic::descriptors()获取每个描述符。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> QList&lt;QLowEnergyCharacteristic&gt;chars = service-&gt;characteristics();</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">const</span> QLowEnergyCharacteristic &amp;ch : chars)&#123;</span><br><span class="line">    <span class="keyword">auto</span> cInfo = <span class="keyword">new</span> CharacteristicInfo(ch);</span><br><span class="line">    m_characterisitics.append(cInfo);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">大笑之</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.qzwjer.top/2022/07/Qt%E8%93%9D%E7%89%99%E5%BC%80%E5%8F%91/">https://www.qzwjer.top/2022/07/Qt蓝牙开发/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.qzwjer.top" target="_blank">飞椅档案</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/BLE/">BLE</a><a class="post-meta__tags" href="/tags/Qt/">Qt</a></div><div class="post_share"><div class="addthis_inline_share_toolbox"></div><script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=null" async="async"></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/07/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"><img class="prev-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">设计模式</div></div></a></div><div class="next-post pull-right"><a href="/2022/07/git%E6%B7%BB%E5%8A%A0-gitignore/"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">git添加.gitignore</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/07/BLE学习笔记/" title="BLE学习笔记"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-30</div><div class="title">BLE学习笔记</div></div></a></div><div><a href="/2021/11/Qt布局不生效/" title="Qt布局不生效"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-24</div><div class="title">Qt布局不生效</div></div></a></div><div><a href="/2021/11/Qt：Slots-error-prone警告/" title="Qt：Slots error prone警告"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-24</div><div class="title">Qt：Slots error prone警告</div></div></a></div><div><a href="/2021/11/Qt：cmake项目配置/" title="Qt：cmake项目配置"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-24</div><div class="title">Qt：cmake项目配置</div></div></a></div><div><a href="/2021/11/Qt：创建QtDesigner自定义部件/" title="Qt：创建QtDesigner自定义部件"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-24</div><div class="title">Qt：创建QtDesigner自定义部件</div></div></a></div><div><a href="/2022/02/Qt：应用程序无法运行/" title="Qt：应用程序无法运行"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-08</div><div class="title">Qt：应用程序无法运行</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/my.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">大笑之</div><div class="author-info__description">学习，进步</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">88</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">45</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/qzwjer" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:1010094375@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/07/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" title="工厂模式">工厂模式</a><time datetime="2022-07-30T08:15:15.000Z" title="发表于 2022-07-30 16:15:15">2022-07-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/07/BLE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="BLE学习笔记">BLE学习笔记</a><time datetime="2022-07-30T08:04:48.000Z" title="发表于 2022-07-30 16:04:48">2022-07-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/07/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" title="设计模式">设计模式</a><time datetime="2022-07-30T08:04:27.000Z" title="发表于 2022-07-30 16:04:27">2022-07-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/07/Qt%E8%93%9D%E7%89%99%E5%BC%80%E5%8F%91/" title="Qt蓝牙开发">Qt蓝牙开发</a><time datetime="2022-07-30T08:04:19.000Z" title="发表于 2022-07-30 16:04:19">2022-07-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2022/07/git%E6%B7%BB%E5%8A%A0-gitignore/" title="git添加.gitignore">git添加.gitignore</a><time datetime="2022-07-30T08:03:56.000Z" title="发表于 2022-07-30 16:03:56">2022-07-30</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By 大笑之</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">欢迎来到我的博客！</div><div class="icp"><a target="_blank" rel="noopener" href="http://www.beian.gov.cn/"><span>陕ICP备2022002230号</span></a></div><div class="icp"><a target="_blank" rel="noopener" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=61019602000193"><img class="icp-icon" src="/img/icp.png"/><span>陕公网安备 61019602000193号</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="chat_btn" type="button" title="rightside.chat_btn"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(() => {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'default',
+      })
+      false && mermaid.init()
+    })
+  }
+}</script><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: 'tIO55n1PcFVxdupwuvyUIUhw-gzGzoHsz',
+      appKey: 'j7cfrdWGV6mIQ6PY5okJrOdz',
+      placeholder: '少年，留下你的足迹',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick,mail'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign(initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
