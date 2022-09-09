@@ -5107,4 +5107,36 @@ rightNode --> 7</pre>
         <tag>Qt</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Hexo-admin本地部署</title>
+    <url>/2022/09/Hexo-admin%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2/</url>
+    <content><![CDATA[<h2 id="hexo-admin本地部署"><a href="#hexo-admin本地部署" class="headerlink" title="hexo-admin本地部署"></a>hexo-admin本地部署</h2><p>使用以下命令即可：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install hexo-admin --save</span><br></pre></td></tr></table></figure>
+
+<p><code>hexo s</code>后浏览<code>localhost:4000/admin/</code>，settings设置登录账户和密码，根据提示在_config.yml中配置，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># hexo-admin authentification</span><br><span class="line">admin:</span><br><span class="line">  username: qzwjer</span><br><span class="line">  password_hash: xxxxxxxxxxxxxxxxxxxxxxx</span><br><span class="line">  secret: xxxxxxxxxx</span><br><span class="line">  deployCommand: &#x27;./script/hexo-d.sh&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>Deploy需要在_config.yml文件中配置deployCommand，如上最后一行，新建<code>script/hexo-d.sh</code>，内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">hexo g &amp;&amp; hexo d</span><br></pre></td></tr></table></figure>
+<p>Windows10如上配置后，发布仍旧报错，需要更改<code>node_modules/hexo-admin/depoly.js</code>文件的相关函数：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = <span class="keyword">function</span> (<span class="params">command, message, done</span>) &#123;</span><br><span class="line">  done = <span class="title function_">once</span>(done);</span><br><span class="line">  <span class="comment">//var proc = spawn(command, [message], &#123;detached: true&#125;);  //将此行替换为下方</span></span><br><span class="line">  <span class="keyword">var</span> proc = <span class="title function_">spawn</span>((process.<span class="property">platform</span> == <span class="string">&quot;win32&quot;</span>?<span class="string">&quot;hexo.cmd&quot;</span>:<span class="string">&quot;hexo&quot;</span>), [<span class="string">&#x27;d&#x27;</span>, <span class="string">&#x27;-g&#x27;</span>]);</span><br><span class="line">  <span class="keyword">var</span> stdout = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  <span class="keyword">var</span> stderr = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  proc.<span class="property">stdout</span>.<span class="title function_">on</span>(<span class="string">&#x27;data&#x27;</span>, <span class="keyword">function</span>(<span class="params">data</span>)&#123;stdout += data.<span class="title function_">toString</span>()&#125;)</span><br><span class="line">  proc.<span class="property">stderr</span>.<span class="title function_">on</span>(<span class="string">&#x27;data&#x27;</span>, <span class="keyword">function</span>(<span class="params">data</span>)&#123;stderr += data.<span class="title function_">toString</span>()&#125;)</span><br><span class="line">  proc.<span class="title function_">on</span>(<span class="string">&#x27;error&#x27;</span>, <span class="keyword">function</span>(<span class="params">err</span>) &#123;</span><br><span class="line">    <span class="title function_">done</span>(err, &#123;<span class="attr">stdout</span>: stdout, <span class="attr">stderr</span>: stderr&#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">  proc.<span class="title function_">on</span>(<span class="string">&#x27;close&#x27;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="title function_">done</span>(<span class="literal">null</span>, &#123;<span class="attr">stdout</span>: stdout, <span class="attr">stderr</span>: stderr&#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如上后即可发布文章也。</p>
+<p>新建文章编辑时，右方Publish按钮边的设置按钮，选中有文章的头部信息，开始只有<code>Data,Author,Tags,Catagories</code>，如需添加其它，在_config.yml中配置，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">metadata:</span><br><span class="line">  top_img:       #文章顶部图片</span><br><span class="line">  cover:         #文章封面</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+]]></content>
+      <categories>
+        <category>杂文集合</category>
+      </categories>
+      <tags>
+        <tag>建站</tag>
+      </tags>
+  </entry>
 </search>
