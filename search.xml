@@ -3005,7 +3005,34 @@ Sport <|-- Volleyball</pre>
 <h3 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h3><p>创建型模式关注对象的创建过程，在软件开发中应用非常广泛。创建型模式描述如何将对象的创建和使用分离，让用户在使用对象过程中无须关心对象的创建细节，从而降低系统耦合度，并且让系统易于修改和扩展。</p>
 <p>简单工厂模式是最简单的设计模式之一，其实它并不属于Gof的23中设计模式，但应用也十分频繁，同时也是其余创建模式的基础，因此有必要先学习简单工厂模式。</p>
 <p><a href="https://github.com/FengJungle/DesignPattern/blob/master/01.SimpleFactory/01.SimpleFactory.md">https://github.com/FengJungle/DesignPattern/blob/master/01.SimpleFactory/01.SimpleFactory.md</a></p>
-<h3 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h3><h3 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h3><h3 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h3><h3 id="外观模式"><a href="#外观模式" class="headerlink" title="外观模式"></a>外观模式</h3><h3 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h3><h3 id="包装模式（装饰器模式）"><a href="#包装模式（装饰器模式）" class="headerlink" title="包装模式（装饰器模式）"></a>包装模式（装饰器模式）</h3><h3 id="桥接模式"><a href="#桥接模式" class="headerlink" title="桥接模式"></a>桥接模式</h3><h3 id="模板方法模式"><a href="#模板方法模式" class="headerlink" title="模板方法模式"></a>模板方法模式</h3><h3 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h3><h3 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h3><h3 id="责任链模式"><a href="#责任链模式" class="headerlink" title="责任链模式"></a>责任链模式</h3>]]></content>
+<h3 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h3><ul>
+<li><a href="https://qzwjer.top/2022/07/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/">工厂模式</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/110419316">https://zhuanlan.zhihu.com/p/110419316</a></li>
+<li><a href="https://www.cnblogs.com/yssjun/p/11102162.html">https://www.cnblogs.com/yssjun/p/11102162.html</a></li>
+</ul>
+<h3 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h3><p>Singleton Pattern，也称单件模式，使用最广泛的设计模式之一。其意图是保证一个类仅有一个实例，并提供一个访问它的全局访问点，该实例被所有程序模块共享。</p>
+<p>定义一个单例类：</p>
+<ol>
+<li>私有化它的构造函数，以防止外界创建单例类的对象；</li>
+<li>使用类的私有静态指针变量指向类的唯一实例；</li>
+<li>使用一个公有的静态方法获取该实例。</li>
+</ol>
+<p>实现方式：</p>
+<ul>
+<li>懒汉式，线程不安全</li>
+<li>懒汉式加锁</li>
+<li>懒汉式双检锁（DCL，double-checked-locking）</li>
+<li>饿汉式</li>
+<li>静态内部类</li>
+<li>枚举</li>
+</ul>
+<p>参考：</p>
+<ul>
+<li><a href="https://m.runoob.com/design-pattern/singleton-pattern.html">https://m.runoob.com/design-pattern/singleton-pattern.html</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/37469260">https://zhuanlan.zhihu.com/p/37469260</a></li>
+<li><a href="https://qzwjer.top/2022/10/Qt%E4%BD%BF%E7%94%A8Http%E4%B8%8B%E8%BD%BD/">Qt 使用 Http 下载</a></li>
+</ul>
+<h3 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h3><h3 id="外观模式"><a href="#外观模式" class="headerlink" title="外观模式"></a>外观模式</h3><h3 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h3><h3 id="包装模式（装饰器模式）"><a href="#包装模式（装饰器模式）" class="headerlink" title="包装模式（装饰器模式）"></a>包装模式（装饰器模式）</h3><h3 id="桥接模式"><a href="#桥接模式" class="headerlink" title="桥接模式"></a>桥接模式</h3><h3 id="模板方法模式"><a href="#模板方法模式" class="headerlink" title="模板方法模式"></a>模板方法模式</h3><h3 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h3><h3 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h3><h3 id="责任链模式"><a href="#责任链模式" class="headerlink" title="责任链模式"></a>责任链模式</h3>]]></content>
       <categories>
         <category>学习总结</category>
       </categories>
@@ -5159,6 +5186,65 @@ rightNode --> 7</pre>
       <tags>
         <tag>Qt</tag>
         <tag>单例模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CDN内容分发网络</title>
+    <url>/2022/10/CDN%E5%86%85%E5%AE%B9%E5%88%86%E5%8F%91%E7%BD%91%E7%BB%9C/</url>
+    <content><![CDATA[<p>Content Delivery Network</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/52362950">https://zhuanlan.zhihu.com/p/52362950</a></li>
+<li><a href="https://help.aliyun.com/document_detail/27101.html">https://help.aliyun.com/document_detail/27101.html</a></li>
+</ul>
+<p>核心思想：将内容缓存在终端用户附近</p>
+<p>CDN边缘节点（缓存服务器），布放在用户访问相对集中的地区或网络中。当用户访问网站时，利用全局负载技术，将用户的访问指向距离最近的缓存服务器上，由缓存服务器响应用户请求。</p>
+<p>CDN缓存静态内容</p>
+<ul>
+<li>以存储换时延</li>
+<li>以存储换带宽，减轻上层骨干网络的流量压力</li>
+</ul>
+]]></content>
+      <categories>
+        <category>杂文集合</category>
+      </categories>
+      <tags>
+        <tag>CDN</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>人生追求</title>
+    <url>/2022/10/%E4%BA%BA%E7%94%9F%E8%BF%BD%E6%B1%82/</url>
+    <content><![CDATA[<p>在毕业以前，个人有很多目标明确的追求，虽如镜花水月，但都不流于庸俗。视金钱如粪土，嫌恶唯钱是命之徒。然时移世易，方今之世，民众评判一人的价值，全然重于赚钱能力，以至于若一人不善于赚钱，与废物等同。</p>
+<p>我迷惘于这个世道观念久矣，以致时时自省，我是不是一无是处，每天兴致缺缺，却又患得患失于工资的多寡，听见赚钱强于人辄喜，望见工资少于人辄颓，庸碌无趣，形神渐似我所厌之人。</p>
+<p>昨夜幡然醒悟，人生在世，如果只与别人比较财物的多少，那天下比我拥有多的数不胜数，我若执着，岂不是永远觉低人一等？时时都可以找根绳子挂死自己了。迷惑于世道皆比较赚钱能力，人人爱钱，实在是误入歧途了。</p>
+<p>世人皆爱财，我难道也爱财？</p>
+<p>钱又岂是能赚尽的？人的价值又岂止于此。社会上以金钱评人高低，也不过是短短一二十年，不能当作长久，未来如何仍未可知。</p>
+<p>当今有钱者身居上流，窃据上位，但究之以人格善恶，彼辈多数可以一唾。</p>
+<p>人位有高低，人格无贵贱。以人位观我，我实不值一提，以人格自观，则我足可以蔑视那些富豪高位。</p>
+<p>人位尽可追，人格更应求。我若早明白，哪里来忧愁。</p>
+<p>不为财迷眼，何事能障目！</p>
+<p>当笑则笑，当哭则哭，当吟则吟，当舞则舞。</p>
+<p>不负己，不罪人，逍遥洒脱，做我自己。</p>
+]]></content>
+      <categories>
+        <category>生活感想</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Linux内核移植</title>
+    <url>/2022/10/Linux%E5%86%85%E6%A0%B8%E7%A7%BB%E6%A4%8D/</url>
+    <content><![CDATA[<p>内核移植思维导图</p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://qzwjer.top/doc/blogImg/img/kernel.png" alt="kernel"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://qzwjer.top/doc/blogImg/img/uboot.png" alt="uboot"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://qzwjer.top/doc/blogImg/img/Linux_kernel.png" alt="Linux_kernel"></p>
+<p><img src= "/img/loading.gif" data-lazy-src="https://qzwjer.top/doc/blogImg/img/rootfs.png" alt="rootfs"></p>
+]]></content>
+      <categories>
+        <category>学习总结</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
       </tags>
   </entry>
 </search>
