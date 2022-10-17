@@ -16,7 +16,7 @@
 <li>以存储换时延</li>
 <li>以存储换带宽，减轻上层骨干网络的流量压力</li>
 </ul>
-]]></content>
+<h3 id="全局负载技术"><a href="#全局负载技术" class="headerlink" title="全局负载技术"></a>全局负载技术</h3>]]></content>
       <categories>
         <category>杂文集合</category>
       </categories>
@@ -4477,34 +4477,28 @@ rightNode --> 7</pre>
     <url>/2021/11/%E5%B8%B8%E7%94%A8%E8%8B%B1%E8%AF%AD%E8%AF%8D%E6%B1%87/</url>
     <content><![CDATA[<h2 align='center' id='常用英语词汇'>常用英语词汇</h2>
 
-<table style="font-size:16px;text-align:center;font-weight:bold;">
-    <tr>
-        <td><a href="#蓝牙">蓝牙</a></td>
-        <td><a href="#芯片">芯片</a></td>
-        <td><a href="#网络">网络</a></td>
-        <td><a href="#SQL">SQL</a></td>
-    </tr>
-    <tr>
-        <td><a href="#嵌入式">嵌入式</a></td>
-        <td><a href="#Qt">Qt</a></td>
-        <td><a href="#其它">其它</a></td>
-        <td><a href="#Linux">Linux</a></td>
-    </tr>
-    <tr>
-        <td><a href="#变量定义">变量定义</a></td>
-        <td><a href="#汇编">汇编</a></td>
-        <td><a href="#底部">底部</a></td>
-    </tr>
-</table>
-
-
-
-
-
-
-
-
-
+<table>
+<thead>
+<tr>
+<th align="center"><a href="#%E8%93%9D%E7%89%99">蓝牙</a></th>
+<th align="center"><a href="#%E8%8A%AF%E7%89%87">芯片</a></th>
+<th align="center"><a href="#%E7%BD%91%E7%BB%9C">网络</a></th>
+<th align="center"><a href="#SQL">SQL</a></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong><a href="#%E5%B5%8C%E5%85%A5%E5%BC%8F">嵌入式</a></strong></td>
+<td align="center"><strong><a href="#Qt">Qt</a></strong></td>
+<td align="center"><strong><a href="#%E5%85%B6%E5%AE%83">其它</a></strong></td>
+<td align="center"><strong><a href="#Linux">Linux</a></strong></td>
+</tr>
+<tr>
+<td align="center"><strong><a href="#%E5%8F%98%E9%87%8F%E5%AE%9A%E4%B9%89">变量定义</a></strong></td>
+<td align="center"><strong><a href="#%E6%B1%87%E7%BC%96">汇编</a></strong></td>
+<td align="center"><strong><a href="#%E5%BA%95%E9%83%A8">底部</a></strong></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
 <h2 align='center' id='蓝牙'>蓝牙</h2>
 
 
@@ -5216,6 +5210,11 @@ rightNode --> 7</pre>
 <td></td>
 <td>面板</td>
 </tr>
+<tr>
+<td>enumerate</td>
+<td>[ɪˈnjuːməreɪt]</td>
+<td>列举、枚举</td>
+</tr>
 </tbody></table>
 <h2 align='center' id='Linux'>Linux</h2>
 
@@ -5400,5 +5399,24 @@ rightNode --> 7</pre>
       <tags>
         <tag>杂文</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>爱情-灵魂</title>
+    <url>/2022/10/%E7%88%B1%E6%83%85-%E7%81%B5%E9%AD%82/</url>
+    <content><![CDATA[<p>开始一段爱情，如盲人摸象，摸到什么样算什么样，又想要收获爱情，把一切结果听天由命，恋人懵懂，不能自主，烦恼自招。</p>
+<p>可你问谁不知道爱情啊，即便是初恋，在经过刻骨铭心之后，也能有一些体会。</p>
+<p>可甚至不明白自己，枝叶落尽，掘开泥沙，是什么底色。</p>
+<p>从未相遇的两条世界线，在开始爱情的那一刻交汇……</p>
+<p>第一面，它们交织，缠绕，打结，像跳双人舞，你进我退，姿态优雅，像双人花样滑冰，分分合合，不论各自还是配合，都奉献精彩，直到最后榫卯相合。</p>
+<p>第二面，一条追赶，一条若即若离，像弹球触碰大地，起起落落最终落地，还是蜜蜂寻找花蜜，蜻蜓点水，采摘完后又分离。</p>
+<p>第三面，平行向前，偶尔相交但并不纠缠，像双螺旋一样起舞，可以慢慢收束最后扭成一条线，亦可以越旋越远，一直离心，最后分道扬镳。</p>
+<p>何种激烈的感情？浪拍礁石，雨打浮萍，才能让人触动，是身不由己，无法挣脱，不可逃避。</p>
+<p>其一，青梅竹马从小相识，性格相似，情意相通，互相了解对方，知悉对方缺点与长处，并喜爱与容忍，直至修成正果；</p>
+<p>其二，早早相识，同窗共读，志趣相投，互相爱慕，结成好友双向奔赴，小心呵护爱情之花，结成正果。</p>
+<p>其三，从不相识，猝然相交，互生好感，结为情侣，于生活中相知，在未完全相知时开花，共同呵护，一起品尝果实而爱愈深，灵魂相融。</p>
+]]></content>
+      <categories>
+        <category>生活感想</category>
+      </categories>
   </entry>
 </search>
