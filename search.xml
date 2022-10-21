@@ -5419,4 +5419,78 @@ rightNode --> 7</pre>
         <category>生活感想</category>
       </categories>
   </entry>
+  <entry>
+    <title>移远EC800MQTT与GNSS应用</title>
+    <url>/2022/10/%E7%A7%BB%E8%BF%9CEC800MQTT%E4%B8%8EGNSS%E5%BA%94%E7%94%A8/</url>
+    <content><![CDATA[<p>一切以移远应用指导手册为准。</p>
+<h2 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h2><ul>
+<li><p>GPRS：General Packet Radio service，<a href="https://baike.baidu.com/item/gprs/107439">通用分组无线业务</a>。</p>
+<p>  是一种基于GSM系统的无线分组交换技术，提供端到端的、广域的无线IP连接。相对原来GSM的拨号方式的电路交换数据传送方式，GPRS是分组交换技术，具有“实时在线”“按量计费”“快捷登录”“高速传输”“自如切换”的优点。通俗地讲，GPRS是一项高速数据处理的技术，方法是以“分组”的形式传送资料到用户手上。GPRS是GSM网络向第三代移动通信系统过渡的一项2.5代通信技术，在许多方面都具有显著的优势。</p>
+</li>
+<li><p>PDN：Public Data Network，<a href="https://baike.baidu.com/item/pdn/4214348">公用数据网</a>。</p>
+<p>  为公众提供数据通信服务的通信网。由交换机、网控中心、用户入网设备、通信线路等设施组成。每个入网用户可与网上其他用户通信，公用数据网负责数据在其间作透明的无差错传输。有公用数字数据网、公用分组交换数据网、公用帧中继网、公用ATM（异步传送模式）网等之分。它除了向公众提供一般的数据交换平台服务外，还提供公用电子信箱业务、公众宽带多媒体业务、公用电子数据交换业务、公众互联网业务、公用无线数据通信网及相应的业务等。</p>
+</li>
+<li><p>PDP：Packet Data Protocol，<a href="https://baike.baidu.com/item/PDP/8646589">分组数据协议</a>。</p>
+<p>  是外部PDN网与GPRS接口所用的网络协议。</p>
+<p>  PDP附着（PDP-Attach）在PDP激活、PDP更新、PDP去激活之前的操作是PDP附着。</p>
+<p>  PDP附着是让终端登录到PS域里，就是登记到SGSN&#x2F;PDSN的数据库，同时在HLR里进行PS域的location update，此时是control-plane还没有流量，相当于拨号成功。</p>
+<p>  相对于PDP激活（PDP-activation）就是开始进行数据流通了，也就是开始打开网页上网了，此时有userplane流量了。</p>
+<p>  分组数据协议（Packet Data Protocol，PDP）包括PDP地址和PDP上下文两个概念。PDP地址是数据用户的网络层地址，可以有一个或多个，这由该用户所涉及的外部网络来决定。PDP地址与标准的网络层地址（如IPv4地址、IPv6地址和X.121地址）建立了临时或永久性的关联。PDP地址可以有以下3种方式分配给MS。</p>
+<ol>
+<li>静态PDP地址，HPLMN将一个PDP地址永久性地分配给MS。</li>
+<li>动态HPLMN PDP地址，当激活一个PDP上下文时，HPLMN才将一个PDP地址临时分配给MS。</li>
+<li>动态VPLMN PDP地址，当激活一个PDP上下文时，VPLMN才将一个PDP地址临时分配给MS。</li>
+</ol>
+</li>
+<li><p>PDP上下文：主要包括以下一些信息：APN、Qos、PDP 类型、PDP 地址等。即是移动场景，英文全称PDP Context，PDP是分组报文协议的简写，Context翻译成上下文。</p>
+</li>
+<li><p>APN：Access Point Name，<a href="https://baike.baidu.com/item/apn/96667">接入点</a>。</p>
+<p>  APN指一种网络接入技术，是通过手机上网时必须配置的一个参数，它决定了手机通过哪种接入方式来访问网络。</p>
+</li>
+<li><p><a href="https://baike.baidu.com/item/apn%E8%AE%BE%E7%BD%AE/9957880">APN设置</a></p>
+<p> 是用户在通过手机上网时必须配置的一个参数，它决定了用户手机通过哪种接入方式来访问移动网络。根据接入点名称，可以确定在分组数据链接中提供什么服务。这些服务可能包括：公众互网的链接；到WAP的连接，以转发互联上的网页;提供短消息，或多媒体业务。</p>
+</li>
+</ul>
+<h2 id="TCP-x2F-IP流程"><a href="#TCP-x2F-IP流程" class="headerlink" title="TCP&#x2F;IP流程"></a>TCP&#x2F;IP流程</h2><ul>
+<li><p>通过AT+QICSGP命令配置APN</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">AT+QICSGP=1,1,&quot;UNINET&quot;,&quot;&quot;,&quot;&quot;,1   //UENINET联通</span><br><span class="line"></span><br><span class="line">AT+QICSGP=1,1,&quot;CMNET&quot;  //CMNET 移动</span><br><span class="line"></span><br><span class="line">AT+QICSGP=&lt;contextID&gt;[,&lt;context_type&gt;,&lt;APN&gt;[,&lt;username&gt;,&lt;password&gt;)[,&lt;authentication&gt;]]]</span><br><span class="line">//&lt;contextID&gt;场景ID，</span><br><span class="line">//&lt;context_type&gt;协议类型：1-IPv4，2-IPv6，3-IPv4v6，&lt;APN&gt;接入点名称</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>激活场景</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">AT+QIACT=1	//激活场景1</span><br><span class="line"></span><br><span class="line">AT+QIACT? //查询场景状态，IP</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>TCP连接</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">AT+QIOPEN=1,0,&quot;TCP&quot;,&quot;220.180.239.212&quot;,8009,0,2</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>关闭SOCKET</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">AT+QICLOSE=&lt;connectID&gt; //&lt;connectID&gt;socket id</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="MQTT流程"><a href="#MQTT流程" class="headerlink" title="MQTT流程"></a>MQTT流程</h2><ul>
+<li><p>配置可选参数</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">AT+QMTCFG=?</span><br><span class="line"></span><br><span class="line">//可以选择配置ssl，如果选择ssl，则必须配置证书，</span><br><span class="line">//否则在打开MQTT客户端网络时会报：网络断开导致错误</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>打开MQTT客户端网络</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">AT+QMTOPEN=0,&quot;qzwjer.top&quot;,1883</span><br><span class="line"></span><br><span class="line">//0为MQTT客户端标识符，对某个标志符配置参数，</span><br><span class="line">//之后可使用此标志符进行MQTT通信</span><br><span class="line"></span><br><span class="line">//回复0，0正常</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>关闭MQTT客户端网络</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">AT+QMTCLOSE=0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>连接客户端到 MQTT 服务器</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">AT+QMTCONN=0,&quot;client0&quot;</span><br><span class="line"></span><br><span class="line">//client0为终端名</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>客户端断开与 MQTT 服务器的连接</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">AT+QMTDISC=0</span><br><span class="line"></span><br><span class="line">//不太清楚 和 关闭MQTT客户端网络 的区别</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>订阅、退订、发布消息</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">AT+QMTSUB=0,1,&quot;topic/example&quot;,2   //订阅主题</span><br><span class="line"></span><br><span class="line">AT+QMTUNS=0,2,&quot;topic/example&quot;  //退订主题</span><br><span class="line"></span><br><span class="line">AT+QMTPUBEX=0,0,0,0,&quot;topic/pub&quot;,30  </span><br><span class="line">//发布消息，发送命令后收到“&gt;”响应，发送数据。 30为数据长度</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="GNSS配置"><a href="#GNSS配置" class="headerlink" title="GNSS配置"></a>GNSS配置</h2><p>GNSS只需要注意配置优先级即可。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">AT+QGPSCFG=&quot;priority&quot;,1</span><br><span class="line">//GNSS优先级1，LTE会中断定位，结束后重新开始</span><br><span class="line">   </span><br><span class="line">AT+QLOCREL=3,3	//GNSS配置</span><br><span class="line">AT+QGPS=1 		//打开GNSS</span><br><span class="line">AT+QGPSLOC=0		//获取定位</span><br><span class="line">AT+QGPSEND		//GNSS休眠</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>项目开发</category>
+      </categories>
+      <tags>
+        <tag>AT</tag>
+        <tag>MQTT</tag>
+      </tags>
+  </entry>
 </search>
