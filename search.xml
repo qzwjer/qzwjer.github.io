@@ -4891,6 +4891,11 @@ rightNode --> 7</pre>
 <td>access point</td>
 <td>接入点</td>
 </tr>
+<tr>
+<td>SSL</td>
+<td>Secure Socket Layer</td>
+<td>安全套接层</td>
+</tr>
 </tbody></table>
 <hr>
 <h2 align='center' id='SQL'>SQL</h2>
