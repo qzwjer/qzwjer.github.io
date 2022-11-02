@@ -214,6 +214,13 @@
     <content><![CDATA[<blockquote>
 <p>一个很久很久未付出亦未感受过爱情的人，谈谈对于爱情是什么的认识</p>
 </blockquote>
+<h2 id="关于坚持"><a href="#关于坚持" class="headerlink" title="关于坚持"></a>关于坚持</h2><p>有些坚持的事要有意义，坚持本身才有意义。就像锻炼，如果不能激发机能，最终不能提升体能，那坚持就失去了目标，没有任何价值。</p>
+<p>有些坚持的事需要对方赋予意义，坚持才有意义。就像交往，如果每天的问候不能让人快乐，就不是感情的创造而是消耗，坚持就进退两难。</p>
+<p>为什么说进退两难呢？</p>
+<p>后退意味着放弃，是否定了此前的坚持，也打消了之后的信念。</p>
+<p>继续意味着消耗，是让激情从心中消逝，好奇变成了无趣。</p>
+<p>如何打破这样的死局？</p>
+<p>坚持不可以改变，但需要变化坚持的内容，早晚的问候虽然温馨，但让人乏味。</p>
 <h2 id="在与女孩言语之后"><a href="#在与女孩言语之后" class="headerlink" title="在与女孩言语之后"></a>在与女孩言语之后</h2><p>女孩说我太过于执着，我说这是认真。</p>
 <p>或许是我每天都道早晚安，让她产生厌倦了吧，认为这是不带感情无谓的言语，是完成自己心中的坚持，是敷衍的问候。</p>
 <p>于我而言是一件有意义的事，它让我快乐，让每天都有可乐的瞬间，但对她来说也许真是这样，像公鸡打鸣，是定好闹钟，是备忘录中的一条记录。这就是不同角色之间的误解吧，互相理解。</p>
@@ -227,9 +234,10 @@
 <p>可以随心意喜欢，但爱只会爱一个。</p>
 <p>爱是什么？每个人的答案不同。</p>
 <p>我的爱是你中有我，我中有你，是不分你我，完全信任，是爱你就是爱自己，无可替代，无多余的给第三者，无理由在爱着你的时候，去爱别人。</p>
-<p>然而喜欢的那么多，为什么有一个会变成爱呢？</p>
-<p>由此想到缘分。</p>
-<p>从喜欢到爱的转变，就是往你中有我、我中有你，你我不分发展的过程。</p>
+<p>然而喜欢的那么多，为什么有一个会变成爱呢？世界上那么多人，为什么偏偏是你？</p>
+<p>由此想到缘分，缘分一道桥，有缘千里来相会，是缘分让素昧平生的人产生了交集。</p>
+<p>是缘分让喜欢有机会变成爱。</p>
+<p>从喜欢到爱情，是往你中有我、我中有你，你我不分发展的旅程。</p>
 <hr>
 <h2 id="写在第一次的胡言乱语"><a href="#写在第一次的胡言乱语" class="headerlink" title="写在第一次的胡言乱语"></a>写在第一次的胡言乱语</h2><p>开始一段感情，如盲人摸象，摸到什么样算什么样，又想要收获爱情，把一切结果听天由命，恋人懵懂，不能自主，烦恼自招。</p>
 <p>可你问谁不知道爱情啊，即便是初恋，在经过刻骨铭心之后，也能有一些体会。</p>
@@ -5577,6 +5585,54 @@ rightNode --> 7</pre>
       </categories>
       <tags>
         <tag>杂文</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>cJSON使用事项</title>
+    <url>/2022/11/cJSON%E4%BD%BF%E7%94%A8%E4%BA%8B%E9%A1%B9/</url>
+    <content><![CDATA[<h2 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h2><p>可以修改内存管理函数，自己实现<code>malloc</code>，<code>realloc</code>和<code>free</code>，详细参考：<a href="https://qzwjer.top/2022/10/%E8%87%AA%E5%AE%9A%E4%B9%89malloc%E5%88%86%E9%85%8D%E6%95%B0%E7%BB%84%E7%A9%BA%E9%97%B4/">自定义malloc分配数组空间</a>。</p>
+<h2 id="内存释放"><a href="#内存释放" class="headerlink" title="内存释放"></a>内存释放</h2><p>使用<code>cJSON_free</code>释放<code>cJSON_Print</code>，<code>cJSON_PrintUnformatted</code>和<code>cJSON_PrintBuffered</code>申请的字符串空间。</p>
+<p>使用<code>cJSON_Delete</code>释放生成的JSON对象。</p>
+<h2 id="控制浮点数小数位数"><a href="#控制浮点数小数位数" class="headerlink" title="控制浮点数小数位数"></a>控制浮点数小数位数</h2><p>没有找到cJSON本身的接口，但可以自己创建函数实现。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">cJSON_AddDoubleToObject</span><span class="params">(cJSON *<span class="type">const</span> object, <span class="type">const</span> <span class="type">char</span>* <span class="type">const</span> name, <span class="type">const</span> <span class="type">double</span> number, <span class="type">const</span> <span class="type">unsigned</span> <span class="type">int</span> precision)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(precision &gt; <span class="number">15</span>) <span class="keyword">return</span>;</span><br><span class="line">    <span class="type">char</span> num_string[<span class="number">26</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="built_in">snprintf</span>(num_string, <span class="keyword">sizeof</span>(num_string), <span class="string">&quot;%1.*lf&quot;</span>, precision, number);</span><br><span class="line">    cJSON_AddRawToObject(object, name, num_string);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上有点小瑕疵，即当浮点数本身小数位不到设置的长度时，也会补上0。下面的迂回修改可以解决这个问题。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">digits</span><span class="params">(<span class="type">int</span> a)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> res = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">do</span></span><br><span class="line">  &#123;</span><br><span class="line">    a /= <span class="number">10</span>;</span><br><span class="line">    res++;</span><br><span class="line">  &#125;<span class="keyword">while</span>(a!=<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">cJSON_AddDoubleToObject</span><span class="params">(cJSON *<span class="type">const</span> object, <span class="type">const</span> <span class="type">char</span>* <span class="type">const</span> name, <span class="type">const</span> <span class="type">double</span> number, <span class="type">const</span> <span class="type">unsigned</span> <span class="type">int</span> precision)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(precision &gt; <span class="number">15</span>) <span class="keyword">return</span>;</span><br><span class="line">    <span class="type">char</span> num_string[<span class="number">26</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="type">int</span> pcs = precision + digits((<span class="type">int</span>)number);</span><br><span class="line">    <span class="built_in">snprintf</span>(num_string, <span class="keyword">sizeof</span>(num_string), <span class="string">&quot;%1.*g&quot;</span>, pcs, number);</span><br><span class="line">    cJSON_AddRawToObject(object, name, num_string);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="控制浮点数数组小数位"><a href="#控制浮点数数组小数位" class="headerlink" title="控制浮点数数组小数位"></a>控制浮点数数组小数位</h2><p>和上边类似，修改原<code>cJSON_CreateDoubleArray</code>函数。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">CJSON_PUBLIC(cJSON*) cJSON_CreateDoubleArray_pcs(<span class="type">const</span> <span class="type">double</span> *numbers, <span class="type">int</span> count, <span class="type">unsigned</span> <span class="type">int</span> precision)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">size_t</span> i = <span class="number">0</span>;</span><br><span class="line">    cJSON *n = <span class="literal">NULL</span>;</span><br><span class="line">    cJSON *p = <span class="literal">NULL</span>;</span><br><span class="line">    cJSON *a = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(precision &gt; <span class="number">15</span>) <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((count &lt; <span class="number">0</span>) || (numbers == <span class="literal">NULL</span>))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    a = cJSON_CreateArray();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; a &amp;&amp; (i &lt; (<span class="type">size_t</span>)count); i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">char</span> num_string[<span class="number">26</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">        <span class="comment">//int pcs = precision + digits((int)numbers[i]);</span></span><br><span class="line">        <span class="comment">//snprintf(num_string, sizeof(num_string), &quot;%1.*g&quot;, pcs, numbers[i]);</span></span><br><span class="line">        <span class="built_in">snprintf</span>(num_string, <span class="keyword">sizeof</span>(num_string), <span class="string">&quot;%1.*lf&quot;</span>, precision, numbers[i]);</span><br><span class="line">        n = cJSON_CreateRaw(num_string);</span><br><span class="line">        <span class="keyword">if</span>(!n)</span><br><span class="line">        &#123;</span><br><span class="line">            cJSON_Delete(a);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(!i)</span><br><span class="line">        &#123;</span><br><span class="line">            a-&gt;child = n;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            suffix_object(p, n);</span><br><span class="line">        &#125;</span><br><span class="line">        p = n;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (a &amp;&amp; a-&gt;child) &#123;</span><br><span class="line">        a-&gt;child-&gt;prev = n;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>杂文集合</category>
+      </categories>
+      <tags>
+        <tag>CC++</tag>
+        <tag>cJSON</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>npm_yarn更新镜像</title>
+    <url>/2022/11/npm-yarn%E6%9B%B4%E6%96%B0%E9%95%9C%E5%83%8F/</url>
+    <content><![CDATA[<p>作为一个备份。</p>
+<p>一、Yarn 设置淘宝镜像<br>1.查询当前配置的镜像</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yarn config get registry  // 默认：https://registry.yarnpkg.com</span><br></pre></td></tr></table></figure>
+<p>2.设置成淘宝镜像</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yarn config set registry http://registry.npm.taobao.org/</span><br></pre></td></tr></table></figure>
+<p>3.换成原来的</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yarn config set registry http://registry.npmjs.org/</span><br></pre></td></tr></table></figure>
+<p>二、NPM设置淘宝镜像<br>1.查询当前配置的镜像</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm get registry</span><br></pre></td></tr></table></figure>
+<p>2.设置成淘宝镜像</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm config set registry http://registry.npm.taobao.org/</span><br></pre></td></tr></table></figure>
+<p>3.换成原来的</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm config set registry https://registry.npmjs.org/</span><br></pre></td></tr></table></figure>
+<p>————————————————</p>
+<p>版权声明：本文为CSDN博主「Handada_fan」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。<br>原文链接：<a href="https://blog.csdn.net/qq_39441438/article/details/121517210">https://blog.csdn.net/qq_39441438/article/details/121517210</a></p>
+]]></content>
+      <categories>
+        <category>杂文集合</category>
+      </categories>
+      <tags>
+        <tag>npm</tag>
+        <tag>yarn</tag>
       </tags>
   </entry>
 </search>
